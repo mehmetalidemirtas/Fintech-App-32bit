@@ -1,15 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import UserContext from '../../context/UserContext';
 import { SafeAreaView,View,Text,StyleSheet } from 'react-native';
 import Button from '../../components/Button';
 import colors from '../../styles/colors';
-const Photo = ({navigation}) => {
+import { useNavigation } from '@react-navigation/native';
 
+const Photo = () => {
+    
+    const{user, setUser} = useContext(UserContext);
+    const navigation = useNavigation();
+
+    const handleSubmit = async (photo) => {
+        try {
+          await setUser({...user, ...photo});
+          console.log(user);
+          navigation.navigate('PasswordScreen');
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    
     return(
-        <SafeAreaView style={styles.container}>            
+        <SafeAreaView style={styles.container}>     
             <Text style={styles.title}>Fotoğraf Seç</Text>
           <View style={styles.button_container}>
             <Button textColor='#7286D3' onPress={() => navigation.goBack()} title="Önceki adım"/>         
-            <Button contained buttonColor='#7286D3' textColor='white' onPress={()=> navigation.navigate('PasswordScreen')} title="Sonraki adım"/>                                  
+            <Button contained buttonColor='#7286D3' textColor='white' onPress={handleSubmit} title="Sonraki adım"/>                                  
             </View>
         </SafeAreaView>
     )
