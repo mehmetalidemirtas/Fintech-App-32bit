@@ -7,6 +7,7 @@ import colors from '../../styles/colors';
 import { Formik } from 'formik';
 import { useNavigation } from '@react-navigation/native';
 import * as Yup from 'yup';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const validationSchema = Yup.object().
 shape({
@@ -30,16 +31,50 @@ const initialValues = {
 const Password = () => {
 
     const{user, setUser} = useContext(UserContext);
+    const [buttonText, setButtonText] = useState('Kaydı tamamla');
+
     const navigation = useNavigation();
 
-    const handleFormSubmit = async (values) => {
-        try {
-            await setUser({...user, ...values});
-            console.log(user);
-            navigation.navigate('LoginScreen');
+    const saveUserToAsyncStorage = async () => {
+        const {name, surname, birthDate,identityNumber, photo,phone, password, confirmPassword} = user;
+      const data = {
+        name,
+        surname,
+        birthDate,
+        identityNumber,
+        photo,
+        phone, 
+        password, 
+        confirmPassword
+      };
+
+        try {          
+          console.log(data);
+          await AsyncStorage.setItem('user', JSON.stringify(data));
+          console.log('User data saved to async storage.');  
+          navigation.navigate('LoginScreen');
         } catch (error) {
-            console.log(error);
+          console.log('Error saving user data to async storage: ', error);
         }
+      }
+      
+    const handleFormSubmit = async (values) => {
+
+        if (buttonText === "Kaydı tamamla") {
+            // İlk kez tıklama durumu
+            try {
+                await setUser({...user, ...values});    //setUser() fonksiyonu asenkron bir fonksiyon değildir. Bu nedenle, await kullanarak setUser()'ın tamamlanmasını bekleyemiyoruz.        
+                console.log(user);            
+                //await saveUserToAsyncStorage(); 
+            } catch (error) {
+                console.log(error);
+            }   
+            setButtonText('Giriş sayfasına git');
+        } else {
+            // İkinci kez tıklama durumu
+            await saveUserToAsyncStorage();             
+          }
+             
       };
 
     return(
@@ -89,11 +124,11 @@ const Password = () => {
             </View>
             <View style={styles.button_container}>
             <Button  onPress={() => navigation.goBack()} title="Önceki adım"/>
-            <Button contained onPress={handleSubmit} title="Kaydı tamamla"/>
+            <Button contained onPress={handleSubmit} title={buttonText}/>
             </View>
             </>
             )}
-            </Formik>            
+            </Formik>                       
         </SafeAreaView>
     )
 }

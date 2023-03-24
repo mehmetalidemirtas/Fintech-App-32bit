@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import UserContext from '../../context/UserContext';
 import { SafeAreaView,View,Text,StyleSheet } from 'react-native';
 import Button from '../../components/Button';
