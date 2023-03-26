@@ -24,8 +24,8 @@ const Photo = () => {
         <SafeAreaView style={styles.container}>     
             <Text style={styles.title}>Fotoğraf Seç</Text>
           <View style={styles.button_container}>
-            <Button textColor='#7286D3' onPress={() => navigation.goBack()} title="Önceki adım"/>         
-            <Button contained buttonColor='#7286D3' textColor='white' onPress={handleSubmit} title="Sonraki adım"/>                                  
+            <Button  onPress={() => navigation.goBack()} title="Önceki adım"/>         
+            <Button contained onPress={handleSubmit} title="Sonraki adım"/>                                  
             </View>
         </SafeAreaView>
     )

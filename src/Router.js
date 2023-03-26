@@ -4,7 +4,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from './styles/colors';
-
 import Login from './pages/Login';
 import Identity from './pages/Register/Identity';
 import Photo from './pages/Register/Photo';
@@ -13,7 +12,11 @@ import Watchlist from './pages/Main/Watchlist';
 import Trade from './pages/Main/Trade';
 import Settings from './pages/Settings';
 import History from './pages/History';
-import NewAccount from './pages/NewAccount';
+import BankAccountType from './pages/NewBankAccount/BankAccountType';
+import BankCurrencyType from './pages/NewBankAccount/BankCurrencyType';
+import BankBranch from './pages/NewBankAccount/BankBranch';
+import Summary from './pages/NewBankAccount/Summary';
+import Confirmation from './pages/NewBankAccount/Confirmation';
 import ForgotPassword from './pages/Register/ForgotPassword';
 
 const Stack = createNativeStackNavigator();
@@ -99,18 +102,32 @@ const SettingsStack = () => {
 
 const WatchlistStack = () => {
   return(
-    <Stack.Navigator screenOptions={screenOptions}>
-      
+    <Stack.Navigator screenOptions={screenOptions}>      
       <Stack.Screen name="WatchlistScreen" component={Watchlist}
-       options={{title: "Watchlist",
+       options={{
+        title: "Watchlist",
           headerBackVisible:false,         
         }}/>
-
-      <Stack.Screen name="NewAccount" component={NewAccount}
+      <Stack.Screen name="BankAccountTypeScreen" component={BankAccountType}
        options={{
-          title: "New Account",
+          title: "Bank Account Type",
         }}/>
-
+        <Stack.Screen name="BankCurrencyTypeScreen" component={BankCurrencyType}
+       options={{
+          title: "Currency Type",
+        }}/>
+      <Stack.Screen name="BankBranchScreen" component={BankBranch}
+       options={{
+          title: "Bank Branch",
+        }}/>
+        <Stack.Screen name="ConfirmationScreen" component={Confirmation}
+        options={{
+           title: "Confirmation",
+         }}/>
+        <Stack.Screen name="SummaryScreen" component={Summary}
+        options={{
+           title: "Summary",
+         }}/>                
       <Stack.Screen name="HistoryScreen" component={History} 
         options={{
           title: "History",        
@@ -128,7 +145,7 @@ const App= () => {
         headerShown:false,
         }}>
         <Stack.Screen name="LoginStack" component={LoginStack}/>
-        <Stack.Screen name="MainTabs" component={MainTabs}/>
+        <Stack.Screen name="MainTabs" component={MainTabs}/>        
       </Stack.Navigator>
     </NavigationContainer>
   );

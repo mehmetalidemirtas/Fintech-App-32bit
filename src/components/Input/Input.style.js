@@ -19,8 +19,7 @@ export default StyleSheet.create({
         borderColor: '#ccc',
         borderWidth: 1,
         paddingHorizontal: 15,
-        fontSize: 18,
- 
+        fontSize: 18, 
       },
       focusedTextInputContainer: {
         borderRadius:20,

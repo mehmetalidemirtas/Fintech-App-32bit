@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.17.12",
     "@react-native-masked-view/masked-view": "^0.2.8",
+    "@react-native-picker/picker": "^2.4.9",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/material-bottom-tabs": "^6.2.15",
     "@react-navigation/native": "^6.1.6",
@@ -22,6 +23,9 @@
     "json-stringify-safe": "^5.0.1",
     "react": "17.0.2",
     "react-native": "0.68.2",
+    "react-native-dropdown-picker": "^5.4.6",
+    "react-native-dropdown-select-list": "^2.0.4",
+    "react-native-flash-message": "^0.4.0",
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.9.0",
     "react-native-image-picker": "^5.3.1",

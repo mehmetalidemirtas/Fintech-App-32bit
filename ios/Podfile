@@ -19,6 +19,8 @@ target 'Fintech' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  pod 'RNCPicker', :path => '../node_modules/@react-native-picker/picker'
+
   target 'FintechTests' do
     inherit! :complete
     # Pods for testing

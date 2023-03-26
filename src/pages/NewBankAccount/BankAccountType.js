@@ -1,0 +1,84 @@
+import React, { useState, useContext } from 'react';
+import { SafeAreaView,View,Text,StyleSheet } from 'react-native';
+import Button from '../../components/Button';
+import colors from '../../styles/colors';
+import { useNavigation } from '@react-navigation/native';
+import { SelectList } from 'react-native-dropdown-select-list';
+import BankAccountContext from '../../context/BankAccountContext';
+import FlashMessage,{ showMessage, hideMessage } from "react-native-flash-message";
+
+const BankAccountType = () => {
+  const navigation = useNavigation();
+  const [selected, setSelected] = useState("");
+  const{bank, setBank} = useContext(BankAccountContext);
+
+    const data = [
+        {key:'1', value:'Vadeli hesap'},
+        {key:'2', value:'Vadesiz hesap'},
+    ]
+  const handleBankAccountTypeSelect = () => {
+    if (selected === "") {
+      showMessage({
+        message: "Lütfen bir seçim yapın",
+        type: "danger",
+        backgroundColor: colors.primary
+      });
+      return;
+    }
+    console.log("selected::: " + selected);
+    setBank(prev => ({...prev, bankType: selected}));
+    console.log(bank);
+    navigation.navigate('BankCurrencyTypeScreen');
+  };
+    
+    return(
+        <SafeAreaView style={styles.container}>       
+        <Text style={styles.title}>Bank Account Type</Text> 
+        <Text style={styles.text} > Lütfen hesap türü seçiniz</Text>
+        <View style={{margin:20}}>
+          <SelectList 
+          setSelected={(val) => setSelected(val)} 
+          data={data} 
+          title="Hesap türünü seçiniz"
+          searchPlaceholder="Ara"
+          notFoundText="Bulunamadı..."
+          placeholder="Hesap türü seçiniz"
+          save="value"
+          defaultOption={bank.bankType}
+          />
+          </View>
+          <View style={styles.button_container}>
+            <Button contained onPress={handleBankAccountTypeSelect} title="Sonraki adım"/>                                  
+          </View>
+   </SafeAreaView>
+    )
+}
+
+const styles = StyleSheet.create({
+
+    container:{
+        backgroundColor:"white", 
+        flex:1, 
+        justifyContent:"center"
+    },
+    title:{
+        textAlign: 'center', 
+        fontSize:25, 
+        fontWeight:"bold", 
+        padding:20,
+        color:colors.primary,
+    },
+    text:{
+      textAlign:"center", 
+      marginTop:30, 
+      fontSize:15
+    },
+    button_container:{
+        flexDirection:"row",
+        alignItems:"center",
+        justifyContent:"space-evenly",
+        marginTop:25,
+    },
+})
+
+export default BankAccountType;
