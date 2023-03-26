@@ -12,12 +12,12 @@ const Summary = () => {
 
     const navigation = useNavigation();
     const{bank, setBank} = useContext(BankAccountContext);
-
+    
     useEffect(() => { //Bir önceki aşamada seçilen branchName bir sonraki render işleminde context'e kaydolacağı için useEffect kullandımm.       
     }, [bank]);
     
     const saveBankAccountToAsyncStorage = async () => {
-        const {bankType, currencyType, branchName,accountNo,iban} = bank;
+      const {bankType, currencyType, branchName,accountNo,iban} = bank;
       const data = {
         bankType,
         currencyType,
@@ -26,14 +26,25 @@ const Summary = () => {
         iban
       };
 
+      AsyncStorage.getItem('user').then(userData => {
+        const user = JSON.parse(userData);
+        const identityNumber = user.identityNumber;
+        console.log("identity: " + identityNumber);
+        const key = `${identityNumber}_bankAccount_${accountNo}`; // Her bir banka hesabı için ayrı bir anahtar oluşturun
+        console.log("key: " + key);
         try {          
           console.log(data);
-          await AsyncStorage.setItem('bank', JSON.stringify(data));
+          AsyncStorage.setItem(key, JSON.stringify(data));
           console.log('Bank account saved to async storage.');  
           navigation.navigate('WatchlistScreen');
         } catch (error) {
           console.log('Error saving bank account to async storage: ', error);
         }
+      }).catch(error => {
+        console.log(error);
+      });
+
+      
       }
     const handleSubmit = async () => {        
         try {

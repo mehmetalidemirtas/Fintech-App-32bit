@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { SafeAreaView,View,Text } from 'react-native';
+import { SafeAreaView,View,Text,FlatList } from 'react-native';
 import Button from '../../../components/Button';
 import UserContext from '../../../context/UserContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,8 +7,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Watchlist = ({navigation}) => {
   const [user, setUser] = useState([]);
   const [bank, setBank] = useState([]);
+  const [identityNo, setIdentityNo] = useState();
   const abortController = new AbortController();
 
+  /*****************************************
+   * // Bütün verileri sil
+    AsyncStorage.clear().then(() => {
+    console.log('Tüm veriler silindi');
+    }).catch(error => {
+    console.log(error);
+    });  
+   *****************************************/
   useEffect(() => {
     const getUserData = async () => {
       try {
@@ -17,7 +26,6 @@ const Watchlist = ({navigation}) => {
           const parsedUserData = JSON.parse(userData);
           setUser(parsedUserData);
         } else {
-          console.log('AsyncStorage boş');
         }
       } catch (e) {
         console.log('Hata oluştu: ', e);
@@ -25,24 +33,45 @@ const Watchlist = ({navigation}) => {
     };
     const getBankData = async () => {
       try {
-        const BankData = await AsyncStorage.getItem('bank');
-        if (BankData !== null) {
-          const parsedBankData = JSON.parse(BankData);
-          setBank(parsedBankData);
-        } else {
-          console.log('AsyncStorage boş');
-        }
+        const keys = await AsyncStorage.getAllKeys(); // Tüm async storage anahtarlarını al
+        const filterKey = `${identityNo}_bankAccount_`; // Her bir banka hesabı için ayrı bir anahtar oluşturun
+        const bankAccountKeys = keys.filter((key) => key.includes(filterKey)); // Sadece banka hesapları için anahtarları filtrele
+        const bankAccounts = await Promise.all(bankAccountKeys.map(async (key) => {
+          const bankAccount = await AsyncStorage.getItem(key); // Her bir banka hesabı için getItem ile async storage'dan verileri yükle
+          return JSON.parse(bankAccount);
+        }));
+        setBank(bankAccounts);
       } catch (e) {
-        console.log('Hata oluştu: ', e);
+        console.error('Error loading bank accounts from async storage:', e);
       }
     };
     getUserData();
-    getBankData();
+    getIdentity();
+    getBankData();  
     return () => { //Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function
       // Temizleme işlevi içinde asenkron işlevleri veya abonelikleri iptal etmek için kullanılır.
       abortController.abort();
     };
   }, [bank]);
+
+const getIdentity=()=>{
+AsyncStorage.getItem('user').then(userData => {
+  const user = JSON.parse(userData);  
+  setIdentityNo(user.identityNumber);
+}).catch(error => {
+  console.log(error);
+});
+}
+
+  const renderItem = ({ item }) => (
+    <View style={{padding:5, margin:5}}>
+      <Text>bankType: {item.bankType}</Text>
+      <Text>currencyType: {item.currencyType}</Text>
+      <Text>branchName: {item.branchName}</Text>
+      <Text>accountNo: {item.accountNo}</Text>
+      <Text>iban: {item.iban}</Text>
+    </View>
+  );
 
   return(
       <SafeAreaView style={{flex:1,backgroundColor:"white"}}>            
@@ -57,11 +86,10 @@ const Watchlist = ({navigation}) => {
           <Text>phone: {user.phone}</Text>
           <Text>password: {user.password}</Text>
           <Text>confirmPassword: {user.confirmPassword}</Text> 
-          <Text>bankType: {bank.bankType}</Text> 
-          <Text>currencyType: {bank.currencyType}</Text> 
-          <Text>branchName: {bank.branchName}</Text> 
-          <Text>accountNo: {bank.accountNo}</Text> 
-          <Text>iban: {bank.iban}</Text> 
+          <FlatList
+      data={bank}
+      renderItem={renderItem}
+    />
       </SafeAreaView>
   )
 }
