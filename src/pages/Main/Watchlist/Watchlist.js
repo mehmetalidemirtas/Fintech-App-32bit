@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Watchlist = ({navigation}) => {
   const [user, setUser] = useState([]);
   const [bank, setBank] = useState([]);
-  const [identityNo, setIdentityNo] = useState();
+  //const [identityNo, setIdentityNo] = useState();
   const abortController = new AbortController();
 
   /*****************************************
@@ -18,10 +18,17 @@ const Watchlist = ({navigation}) => {
     console.log(error);
     });  
    *****************************************/
+    const onLogout = async () => {
+      await AsyncStorage.setItem('isLoggedIn', 'false');      
+      await AsyncStorage.removeItem('currentUser');    
+      navigation.navigate('LoginStack');
+    };
   useEffect(() => {
     const getUserData = async () => {
       try {
-        const userData = await AsyncStorage.getItem('user');
+        const identityNo = await AsyncStorage.getItem('currentUser');
+        const key = `${identityNo}_userAccount`; 
+        const userData = await AsyncStorage.getItem(key);
         if (userData !== null) {
           const parsedUserData = JSON.parse(userData);
           setUser(parsedUserData);
@@ -34,7 +41,8 @@ const Watchlist = ({navigation}) => {
     const getBankData = async () => {
       try {
         const keys = await AsyncStorage.getAllKeys(); // Tüm async storage anahtarlarını al
-        const filterKey = `${identityNo}_bankAccount_`; // Her bir banka hesabı için ayrı bir anahtar oluşturun
+        const identityNo = await AsyncStorage.getItem('currentUser');
+        const filterKey = `${identityNo}_bankAccount_`; 
         const bankAccountKeys = keys.filter((key) => key.includes(filterKey)); // Sadece banka hesapları için anahtarları filtrele
         const bankAccounts = await Promise.all(bankAccountKeys.map(async (key) => {
           const bankAccount = await AsyncStorage.getItem(key); // Her bir banka hesabı için getItem ile async storage'dan verileri yükle
@@ -46,7 +54,6 @@ const Watchlist = ({navigation}) => {
       }
     };
     getUserData();
-    getIdentity();
     getBankData();  
     return () => { //Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function
       // Temizleme işlevi içinde asenkron işlevleri veya abonelikleri iptal etmek için kullanılır.
@@ -55,9 +62,9 @@ const Watchlist = ({navigation}) => {
   }, [bank]);
 
 const getIdentity=()=>{
-AsyncStorage.getItem('user').then(userData => {
+AsyncStorage.getItem('currentUser').then(userData => {
   const user = JSON.parse(userData);  
-  setIdentityNo(user.identityNumber);
+  //setIdentityNo(user.identityNumber);
 }).catch(error => {
   console.log(error);
 });
@@ -78,6 +85,7 @@ AsyncStorage.getItem('user').then(userData => {
           <Text>Watchlist</Text>
           <Button title="Yeni hesap oluştur"  onPress={()=> navigation.navigate('BankAccountTypeScreen')} />   
           <Button title="History"   onPress={()=> navigation.navigate('HistoryScreen')} />  
+          <Button title="Logout"   onPress={onLogout} />  
           <Text>name: {user.name}</Text>
           <Text>surname: {user.surname}</Text>
           <Text>birthDate: {user.birthDate}</Text>

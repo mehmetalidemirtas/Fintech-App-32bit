@@ -48,9 +48,12 @@ const Password = () => {
         confirmPassword
       };
 
-        try {          
+        try {
+          const key = `${identityNumber}_userAccount`; // Her bir kullanıcı hesabı için ayrı bir anahtar oluşturun
+          console.log("key: " + key);
           console.log(data);
-          await AsyncStorage.setItem('user', JSON.stringify(data));
+          await AsyncStorage.setItem(key, JSON.stringify(data));
+          //await AsyncStorage.setItem('isLoggedIn', 'false');
           console.log('User data saved to async storage.');  
           navigation.navigate('LoginScreen');
         } catch (error) {

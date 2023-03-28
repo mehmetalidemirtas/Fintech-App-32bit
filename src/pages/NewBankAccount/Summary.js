@@ -26,11 +26,9 @@ const Summary = () => {
         iban
       };
 
-      AsyncStorage.getItem('user').then(userData => {
-        const user = JSON.parse(userData);
-        const identityNumber = user.identityNumber;
-        console.log("identity: " + identityNumber);
-        const key = `${identityNumber}_bankAccount_${accountNo}`; // Her bir banka hesabı için ayrı bir anahtar oluşturun
+      const identityNo = await AsyncStorage.getItem('currentUser');
+        console.log("identity: " + identityNo);
+        const key = `${identityNo}_bankAccount_${accountNo}`; // Her bir banka hesabı için ayrı bir anahtar oluşturun
         console.log("key: " + key);
         try {          
           console.log(data);
@@ -40,12 +38,7 @@ const Summary = () => {
         } catch (error) {
           console.log('Error saving bank account to async storage: ', error);
         }
-      }).catch(error => {
-        console.log(error);
-      });
-
-      
-      }
+     }
     const handleSubmit = async () => {        
         try {
             await saveBankAccountToAsyncStorage(); 

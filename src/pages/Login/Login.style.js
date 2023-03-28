@@ -25,5 +25,11 @@ export default StyleSheet.create({
         flexDirection:"row",
         justifyContent:"flex-end",
          marginRight:25,
+    },
+    error_message:{
+        fontSize: 12, 
+        color: 'red',
+        marginLeft:30,
+        padding:1,
     }
 });
