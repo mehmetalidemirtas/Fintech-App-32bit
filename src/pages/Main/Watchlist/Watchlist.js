@@ -18,11 +18,12 @@ const Watchlist = ({navigation}) => {
     console.log(error);
     });  
    *****************************************/
-    const onLogout = async () => {
-      await AsyncStorage.setItem('isLoggedIn', 'false');      
-      await AsyncStorage.removeItem('currentUser');    
-      navigation.navigate('LoginStack');
-    };
+    const handleLogout = async () => {
+      await AsyncStorage.removeItem("isLoggedIn");
+      await AsyncStorage.removeItem('currentUser');
+      //navigation.navigate("LoginStack");
+    };    
+  
   useEffect(() => {
     const getUserData = async () => {
       try {
@@ -85,7 +86,6 @@ AsyncStorage.getItem('currentUser').then(userData => {
           <Text>Watchlist</Text>
           <Button title="Yeni hesap oluştur"  onPress={()=> navigation.navigate('BankAccountTypeScreen')} />   
           <Button title="History"   onPress={()=> navigation.navigate('HistoryScreen')} />  
-          <Button title="Logout"   onPress={onLogout} />  
           <Text>name: {user.name}</Text>
           <Text>surname: {user.surname}</Text>
           <Text>birthDate: {user.birthDate}</Text>

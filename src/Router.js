@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
@@ -18,10 +18,14 @@ import BankBranch from './pages/NewBankAccount/BankBranch';
 import Summary from './pages/NewBankAccount/Summary';
 import Confirmation from './pages/NewBankAccount/Confirmation';
 import ForgotPassword from './pages/Register/ForgotPassword';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Button } from 'react-native';
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
+const App = () => {
 const screenOptions = {
   headerStyle : {backgroundColor: "white"},
   headerTitleStyle: {color: colors.primary},
@@ -30,11 +34,20 @@ const screenOptions = {
   statusBarStyle:"dark",
   headerTintColor: colors.primary,
 }
-
+const handleLogin = async () => {
+  try {
+    await AsyncStorage.setItem('isLoggedIn', 'true');
+    setIsLoggedIn(true);
+  } catch (error) {
+    console.log(error);
+  }
+};
 const LoginStack = () => {
   return(
     <Stack.Navigator screenOptions={{headerShown:false, statusBarColor:"#FFF", statusBarStyle:"dark", navigationBarColor:"#FFF"}}>
-      <Stack.Screen name="LoginScreen" component={Login}/>
+      <Stack.Screen name="LoginScreen">
+        {(props) => <Login {...props} handleLogin={handleLogin} />}
+      </Stack.Screen>
       <Stack.Screen name="IdentityScreen" component={Identity}/>
       <Stack.Screen name="PhotoScreen" component={Photo}/>
       <Stack.Screen name="PasswordScreen" component={Password}/>
@@ -94,7 +107,10 @@ const SettingsStack = () => {
       <Stack.Screen name='Setting' component={Settings}
        options={{
           title: "Setting",
-          headerBackVisible:false,        
+          headerBackVisible:false,   
+          headerRight: () => (
+            <Icon name='logout' size={25} color={colors.primary} onPress={onLogout}/>
+          ),     
         }}/>
     </Stack.Navigator>
   )
@@ -135,17 +151,45 @@ const WatchlistStack = () => {
     </Stack.Navigator>
   )
 }
+const onLogout = async () => {
+  // Kullanıcının giriş durumunu "false" olarak ayarlayın
+  setIsLoggedIn(false);
+  // AsyncStorage'de kullanıcının giriş durumunu güncelleyin
+  try {
+    await AsyncStorage.removeItem("isLoggedIn");
+    await AsyncStorage.removeItem('currentUser');
 
+  } catch (error) {
+    console.log(error);
+  }
+};
+const getIsSignedIn = async () => {
+  const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
+  return isLoggedIn;
+};
 
-const App= () => {
-  return (
-    
-    <NavigationContainer>                 
-      <Stack.Navigator  screenOptions={{
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    const checkIsSignedIn = async () => {
+      const signedIn = await getIsSignedIn();
+      setIsLoggedIn(signedIn);
+    };
+
+    checkIsSignedIn();
+  }, [isLoggedIn]);
+
+  console.log("isLoggedIn: "+ isLoggedIn);
+  
+  return (    
+    <NavigationContainer>                     
+      <Stack.Navigator  screenOptions={{        
         headerShown:false,
-        }}>
-        <Stack.Screen name="LoginStack" component={LoginStack}/>
-        <Stack.Screen name="MainTabs" component={MainTabs}/>        
+      }}>
+        {isLoggedIn ? (
+          <Stack.Screen name="MainTabs" component={MainTabs} />
+          ) : (
+          <Stack.Screen name="LoginStack" component={LoginStack} />
+          )}
       </Stack.Navigator>
     </NavigationContainer>
   );

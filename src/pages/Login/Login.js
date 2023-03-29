@@ -27,7 +27,7 @@ const initialValues = {
     password: '',
 };
 
-const Login = ({navigation}) => {
+const Login = ({navigation, handleLogin}) => {
       //Bu işlem belki splash ekranında yapılabilir????
       const checkIsLoggedIn = async () => {
         const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
@@ -56,9 +56,10 @@ const Login = ({navigation}) => {
                 const userAccount = JSON.parse(isUserAccountExists);
                 if (userAccount.password === values.password) {
                     console.log("şifre doğru, giriş başarılı")
+                    await handleLogin();
                     AsyncStorage.setItem('isLoggedIn', 'true')
                     await AsyncStorage.setItem('currentUser', values.identityNumber);;
-                    navigation.navigate('MainTabs');
+                    //navigation.navigate('MainTabs');
                 } else {
                     console.log("şifre yanlış");
                     showMessage({
