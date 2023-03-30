@@ -1,4 +1,4 @@
-import React, {useEffect,useCallback } from 'react';
+import React, {useEffect,useState } from 'react';
 import { SafeAreaView,View,Text,Image } from 'react-native';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
@@ -28,7 +28,9 @@ const initialValues = {
 };
 
 const Login = ({navigation, handleLogin}) => {
-      //Bu işlem belki splash ekranında yapılabilir????
+
+  const [isLoading, setIsLoading] = useState(false);
+
       const checkIsLoggedIn = async () => {
         const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
         if (isLoggedIn === 'true') {
@@ -42,6 +44,8 @@ const Login = ({navigation, handleLogin}) => {
       }, []);
 
     const handleFormSubmit = async (values) => {
+      setIsLoading(true);
+
         try {
             console.log("id: " + values.identityNumber)
             console.log("pw: " + values.password)
@@ -79,6 +83,7 @@ const Login = ({navigation, handleLogin}) => {
         } catch (error) {
             console.log(error);
         }
+        setIsLoading(false);
       };
     
     return(
@@ -99,8 +104,9 @@ const Login = ({navigation, handleLogin}) => {
                     placeholder="Kimlik numaranızı giriniz..."
                     iconName="account"
                     onType={handleChange('identityNumber')}
-                onBlur={handleBlur('identityNumber')}
-                value={values.identityNumber}
+                    onBlur={handleBlur('identityNumber')}
+                    value={values.identityNumber}
+                    loading={isLoading}
                     />
                     {touched.identityNumber && errors.identityNumber &&
               <Text style={styles.error_message}>{errors.identityNumber}</Text>
@@ -112,6 +118,7 @@ const Login = ({navigation, handleLogin}) => {
                     onBlur={handleBlur('password')}
                     value={values.password}
                     isPassword
+                    loading={isLoading}
                     />
                 {touched.password && errors.password &&
               <Text style={styles.error_message}>{errors.password}</Text>
@@ -122,7 +129,7 @@ const Login = ({navigation, handleLogin}) => {
             </View>
 
             <View style={{marginBottom:70}}>
-            <Button contained marginRight={25} marginLeft={25} title="Giriş Yap" onPress={handleSubmit} />
+            <Button contained marginRight={25} marginLeft={25} title="Giriş Yap" onPress={handleSubmit} loading={isLoading} />
                 <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center"}}>                
                     <Button  title="Dont you have an account? Sign up" marginRight={25} marginLeft={25} border={0} onPress={()=> navigation.navigate('IdentityScreen')} />                    
                 </View>

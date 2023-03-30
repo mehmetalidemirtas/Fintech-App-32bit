@@ -19,8 +19,7 @@ import Summary from './pages/NewBankAccount/Summary';
 import Confirmation from './pages/NewBankAccount/Confirmation';
 import ForgotPassword from './pages/Register/ForgotPassword';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Button } from 'react-native';
-
+import Splash from './pages/Splash';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -169,15 +168,21 @@ const getIsSignedIn = async () => {
 };
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const checkIsSignedIn = async () => {
       const signedIn = await getIsSignedIn();
       setIsLoggedIn(signedIn);
+      setIsLoading(false);
     };
 
     checkIsSignedIn();
   }, [isLoggedIn]);
 
+  if (isLoading) {
+    return <Splash />;
+  }
   console.log("isLoggedIn: "+ isLoggedIn);
   
   return (    

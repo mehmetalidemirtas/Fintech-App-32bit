@@ -4,7 +4,7 @@ import styles from './Input.style';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../../styles/colors';
 
-const Input = ({placeholder,value,onType, iconName, isPassword}) => {
+const Input = ({placeholder,value,onType, iconName, isPassword, loading}) => {
 
     const [isFocused, setIsFocused] = useState(false);
 
@@ -21,6 +21,8 @@ const Input = ({placeholder,value,onType, iconName, isPassword}) => {
             placeholder={placeholder}
             onFocus={handleFocus}
             value={value}
+            editable={!loading}
+            selectable={!loading}
             onChangeText={onType}
             secureTextEntry={isPassword}
             onBlur={handleBlur}  />

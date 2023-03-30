@@ -31,11 +31,13 @@ const initialValues = {
 const Password = () => {
 
     const{user, setUser} = useContext(UserContext);
+    const [isLoading, setIsLoading] = useState(false);
     const [buttonText, setButtonText] = useState('Kaydı tamamla');
 
     const navigation = useNavigation();
 
     const saveUserToAsyncStorage = async () => {
+      setIsLoading(true);
         const {name, surname, birthDate,identityNumber, photo,phone, password, confirmPassword} = user;
       const data = {
         name,
@@ -55,10 +57,12 @@ const Password = () => {
           await AsyncStorage.setItem(key, JSON.stringify(data));
           //await AsyncStorage.setItem('isLoggedIn', 'false');
           console.log('User data saved to async storage.');  
+          setIsLoading(false);
           navigation.navigate('LoginScreen');
         } catch (error) {
           console.log('Error saving user data to async storage: ', error);
-        }
+          setIsLoading(false);
+        }        
       }
       
     const handleFormSubmit = async (values) => {
@@ -98,6 +102,7 @@ const Password = () => {
                 onType={handleChange('phone')}
                 onBlur={handleBlur('phone')}
                 value={values.phone}
+                
             />
             {touched.phone && errors.phone &&
               <Text style={styles.error_message}>{errors.phone}</Text>
@@ -126,8 +131,8 @@ const Password = () => {
             }
             </View>
             <View style={styles.button_container}>
-            <Button  onPress={() => navigation.goBack()} title="Önceki adım"/>
-            <Button contained onPress={handleSubmit} title={buttonText}/>
+            <Button  onPress={() => navigation.goBack()} title="Önceki adım" loading={isLoading}/>
+            <Button contained onPress={handleSubmit} title={buttonText} loading={isLoading}/>
             </View>
             </>
             )}

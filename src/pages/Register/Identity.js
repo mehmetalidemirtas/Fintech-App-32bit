@@ -35,9 +35,11 @@ const initialValues = {
 const Identity = () => {
 
     const{user, setUser} = useContext(UserContext);
+    const [isLoading, setIsLoading] = useState(false);
     const navigation = useNavigation();
 
     const handleFormSubmit = async (values) => {
+        setIsLoading(true);
         try {
             await setUser({...user, ...values});
             console.log(user);
@@ -45,6 +47,7 @@ const Identity = () => {
         } catch (error) {
             console.log(error);
         }
+        setIsLoading(false);
       };
     
     return(
@@ -100,8 +103,8 @@ const Identity = () => {
               <Text style={styles.error_message}>{errors.identityNumber}</Text>
             }       
             <View style={styles.button_container}>
-            <Button  text  onPress={() => navigation.goBack()} title="Zaten hesabınız var mı?"/>         
-            <Button contained onPress={handleSubmit} title="Sonraki adım" /> 
+            <Button  text  onPress={() => navigation.goBack()} title="Zaten hesabınız var mı?" loading={isLoading}/>         
+            <Button contained onPress={handleSubmit} title="Sonraki adım" loading={isLoading}/> 
             </View>
             </>
             )}
