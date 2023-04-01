@@ -7,12 +7,14 @@ import { SelectList } from 'react-native-dropdown-select-list'
 import currency_type_list from '../../assets/currency_type';
 import BankAccountContext from '../../context/BankAccountContext';
 import FlashMessage,{ showMessage, hideMessage } from "react-native-flash-message";
+import { ThemeContext } from '../../context/ThemeContext';
 
 const BankCurrencyType = () => {
     
     const navigation = useNavigation();
     const [selected, setSelected] = useState("");
     const{bank, setBank} = useContext(BankAccountContext);
+    const theme = useContext(ThemeContext);
 
     const handleCurrencyTypeSelect = () => {
       if (selected === "") {
@@ -29,8 +31,8 @@ const BankCurrencyType = () => {
       navigation.navigate('BankBranchScreen');                
     };
     return(
-        <SafeAreaView style={styles.container}>     
-            <Text style={styles.title}>Currency Type</Text>
+      <SafeAreaView style={[styles.container, {backgroundColor: theme.backgroundColor}]}>       
+      <Text style={[styles.title,{color: theme.primary}]}>Currency Type</Text>
             <Text style={styles.text} > Lütfen döviz tipi seçiniz</Text>            
         <View style={{margin:20}}>
           <SelectList 
@@ -55,7 +57,6 @@ const BankCurrencyType = () => {
 const styles = StyleSheet.create({
 
   container:{
-      backgroundColor:"white", 
       flex:1, 
       justifyContent:"center"
   },

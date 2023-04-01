@@ -9,7 +9,8 @@ export default StyleSheet.create({
         marginRight:20,
       },
       bottom_container:{
-        flexDirection: 'row', alignItems: 'center' 
+        flexDirection: 'row', 
+        alignItems: 'center' 
       },
       textInputContainer: {
         justifyContent:"center",

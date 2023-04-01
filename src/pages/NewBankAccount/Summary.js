@@ -7,12 +7,14 @@ import { useNavigation } from '@react-navigation/native';
 import Card from '../../components/Card';
 import BankAccountContext from '../../context/BankAccountContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const Summary = () => {
 
     const navigation = useNavigation();
     const{bank, setBank} = useContext(BankAccountContext);
-    
+    const theme = useContext(ThemeContext);
+
     useEffect(() => { //Bir önceki aşamada seçilen branchName bir sonraki render işleminde context'e kaydolacağı için useEffect kullandımm.       
     }, [bank]);
     
@@ -48,9 +50,9 @@ const Summary = () => {
         }   
     };
     return(
-        <SafeAreaView style={styles.container}>     
-            <Text style={styles.title}>Hesap Özeti</Text>
-            <View style={{backgroundColor: colors.card_bg, borderRadius: 30, margin:20}}>
+        <SafeAreaView style={[styles.container, {backgroundColor: theme.backgroundColor}]}>       
+            <Text style={[styles.title,{color: theme.primary}]}>Hesap Özeti</Text>
+            <View style={{backgroundColor: theme.cardColor, borderRadius: 30, margin:20}}>
             <Card title="Bank Account Type:" text={bank.bankType} />
             <Card title="Currency Type:" text={bank.currencyType} />
             <Card title="Bank Branch:" text={bank.branchName} />
@@ -67,7 +69,6 @@ const Summary = () => {
 const styles = StyleSheet.create({
 
     container:{
-        backgroundColor:"#FFF", 
         flex:1, 
         justifyContent:"center"
     },

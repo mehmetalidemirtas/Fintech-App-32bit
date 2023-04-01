@@ -1,4 +1,4 @@
-import React, {useEffect,useState } from 'react';
+import React, {useEffect,useState, useContext} from 'react';
 import { SafeAreaView,View,Text,Image } from 'react-native';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { showMessage } from "react-native-flash-message";
 import colors from '../../styles/colors';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const validationSchema = Yup.object().
 shape({
@@ -30,6 +31,7 @@ const initialValues = {
 const Login = ({navigation, handleLogin}) => {
 
   const [isLoading, setIsLoading] = useState(false);
+  const theme = useContext(ThemeContext);
 
       const checkIsLoggedIn = async () => {
         const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
@@ -88,7 +90,7 @@ const Login = ({navigation, handleLogin}) => {
     
     return(
 
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
             <View style={styles.logo_container}>
             <Image style={styles.logo} source={require("../../assets/login-logo.png")} />
             </View>  

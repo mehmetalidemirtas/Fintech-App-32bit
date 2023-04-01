@@ -3,11 +3,12 @@ import { SafeAreaView,View,Text,FlatList } from 'react-native';
 import Button from '../../../components/Button';
 import UserContext from '../../../context/UserContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { ThemeContext } from '../../../context/ThemeContext';
+import styles from './Watchlist.style';
 const Watchlist = ({navigation}) => {
   const [user, setUser] = useState([]);
   const [bank, setBank] = useState([]);
-  //const [identityNo, setIdentityNo] = useState();
+  const theme = useContext(ThemeContext);
   const abortController = new AbortController();
 
   /*****************************************
@@ -18,12 +19,6 @@ const Watchlist = ({navigation}) => {
     console.log(error);
     });  
    *****************************************/
-    const handleLogout = async () => {
-      await AsyncStorage.removeItem("isLoggedIn");
-      await AsyncStorage.removeItem('currentUser');
-      //navigation.navigate("LoginStack");
-    };    
-  
   useEffect(() => {
     const getUserData = async () => {
       try {
@@ -82,7 +77,7 @@ AsyncStorage.getItem('currentUser').then(userData => {
   );
 
   return(
-      <SafeAreaView style={{flex:1,backgroundColor:"white"}}>            
+      <SafeAreaView style={[styles.container, {backgroundColor: theme.backgroundColor}]}>            
           <Text>Watchlist</Text>
           <Button title="Yeni hesap oluştur"  onPress={()=> navigation.navigate('BankAccountTypeScreen')} />   
           <Button title="History"   onPress={()=> navigation.navigate('HistoryScreen')} />  

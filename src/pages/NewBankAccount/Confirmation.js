@@ -5,13 +5,15 @@ import colors from '../../styles/colors';
 import { useNavigation } from '@react-navigation/native';
 import BankAccountContext from '../../context/BankAccountContext';
 import Card from '../../components/Card';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const Confirmation = () => {
     
     const navigation = useNavigation();
     const{bank, setBank} = useContext(BankAccountContext); 
     const accountNumber = Math.floor(Math.random() * 100000000);
-   
+    const theme = useContext(ThemeContext);
+
     useEffect(() => { //Bir önceki aşamada seçilen branchName bir sonraki render işleminde context'e kaydolacağı için useEffect kullandımm.
         console.log(bank.bankType);
         console.log(bank.currencyType);
@@ -45,10 +47,10 @@ const Confirmation = () => {
       return trIban;
     };    
     return(
-        <SafeAreaView style={styles.container}>
-            <Text style={styles.title}>Confirmation</Text>
+      <SafeAreaView style={[styles.container, {backgroundColor: theme.backgroundColor}]}>       
+      <Text style={[styles.title,{color: theme.primary}]}>Confirmation</Text>
             <Text style={styles.text}> Lütfen hesap açma işlemini onaylayınız</Text>            
-            <View style={{backgroundColor: colors.card_bg, borderRadius: 30, margin:20}}>
+            <View style={{backgroundColor: theme.cardColor, borderRadius: 30, margin:20}}>
             <Card title="Bank Account Type:" text={bank.bankType} onPress={editAccountType}/>
             <Card title="Currency Type:" text={bank.currencyType} onPress={editCurrencyType}/>
             <Card title="Bank Branch:" text={bank.branchName} onPress={editBankBranch}/>
@@ -63,7 +65,6 @@ const Confirmation = () => {
 const styles = StyleSheet.create({
 
   container:{
-      backgroundColor:"white", 
       flex:1, 
       justifyContent:"center"
   },

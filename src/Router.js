@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
@@ -20,17 +20,19 @@ import Confirmation from './pages/NewBankAccount/Confirmation';
 import ForgotPassword from './pages/Register/ForgotPassword';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Splash from './pages/Splash';
+import { ThemeContext } from './context/ThemeContext';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
 const App = () => {
+  const theme = useContext(ThemeContext);
 const screenOptions = {
-  headerStyle : {backgroundColor: "white"},
-  headerTitleStyle: {color: colors.primary},
+  headerStyle : {backgroundColor: theme.backgroundColor},
+  headerTitleStyle: {color: theme.textColor},
   headerTitleAlign: "center",
-  statusBarColor: "#FFF",
-  statusBarStyle:"dark",
+  statusBarColor: theme.backgroundColor,
+  statusBarStyle:theme.statusBarStyle,
   headerTintColor: colors.primary,
 }
 const handleLogin = async () => {
@@ -43,7 +45,7 @@ const handleLogin = async () => {
 };
 const LoginStack = () => {
   return(
-    <Stack.Navigator screenOptions={{headerShown:false, statusBarColor:"#FFF", statusBarStyle:"dark", navigationBarColor:"#FFF"}}>
+    <Stack.Navigator screenOptions={{headerShown:false, statusBarColor:theme.backgroundColor, statusBarStyle:theme.statusBarStyle, navigationBarColor:theme.backgroundColor}}>
       <Stack.Screen name="LoginScreen">
         {(props) => <Login {...props} handleLogin={handleLogin} />}
       </Stack.Screen>
@@ -58,31 +60,31 @@ const LoginStack = () => {
 const MainTabs = () => {
   return(
     <Tab.Navigator    
-    screenOptions={{navigationBarColor:"white"}}
+    screenOptions={{navigationBarColor:theme.backgroundColor}}
     initialRouteName="Home"
-    activeColor={colors.primary}
-    inactiveColor={colors.primary}    
-    barStyle={{ backgroundColor: "#FFF" }}
+    activeColor={theme.textColor}
+    inactiveColor={theme.primary}    
+    barStyle={{ backgroundColor: theme.backgroundColor }}
     >
-      <Tab.Screen screenOptions={{navigationBarColor:"#FFFF"}} name="WatchlistStack" component={WatchlistStack}                   
+      <Tab.Screen screenOptions={{navigationBarColor:theme.backgroundColor}} name="WatchlistStack" component={WatchlistStack}                   
       options={{                         
           tabBarLabel: 'Watchlist',  
           tabBarIcon: () => (
-            <Icon name="home" color={colors.primary} size={25} />
+            <Icon name="home" color={theme.primary} size={25} />
           ),
         }}/>
       <Tab.Screen name="TradeScreen" component={TradeStack}  
       options={{
         tabBarLabel: 'Trade',
         tabBarIcon: () => (
-          <Icon name="swap-horizontal" color={colors.primary} size={25} />
+          <Icon name="swap-horizontal" color={theme.primary} size={25} />
         ),
       }}/>
       <Tab.Screen name="SettingsScreen" component={SettingsStack} 
       options={{
         tabBarLabel: 'Settings',
         tabBarIcon: () => (
-          <Icon name="cog" color={colors.primary} size={25} />
+          <Icon name="cog" color={theme.primary} size={25} />
         ),
       }}/>
     </Tab.Navigator>
@@ -108,7 +110,7 @@ const SettingsStack = () => {
           title: "Setting",
           headerBackVisible:false,   
           headerRight: () => (
-            <Icon name='logout' size={25} color={colors.primary} onPress={onLogout}/>
+            <Icon name='logout' size={25} color={theme.primary} onPress={onLogout}/>
           ),     
         }}/>
     </Stack.Navigator>

@@ -7,12 +7,14 @@ import colors from '../../styles/colors';
 import { useNavigation } from '@react-navigation/native';
 import BankAccountContext from '../../context/BankAccountContext';
 import FlashMessage,{ showMessage, hideMessage } from "react-native-flash-message";
+import { ThemeContext } from '../../context/ThemeContext';
 
 
 const BankBranch = () => {
   const [selected, setSelected] = useState("");
   const navigation = useNavigation();
   const{bank, setBank} = useContext(BankAccountContext);
+  const theme = useContext(ThemeContext);
 
   const handleBranchNameSelect = () => {
     if (selected === "") {
@@ -30,8 +32,8 @@ const BankBranch = () => {
   };
 
   return (
-    <SafeAreaView style={{backgroundColor:"white", flex:1, alignContent:"center", justifyContent:"center"}}>
-      <Text style={styles.title}>Branch</Text>
+    <SafeAreaView style={[styles.container, {backgroundColor: theme.backgroundColor}]}>       
+    <Text style={[styles.title,{color: theme.primary}]}>Branch</Text>
       <Text style={styles.text} > Lütfen şube seçiniz</Text>                
       <View style={{margin:20}}>
        <SelectList 

@@ -7,6 +7,7 @@ import colors from '../../styles/colors';
 import { Formik } from 'formik';
 import { useNavigation } from '@react-navigation/native';
 import * as Yup from 'yup';
+import { ThemeContext } from '../../context/ThemeContext';
 
 
 const validationSchema = Yup.object().
@@ -37,6 +38,7 @@ const Identity = () => {
     const{user, setUser} = useContext(UserContext);
     const [isLoading, setIsLoading] = useState(false);
     const navigation = useNavigation();
+    const theme = useContext(ThemeContext);
 
     const handleFormSubmit = async (values) => {
         setIsLoading(true);
@@ -51,7 +53,7 @@ const Identity = () => {
       };
     
     return(
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
             <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -59,7 +61,7 @@ const Identity = () => {
       >       
       {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
         <>
-            <Text style={styles.title}>Kimlik Bigileri</Text>
+            <Text style={[styles.title,{color: theme.primary}]}>Kimlik Bigileri</Text>
             <Input 
                 placeholder="İsminizi giriniz..."
                 iconName="account"
@@ -119,7 +121,6 @@ const Identity = () => {
 const styles = StyleSheet.create({
 
     container:{
-        backgroundColor:"#FFF", 
         flex:1, 
         justifyContent:"center",
     },
@@ -128,7 +129,6 @@ const styles = StyleSheet.create({
         fontSize:25, 
         fontWeight:"bold",
         padding:20,
-        color:colors.primary,
     },
     button_container:{
         flexDirection:"row",

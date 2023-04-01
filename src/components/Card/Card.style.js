@@ -1,6 +1,5 @@
 import { TouchableOpacity, StyleSheet,View } from 'react-native';
 import { Divider, Text } from 'react-native-paper';
-import colors from '../../styles/colors';
 
 export default StyleSheet.create({
     container: {        
@@ -35,14 +34,11 @@ export default StyleSheet.create({
         flex: 0.26,
     },
     button:{
-        padding: 10, 
-        backgroundColor: 
-        colors.primary, 
+        padding: 10,         
         margin: 5, 
         borderRadius: 25,
     },
     button_text:{
         textAlign: "center", 
-        color: "white",
     },
 });

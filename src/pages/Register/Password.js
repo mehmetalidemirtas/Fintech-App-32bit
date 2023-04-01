@@ -8,6 +8,7 @@ import { Formik } from 'formik';
 import { useNavigation } from '@react-navigation/native';
 import * as Yup from 'yup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const validationSchema = Yup.object().
 shape({
@@ -33,6 +34,7 @@ const Password = () => {
     const{user, setUser} = useContext(UserContext);
     const [isLoading, setIsLoading] = useState(false);
     const [buttonText, setButtonText] = useState('Kaydı tamamla');
+    const theme = useContext(ThemeContext);
 
     const navigation = useNavigation();
 
@@ -85,15 +87,15 @@ const Password = () => {
       };
 
     return(
-        <SafeAreaView style={styles.container}> 
-        <Formik
+      <SafeAreaView style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
+      <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleFormSubmit}
       >       
       {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
         <>           
-        <Text style={styles.title}>Şifre Belirle</Text>
+        <Text style={[styles.title,{color: theme.primary}]}>Şifre Belirle</Text>
 
             <View>
             <Input 
@@ -144,7 +146,6 @@ const Password = () => {
 const styles = StyleSheet.create({
 
     container:{
-        backgroundColor:"#FFF",
         flex:1,
         justifyContent:"center",
     },
@@ -153,7 +154,6 @@ const styles = StyleSheet.create({
         fontSize:25, 
         fontWeight:"bold", 
         padding:20, 
-        color:colors.primary,
     },
     button_container:{
         flexDirection:"row",

@@ -6,11 +6,13 @@ import { useNavigation } from '@react-navigation/native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import BankAccountContext from '../../context/BankAccountContext';
 import FlashMessage,{ showMessage, hideMessage } from "react-native-flash-message";
+import { ThemeContext } from '../../context/ThemeContext';
 
 const BankAccountType = () => {
   const navigation = useNavigation();
   const [selected, setSelected] = useState("");
   const{bank, setBank} = useContext(BankAccountContext);
+  const theme = useContext(ThemeContext);
 
     const data = [
         {key:'1', value:'Vadeli hesap'},
@@ -32,8 +34,8 @@ const BankAccountType = () => {
   };
     
     return(
-        <SafeAreaView style={styles.container}>       
-        <Text style={styles.title}>Bank Account Type</Text> 
+        <SafeAreaView style={[styles.container, {backgroundColor: theme.backgroundColor}]}>       
+        <Text style={[styles.title,{color: theme.primary}]}>Bank Account Type</Text> 
         <Text style={styles.text} > Lütfen hesap türü seçiniz</Text>
         <View style={{margin:20}}>
           <SelectList 
@@ -57,7 +59,6 @@ const BankAccountType = () => {
 const styles = StyleSheet.create({
 
     container:{
-        backgroundColor:"white", 
         flex:1, 
         justifyContent:"center"
     },

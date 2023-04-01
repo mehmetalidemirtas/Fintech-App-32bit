@@ -1,10 +1,13 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Lottie from 'lottie-react-native';
+import { ThemeContext } from '../../context/ThemeContext';
 
 function Splash(){
+  const theme = useContext(ThemeContext);
+
     return (
-        <View style={styles.container}>
+      <View style={[styles.container, {backgroundColor: theme.backgroundColor}]}>           
         <Lottie style={styles.animation} source={require('../../assets/fintech_splash.json')} autoPlay loop />
         </View>
       );
@@ -15,7 +18,6 @@ const styles = StyleSheet.create({
       flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#FFFFFF',
     },
     animation: {
       width: 250,

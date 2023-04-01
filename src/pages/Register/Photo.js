@@ -4,12 +4,14 @@ import { SafeAreaView,View,Text,StyleSheet } from 'react-native';
 import Button from '../../components/Button';
 import colors from '../../styles/colors';
 import { useNavigation } from '@react-navigation/native';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const Photo = () => {
     
     const{user, setUser} = useContext(UserContext);
     const [isLoading, setIsLoading] = useState(false);
     const navigation = useNavigation();
+    const theme = useContext(ThemeContext);
 
     const handleSubmit = async (photo) => {
       setIsLoading(true);
@@ -24,8 +26,8 @@ const Photo = () => {
       };
     
     return(
-        <SafeAreaView style={styles.container}>     
-            <Text style={styles.title}>Fotoğraf Seç</Text>
+      <SafeAreaView style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
+      <Text style={[styles.title,{color: theme.primary}]}>Fotoğraf Seç</Text>
           <View style={styles.button_container}>
             <Button  onPress={() => navigation.goBack()} title="Önceki adım" loading={isLoading}/>         
             <Button contained onPress={handleSubmit} title="Sonraki adım" loading={isLoading}/>                                  
@@ -37,7 +39,6 @@ const Photo = () => {
 const styles = StyleSheet.create({
 
     container:{
-        backgroundColor:"#FFF", 
         flex:1, 
         justifyContent:"center"
     },
@@ -46,7 +47,6 @@ const styles = StyleSheet.create({
         fontSize:25, 
         fontWeight:"bold", 
         padding:20, 
-        color:colors.primary,
     },
     button_container:{
         flexDirection:"row",
