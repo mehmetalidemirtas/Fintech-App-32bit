@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { SafeAreaView,View,Text,FlatList } from 'react-native';
+import { SafeAreaView,View,Text,FlatList, Image } from 'react-native';
 import Button from '../../../components/Button';
-import UserContext from '../../../context/UserContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeContext } from '../../../context/ThemeContext';
 import styles from './Watchlist.style';
@@ -86,6 +85,7 @@ AsyncStorage.getItem('currentUser').then(userData => {
           <Text>birthDate: {user.birthDate}</Text>
           <Text>identityNumber: {user.identityNumber}</Text>
           <Text>photo: {user.photo}</Text>
+          <Image style={styles.image} source={{uri: user.photo}} />
           <Text>phone: {user.phone}</Text>
           <Text>password: {user.password}</Text>
           <Text>confirmPassword: {user.confirmPassword}</Text> 

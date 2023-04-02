@@ -16,7 +16,7 @@ const CustomButton = ({ onPress, style, textStyle, contained,marginLeft,marginRi
   });
 
   return (
-    <TouchableOpacity style={[buttonStyle,localStyles.button, style, contained &&{backgroundColor: theme.primary}]} onPress={onPress} disabled={loading}>
+    <TouchableOpacity style={[buttonStyle,localStyles.button, style, contained &&{backgroundColor: theme.primary}, {borderColor: theme.primary}]} onPress={onPress} disabled={loading}>
       {
             loading ?
                ( <ActivityIndicator color="white" />)
