@@ -7,6 +7,8 @@ import { ThemeContext } from '../../context/ThemeContext';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import { showMessage } from "react-native-flash-message";
 import colors from '../../styles/colors';
+import { useTranslation } from 'react-i18next';
+
 const Photo = () => {
     
     const{user, setUser} = useContext(UserContext);
@@ -14,6 +16,7 @@ const Photo = () => {
     const navigation = useNavigation();
     const theme = useContext(ThemeContext);
     const [selectedImage, setSelectedImage] = useState(null);
+    const { t } = useTranslation();
 
     const handleCameraPress = () => {
       const options = {
@@ -43,7 +46,7 @@ const Photo = () => {
     const handleSubmit = async (photo) => {  
       if (selectedImage === null) {
         showMessage({
-          message: "Lütfen bir fotoğraf seçiniz",
+          message: t('error.choosePhoto'),
           type: "danger",
           backgroundColor: colors.primary
         });
@@ -62,19 +65,19 @@ const Photo = () => {
     
     return(
       <SafeAreaView style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
-      <Text style={[styles.title,{color: theme.primary}]}>Fotoğraf Seç</Text>
+      <Text style={[styles.title,{color: theme.primary}]}>{t('title.choosePhoto')}</Text>
       {selectedImage && (
         <Image style={styles.image} source={{uri: selectedImage}} />
       )}
         <View style={{margin:5, padding:10,marginHorizontal:20,}}>
-          <Button border={1} onPress={handleCameraPress} title="Open the camera" loading={isLoading}/>    
+          <Button border={1} onPress={handleCameraPress} title={t('button.openTheCamera')} loading={isLoading}/>    
           </View>
           <View style={{margin:5, marginTop:0, padding:10,marginHorizontal:20,}}>
-          <Button border={1} onPress={handleGalleryPress} title="Open the gallery" loading={isLoading}/>         
+          <Button border={1} onPress={handleGalleryPress} title={t('button.openTheGallery')} loading={isLoading}/>         
         </View> 
           <View style={styles.button_container}>
-            <Button  onPress={() => navigation.goBack()} title="Önceki adım" loading={isLoading}/>         
-            <Button contained onPress={handleSubmit} title="Sonraki adım" loading={isLoading}/>                                  
+            <Button  onPress={() => navigation.goBack()} title={t('button.previous')} loading={isLoading}/>         
+            <Button contained onPress={handleSubmit} title={t('button.next')} loading={isLoading}/>                                  
             </View>
         </SafeAreaView>
     )

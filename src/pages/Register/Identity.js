@@ -8,38 +8,41 @@ import { Formik } from 'formik';
 import { useNavigation } from '@react-navigation/native';
 import * as Yup from 'yup';
 import { ThemeContext } from '../../context/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 
-const validationSchema = Yup.object().
-shape({
-    name: Yup.string()
-        .required('Lütfen adınızı giriniz'),
-    surname: Yup.string()
-        .required('Lütfen soyadınızı giriniz'),
-    birthDate: Yup.string()
-    .required('Lütfen doğum tarihinizi giriniz')
-    .matches(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/(19|20)\d{2}$/, 'Tarih formatı dd/mm/yyyy olmalıdır.'),          
-    identityNumber: Yup.string()
-        .required('Lütfen T.C. kimlik numaranızı giriniz')
-        .matches(/^[1-9]{1}[0-9]{9}[02468]{1}$/, 'TC Kimlik Numarası geçersiz')
-        .min(11,"Tc Kimlik numarası 11 haneli olmalıdır")
-        .max(11,"Tc Kimlik numarası 11 haneli olmalıdır"),
-});
-
-const initialValues = {
-    name: '',
-    surname: '',
-    birthDate: '',
-    identityNumber: '',
-};
 
 const Identity = () => {
-
+    
     const{user, setUser} = useContext(UserContext);
     const [isLoading, setIsLoading] = useState(false);
     const navigation = useNavigation();
     const theme = useContext(ThemeContext);
-
+    const { t } = useTranslation();
+    
+    const validationSchema = Yup.object().
+    shape({
+        name: Yup.string()
+            .required(t('error.enterName')),
+        surname: Yup.string()
+            .required(t('error.enterSurname')),
+        birthDate: Yup.string()
+        .required(t('error.enterDate'))
+        .matches(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/(19|20)\d{2}$/, t('error.invalidDate')),          
+        identityNumber: Yup.string()
+            .required(t('error.enterIdentityNo'))
+            .matches(/^[1-9]{1}[0-9]{9}[02468]{1}$/, t('error.invalidId'))
+            .min(11,t('error.minIdentity'))
+            .max(11,t('error.minIdentity')),
+    });
+    
+    const initialValues = {
+        name: '',
+        surname: '',
+        birthDate: '',
+        identityNumber: '',
+    };
+    
     const handleFormSubmit = async (values) => {
         setIsLoading(true);
         try {
@@ -61,9 +64,9 @@ const Identity = () => {
       >       
       {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
         <>
-            <Text style={[styles.title,{color: theme.primary}]}>Kimlik Bigileri</Text>
+            <Text style={[styles.title,{color: theme.primary}]}>{t('title.enterYourCredentials')}</Text>
             <Input 
-                placeholder="İsminizi giriniz..."
+                placeholder={t('input.name')}
                 iconName="account"
                 onType={handleChange('name')}
                 onBlur={handleBlur('name')}
@@ -73,7 +76,7 @@ const Identity = () => {
               <Text style={styles.error_message}>{errors.name}</Text>
             }
             <Input 
-                placeholder="Soyisminizi giriniz..."
+                placeholder={t('input.surname')}
                 iconName="account-multiple"
                 onType={handleChange('surname')}
                 onBlur={handleBlur('surname')}
@@ -83,7 +86,7 @@ const Identity = () => {
               <Text style={styles.error_message}>{errors.surname}</Text>
             }
             <Input 
-                placeholder="Doğum tarihinizi giriniz..."
+                placeholder={t('input.date')}
                 label="Doğum tarihi"  
                 iconName="calendar-range"   
                 onType={handleChange('birthDate')}
@@ -94,7 +97,7 @@ const Identity = () => {
               <Text style={styles.error_message}>{errors.birthDate}</Text>
             }
             <Input 
-                placeholder="Kimlik numaranızı giriniz..."
+                placeholder={t('input.identityNo')}
                 label="Kimlik Numarası"
                 iconName="card-account-details"
                 onType={handleChange('identityNumber')}
@@ -105,14 +108,12 @@ const Identity = () => {
               <Text style={styles.error_message}>{errors.identityNumber}</Text>
             }       
             <View style={styles.button_container}>
-            <Button  text  onPress={() => navigation.goBack()} title="Zaten hesabınız var mı?" loading={isLoading}/>         
-            <Button contained onPress={handleSubmit} title="Sonraki adım" loading={isLoading}/> 
+            <Button  text  onPress={() => navigation.goBack()} title={t('button.alreadyHaveAccount')} loading={isLoading}/>         
+            <Button contained onPress={handleSubmit} title={t('button.next')} loading={isLoading}/> 
             </View>
             </>
             )}
-            </Formik>
-            
-            
+            </Formik>                        
         </SafeAreaView>
     )
 }

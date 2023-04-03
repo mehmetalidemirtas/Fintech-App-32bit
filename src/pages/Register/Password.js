@@ -9,33 +9,35 @@ import { useNavigation } from '@react-navigation/native';
 import * as Yup from 'yup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeContext } from '../../context/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
-const validationSchema = Yup.object().
-shape({
-    phone: Yup.string()
-        .matches(/^(\+90|90)?([0-9]{10})$/, 'Telefon numaranız +905xxxxxxxxx olmalıdır')
-        .required('Lütfen telefon numaranızı giriniz'),
-    password: Yup.string()
-        .min(8, 'Şifreniz en az 8 karakter olmalıdır')
-        .required('Lütfen şifrenizi giriniz'),
-    confirmPassword: Yup.string()
-        .oneOf([Yup.ref('password'), null], 'Şifreler aynı değil')
-        .required('Lütfen şifrenizi tekrar giriniz'),
-});
-
-const initialValues = {
-    phone: '',
-    password: '',
-    confirmPassword: '',    
-};
 
 const Password = () => {
-
-    const{user, setUser} = useContext(UserContext);
-    const [isLoading, setIsLoading] = useState(false);
-    const [buttonText, setButtonText] = useState('Kaydı tamamla');
-    const theme = useContext(ThemeContext);
-
+  const { t } = useTranslation();
+  const{user, setUser} = useContext(UserContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const [buttonText, setButtonText] = useState(t('button.completeRegistration'));
+  const theme = useContext(ThemeContext);
+  
+  const validationSchema = Yup.object().
+  shape({
+      phone: Yup.string()
+          .matches(/^(\+90|90)?([0-9]{10})$/, t('error.phoneMustBe'))
+          .required(t('error.enterPhone')),
+      password: Yup.string()
+        .min(8, t('error.minPassword'))
+        .required(t('error.enterPassword')), 
+      confirmPassword: Yup.string()
+          .oneOf([Yup.ref('password'), null], t('error.passwordsNotSame'))
+          .required(t('error.enterConfirmPassword')),
+  });
+  
+  const initialValues = {
+      phone: '',
+      password: '',
+      confirmPassword: '',    
+  };
+  
     const navigation = useNavigation();
 
     const saveUserToAsyncStorage = async () => {
@@ -69,7 +71,7 @@ const Password = () => {
       
     const handleFormSubmit = async (values) => {
 
-        if (buttonText === "Kaydı tamamla") {
+        if (buttonText === t('button.completeRegistration')) {
             // İlk kez tıklama durumu
             try {
                 await setUser({...user, ...values});    //setUser() fonksiyonu asenkron bir fonksiyon değildir. Bu nedenle, await kullanarak setUser()'ın tamamlanmasını bekleyemiyoruz.        
@@ -78,7 +80,7 @@ const Password = () => {
             } catch (error) {
                 console.log(error);
             }   
-            setButtonText('Giriş sayfasına git');
+            setButtonText(t('button.goToSignUp'));
         } else {
             // İkinci kez tıklama durumu
             await saveUserToAsyncStorage();             
@@ -95,11 +97,11 @@ const Password = () => {
       >       
       {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
         <>           
-        <Text style={[styles.title,{color: theme.primary}]}>Şifre Belirle</Text>
+        <Text style={[styles.title,{color: theme.primary}]}>{t('title.setPassword')}</Text>
 
             <View>
             <Input 
-                placeholder="Telefon numaranızı giriniz..."
+                placeholder={t('input.phone')}
                 iconName="phone"
                 onType={handleChange('phone')}
                 onBlur={handleBlur('phone')}
@@ -110,7 +112,7 @@ const Password = () => {
               <Text style={styles.error_message}>{errors.phone}</Text>
             }
             <Input 
-                placeholder="Yeni şifrenizi giriniz..."
+                placeholder={t('input.password')}
                 iconName="lock"
                 onType={handleChange('password')}
                 onBlur={handleBlur('password')}
@@ -121,7 +123,7 @@ const Password = () => {
               <Text style={styles.error_message}>{errors.password}</Text>
             }
             <Input 
-                placeholder="Yeni şifrenizi tekrar giriniz..."
+                placeholder={t('input.confirmPassword')}
                 iconName="lock-check"
                 onType={handleChange('confirmPassword')}
                 onBlur={handleBlur('confirmPassword')}
@@ -133,7 +135,7 @@ const Password = () => {
             }
             </View>
             <View style={styles.button_container}>
-            <Button  onPress={() => navigation.goBack()} title="Önceki adım" loading={isLoading}/>
+            <Button  onPress={() => navigation.goBack()} title={t('button.previous')} loading={isLoading}/>
             <Button contained onPress={handleSubmit} title={buttonText} loading={isLoading}/>
             </View>
             </>

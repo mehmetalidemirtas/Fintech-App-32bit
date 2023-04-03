@@ -5,35 +5,37 @@ import Input from '../../components/Input';
 import styles from './Login.style';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { showMessage } from "react-native-flash-message";
 import colors from '../../styles/colors';
 import { ThemeContext } from '../../context/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
-const validationSchema = Yup.object().
-shape({
-    identityNumber: Yup.string()
-        .required('Lütfen T.C. kimlik numaranızı giriniz')
-        .matches(/^[1-9]{1}[0-9]{9}[02468]{1}$/, 'TC Kimlik Numarası geçersiz')
-        .min(11,"Tc Kimlik numarası 11 haneli olmalıdır")
-        .max(11,"Tc Kimlik numarası 11 haneli olmalıdır"),
-    password: Yup.string()
-        .min(8, 'Şifreniz en az 8 karakter olmalıdır')
-        .required('Lütfen şifrenizi giriniz'), 
-});
-
-const initialValues = {
-    identityNumber: '',
-    password: '',
-};
 
 const Login = ({navigation, handleLogin}) => {
+  const { t } = useTranslation();
+  
+  const validationSchema = Yup.object().
+  shape({
+      identityNumber: Yup.string()
+          .required(t('error.enterIdentityNo'))
+          .matches(/^[1-9]{1}[0-9]{9}[02468]{1}$/, t('error.invalidId'))
+          .min(11,t('error.minIdentity'))
+          .max(11,t('error.minIdentity')),
+      password: Yup.string()
+          .min(8, t('error.minPassword'))
+          .required(t('error.enterPassword')), 
+  });
+  
+  const initialValues = {
+      identityNumber: '',
+      password: '',
+  };
 
   const [isLoading, setIsLoading] = useState(false);
   const theme = useContext(ThemeContext);
-
-      const checkIsLoggedIn = async () => {
+  
+  const checkIsLoggedIn = async () => {
         const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
         if (isLoggedIn === 'true') {
            console.log("Kullanıcı daha önce giriş yapmış, ana sayfaya yönlendir")
@@ -69,7 +71,7 @@ const Login = ({navigation, handleLogin}) => {
                 } else {
                     console.log("şifre yanlış");
                     showMessage({
-                      message: "Hatalı şifre girdiniz!",
+                      message: t('error.wrongPassword'),
                       type: "danger",
                       backgroundColor: colors.primary
                     });
@@ -77,7 +79,7 @@ const Login = ({navigation, handleLogin}) => {
               } else {
                 console.log("kullanıcı kayıtlı değil");
                 showMessage({
-                  message: "Kimlik numaranızı yanlış girdiniz!",
+                  message: t('error.wrongIdentity'),
                   type: "danger",
                   backgroundColor: colors.primary
                 });
@@ -103,7 +105,7 @@ const Login = ({navigation, handleLogin}) => {
         <> 
            <View style={styles.body_container}>
                 <Input 
-                    placeholder="Kimlik numaranızı giriniz..."
+                    placeholder={t('input.identityNo')}
                     iconName="account"
                     onType={handleChange('identityNumber')}
                     onBlur={handleBlur('identityNumber')}
@@ -114,7 +116,7 @@ const Login = ({navigation, handleLogin}) => {
               <Text style={styles.error_message}>{errors.identityNumber}</Text>
                 }                     
                  <Input 
-                    placeholder="Şifrenizi giriniz..." 
+                    placeholder={t('input.password')}
                     iconName="lock"
                     onType={handleChange('password')}
                     onBlur={handleBlur('password')}
@@ -126,14 +128,14 @@ const Login = ({navigation, handleLogin}) => {
               <Text style={styles.error_message}>{errors.password}</Text>
             }  
             <View style={styles.forgot_pw_container}>
-                <Button title="Forgot password?" border={0} onPress={()=> navigation.navigate('ForgotPasswordScreen')}/>
+                <Button title={t('login.forgotPassword')} border={0} onPress={()=> navigation.navigate('ForgotPasswordScreen')}/>
             </View>
             </View>
 
             <View style={{marginBottom:70}}>
-            <Button contained marginRight={25} marginLeft={25} title="Giriş Yap" onPress={handleSubmit} loading={isLoading} />
+            <Button contained marginRight={25} marginLeft={25} title={t('login.buttonTitle')} onPress={handleSubmit} loading={isLoading} />
                 <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center"}}>                
-                    <Button  title="Dont you have an account? Sign up" marginRight={25} marginLeft={25} border={0} onPress={()=> navigation.navigate('IdentityScreen')} />                    
+                    <Button  title={t('login.dontHaveAccount')} marginRight={25} marginLeft={25} border={0} onPress={()=> navigation.navigate('IdentityScreen')} />                    
                 </View>
             </View>
             </>

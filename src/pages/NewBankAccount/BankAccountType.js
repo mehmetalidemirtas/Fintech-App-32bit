@@ -44,7 +44,7 @@ const BankAccountType = () => {
           title="Hesap türünü seçiniz"
           searchPlaceholder="Ara"
           notFoundText="Bulunamadı..."
-          placeholder="Hesap türü seçiniz"
+          placeholder="Hesap türünü seçiniz"
           save="value"
           defaultOption={bank.bankType}
           />
