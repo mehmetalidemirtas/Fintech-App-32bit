@@ -173,6 +173,7 @@ const getIsSignedIn = async () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+
     const checkIsSignedIn = async () => {
       const signedIn = await getIsSignedIn();
       setIsLoggedIn(signedIn);

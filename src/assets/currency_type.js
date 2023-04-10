@@ -58,6 +58,10 @@ const data = [
     {
       key: '15',
       value: 'UAH - Ukrayna Grivnası'
+    },
+     {
+      key: '16',
+      value: 'IDR - Endonezya Rupisi'
     }
   ];
 export default data;
