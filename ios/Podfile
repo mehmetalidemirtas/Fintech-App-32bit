@@ -25,6 +25,8 @@ target 'Fintech' do
 
   pod 'RNImageCropPicker', :path => '../node_modules/react-native-image-crop-picker'
 
+  pod 'RNCCheckbox', :path => '../node_modules/@react-native-community/checkbox'
+
   target 'FintechTests' do
     inherit! :complete
     # Pods for testing

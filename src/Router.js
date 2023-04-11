@@ -21,6 +21,7 @@ import ForgotPassword from './pages/Register/ForgotPassword';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Splash from './pages/Splash';
 import { ThemeContext } from './context/ThemeContext';
+import FavoriteCurrencies from './pages/FavoriteCurrencies';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -148,6 +149,10 @@ const WatchlistStack = () => {
       <Stack.Screen name="HistoryScreen" component={History} 
         options={{
           title: "History",        
+        }}/>
+      <Stack.Screen name="FavoriteCurrenciesScreen" component={FavoriteCurrencies} 
+        options={{
+          title: "Favorite Currencies",        
         }}/>
     </Stack.Navigator>
   )

@@ -38,5 +38,8 @@
     "error.passwordsNotSame" : "Şifreler aynı değil",
     "error.phoneMustBe" : "Telefon numaranız +905xxxxxxxxx olmalıdır",
     "error.invalidId" : "Kimlik Numarası geçersiz",
-    "error.invalidDate" : "Tarih formatı dd/mm/yyyy olmalıdır"
+    "error.invalidDate" : "Tarih formatı dd/mm/yyyy olmalıdır",
+    "loading.websocket" : "Sunucuya bağlantı bekleniyor...",
+    "loading.currencies" : "Para birimleri listeleniyor...",
+    "button.createBankAccount" : "Yeni banka hesabı oluştur"
 }}

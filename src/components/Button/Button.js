@@ -22,8 +22,8 @@ const CustomButton = ({ onPress, style, textStyle, contained,marginLeft,marginRi
                ( <ActivityIndicator color="white" />)
       : (<Text style={[buttonTextStyle, textStyle,  {
         color: contained ? theme.backgroundColor : theme.primary,
-      },]}>{title}</Text>)
-    }
+      },]}>{title}</Text>
+      )}
 
     </TouchableOpacity>
   );

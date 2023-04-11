@@ -38,6 +38,9 @@
     "error.passwordsNotSame" : "Passwords are not the same",
     "error.phoneMustBe" : "Your phone number must be +905xxxxxxxxx",
     "error.invalidId" : "Identity number is invalid",
-    "error.invalidDate" : "Date format must be dd/mm/yyyy"
+    "error.invalidDate" : "Date format must be dd/mm/yyyy",
+    "loading.websocket" : "Waiting for connection to server...",
+    "loading.currencies" : "Currencies are listing...",
+    "button.createBankAccount" : "Create new bank account"
 
     } }
