@@ -27,6 +27,8 @@ target 'Fintech' do
 
   pod 'RNCCheckbox', :path => '../node_modules/@react-native-community/checkbox'
 
+  pod 'lottie-react-native', :path => '../node_modules/lottie-react-native'
+
   target 'FintechTests' do
     inherit! :complete
     # Pods for testing
