@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback, useContext} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   View,
   Text,
@@ -16,9 +16,13 @@ import {ThemeContext} from '../../../context/ThemeContext';
 import {useTranslation} from 'react-i18next';
 import io from 'socket.io-client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CurrencyContext from '../../../context/CurrencyContext';
+
 const socket = io('http://10.0.2.2:3000');
 const Watchlist = ({navigation}) => {
   const [data, setData] = useState([]);
+  const {currencyValues, setCurrencyValues} = useContext(CurrencyContext);
+
   const [loading, setLoading] = useState(true);
   const theme = useContext(ThemeContext);
   const {t} = useTranslation();
@@ -68,6 +72,23 @@ const Watchlist = ({navigation}) => {
       }
     };
 
+    let timeout;
+
+    const handleSocketConnection = () => {
+      if (!socket.connected) {
+        console.log('Socket bağlantısı yok, tekrar deneniyor...');
+        socket.connect();
+      }
+      timeout = setTimeout(() => {
+        handleSocketConnection();
+      }, 15000);
+    };
+
+    socket.on('connect', () => {
+      console.log('Socket connected!');
+      clearTimeout(timeout);
+    });
+
     socket.on('currency-update', message => {
       const newData = message.split(',').map(value => {
         const [
@@ -103,17 +124,35 @@ const Watchlist = ({navigation}) => {
       saveCurrencies(newData.map(currency => currency.currency));
     });
 
+    handleSocketConnection();
+
     return () => {
       socket.disconnect();
+      clearTimeout(timeout);
     };
   }, []);
-
   const renderItem = ({item}) => {
     const goToCryptoDetail = () => {
-      navigation.navigate('TradeScreen', {currency: item.currency});
+      setCurrencyValues(prev => ({
+        ...prev,
+        currency: item.currency,
+        buyValue: item.buyValue,
+        sellValue: item.sellValue,
+        time: item.time,
+      }));
+      //console.log('values:' + currencyValues);
+      navigation.navigate('ExchangeScreen', {currency: item.currency});
     };
-
-    const date = new Date(parseInt(item.time));
+    /*
+    const formatDate = date => {
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const year = date.getFullYear();
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      return `${day}/${month}/${year} ${hours}:${minutes}`;
+      <Text>time: {formatDate(new Date(parseInt(currencyValues.time)))}</Text>
+    };*/
     return (
       <Pressable style={styles.item} onPress={() => goToCryptoDetail()}>
         <View style={styles.card_container}>
@@ -137,16 +176,30 @@ const Watchlist = ({navigation}) => {
     <SafeAreaView
       style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
       <View style={styles.item_container}>
-        <Button
-          contained
-          title={t('button.createBankAccount')}
-          onPress={() => navigation.navigate('BankAccountTypeScreen')}
-        />
-        <Button
-          contained
-          title="Choose your favorite currencies"
-          onPress={() => navigation.navigate('FavoriteCurrenciesScreen')}
-        />
+        <ScrollView horizontal={true}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginBottom: 10,
+            }}>
+            <Button
+              contained
+              title={t('button.createBankAccount')}
+              onPress={() => navigation.navigate('BankAccountTypeScreen')}
+            />
+            <Button
+              contained
+              title="Favorite Currencies"
+              onPress={() => navigation.navigate('FavoriteCurrenciesScreen')}
+            />
+            <Button
+              contained
+              title="Exchange History"
+              onPress={() => navigation.navigate('HistoryScreen')}
+            />
+          </View>
+        </ScrollView>
         <View style={styles.bottom_container}>
           <Text>Currency</Text>
           <Text>Buy price</Text>
@@ -189,8 +242,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   item_container: {
-    flex: 0.99,
+    flex: 1,
     margin: 10,
+    marginBottom: 0,
   },
   title: {
     color: 'black',

@@ -9,7 +9,6 @@ import Identity from './pages/Register/Identity';
 import Photo from './pages/Register/Photo';
 import Password from './pages/Register/Password';
 import Watchlist from './pages/Main/Watchlist';
-import Trade from './pages/Trade';
 import Settings from './pages/Settings';
 import History from './pages/History';
 import BankAccountType from './pages/NewBankAccount/BankAccountType';
@@ -22,6 +21,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Splash from './pages/Splash';
 import {ThemeContext} from './context/ThemeContext';
 import FavoriteCurrencies from './pages/FavoriteCurrencies';
+import io from 'socket.io-client';
+import TradeSummary from './pages/Trade/Summary';
+import Exchange from './pages/Trade/Exchange';
+const socket = io('http://10.0.2.2:3000');
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -95,18 +98,6 @@ const App = () => {
           }}
         />
       </Tab.Navigator>
-    );
-  };
-
-  const TradeStack = () => {
-    return (
-      <Stack.Navigator screenOptions={screenOptions}>
-        <Stack.Screen
-          name="TradeScreens"
-          component={Trade}
-          options={{title: 'Trade', headerBackVisible: false}}
-        />
-      </Stack.Navigator>
     );
   };
 
@@ -194,9 +185,18 @@ const App = () => {
           }}
         />
         <Stack.Screen
-          name="TradeScreen"
-          component={Trade}
-          options={{title: 'Trade'}}
+          name="ExchangeScreen"
+          component={Exchange}
+          options={{
+            title: 'ExchangeScreen',
+          }}
+        />
+        <Stack.Screen
+          name="TradeSummaryScreen"
+          component={TradeSummary}
+          options={{
+            title: 'TradeSummaryScreen',
+          }}
         />
       </Stack.Navigator>
     );
@@ -208,6 +208,7 @@ const App = () => {
     try {
       await AsyncStorage.removeItem('isLoggedIn');
       await AsyncStorage.removeItem('currentUser');
+      socket.disconnect();
     } catch (error) {
       console.log(error);
     }
