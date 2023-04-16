@@ -19,13 +19,14 @@ const Summary = () => {
   }, [bank]);
 
   const saveBankAccountToAsyncStorage = async () => {
-    const {bankType, currencyType, branchName, accountNo, iban} = bank;
+    const {bankType, currencyType, branchName, accountNo, iban, amount} = bank;
     const data = {
       bankType,
       currencyType,
       branchName,
       accountNo,
       iban,
+      amount,
     };
 
     const identityNo = await AsyncStorage.getItem('currentUser');

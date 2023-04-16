@@ -10,25 +10,39 @@ import {
 } from 'react-native';
 import styles from './Exchange.style';
 import {ThemeContext} from '../../../context/ThemeContext';
-import CurrencyContext from '../../../context/CurrencyContext';
+import TradeHistoryContext from '../../../context/TradeHistoryContext';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {SelectList} from 'react-native-dropdown-select-list';
 import {showMessage} from 'react-native-flash-message';
+import {useNavigation} from '@react-navigation/native';
 
 const Exchange = props => {
   const theme = useContext(ThemeContext);
-  const currencyName = props.route.params.currency;
-  const {currencyValues, setCurrencyValues} = useContext(CurrencyContext);
-  const [inputValue, setInputValue] = useState('');
+  const nameOfCurrency = props.route.params.currency;
+  const {tradeHistory, setTradeHistory} = useContext(TradeHistoryContext);
   const [isBuySelected, setIsBuySelected] = useState(false);
-  const [bank, setBank] = useState([]);
-  const [bankTL, setBankTL] = useState([]);
-  const [selectedAccount, setSelectedAccount] = useState(null);
-  const [selectedTLAccount, setSelectedTLAccount] = useState(null);
+  const [bankAccountToBeSold, setBankAccountToBeSold] = useState([]);
+  const [bankAccountToBeReceived, setBankAccountToBeReceived] = useState([]);
+  const [selectedAccountToBeSold, setSelectedAccountToBeSold] = useState(null);
+  const [selectedAccountToBeReceived, setSelectedAccountToBeReceived] =
+    useState(null);
   const [identityNo, setIdentityNo] = useState('');
+  const [outputValue, setOutputValue] = useState(0);
+  const [amount, setAmount] = useState(0);
+  const [amountOfReceivedBank, setAmountOfReceivedBank] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigation = useNavigation();
 
+  //forHistory
+  const [nameOfBankSold, setNameOfBankSold] = useState(null); //Satılacak hesap adı
+  const [nameOfBankBuy, setNameOfBankBuy] = useState(null); //Aktarılacak hesap adı
+  const [currencyNameToBeReceived, setCurrencyNameToBeReceived] = useState('TL'); //Alınacak para birimi adı
+  const [currencyNameToBeSold, setCurrencyNameToBeSold] = useState(props.route.params.currency);  //Satılacak para birimi adı
+  const [exchangeRate, setExchangeRate] = useState(props.route.params.buyValue); //Kur oranı
+  const [inputValue, setInputValue] = useState(''); //Girilen tutar
+  
   useEffect(() => {
     const getBankTLData = async () => {
       try {
@@ -43,7 +57,7 @@ const Exchange = props => {
             return JSON.parse(bankAccount);
           }),
         );
-        setBankTL(bankAccounts);
+        setBankAccountToBeReceived(bankAccounts);
       } catch (e) {
         console.error('Error loading bank accounts from async storage:', e);
       }
@@ -52,7 +66,7 @@ const Exchange = props => {
       try {
         const keys = await AsyncStorage.getAllKeys(); // Tüm async storage anahtarlarını al
         const identityNo = await AsyncStorage.getItem('currentUser');
-        const filterKey = `${identityNo}_bankAccount_${currencyName}_`;
+        const filterKey = `${identityNo}_bankAccount_${nameOfCurrency}_`; //????????????????? currencyNameToBeSold
         const bankAccountKeys = keys.filter(key => key.includes(filterKey)); // Sadece banka hesapları için anahtarları filtrele
         const bankAccounts = await Promise.all(
           bankAccountKeys.map(async key => {
@@ -60,7 +74,7 @@ const Exchange = props => {
             return JSON.parse(bankAccount);
           }),
         );
-        setBank(bankAccounts);
+        setBankAccountToBeSold(bankAccounts);
       } catch (e) {
         console.error('Error loading bank accounts from async storage:', e);
       }
@@ -70,13 +84,75 @@ const Exchange = props => {
     getBankTLData();
   }, []);
 
-  const handleOptionChange = value => {
-    setSelectedOption(value);
+  const getAmountFromSelectedAccount = async value => {
+    try {
+      const bankAccountData = await AsyncStorage.getItem(value);
+      const parsedBankAccountData = JSON.parse(bankAccountData);
+      setSelectedAccountToBeSold(value);
+      console.log('selectedAccountToBeSold::::' + selectedAccountToBeSold);
+      const amount = parsedBankAccountData.amount;
+      const branchName = parsedBankAccountData.branchName;
+      const accountNo = parsedBankAccountData.accountNo;      
+      const bankOfSell=`${branchName} - ${accountNo}`;
+      setNameOfBankSold(bankOfSell);
+      console.log('amount:::: ' + amount);
+      setAmount(amount);
+    } catch (e) {
+      console.error(
+        "Error loading bank account's amount from async storage:",
+        e,
+      );
+    }
   };
+
+  const getAmountFromSelectedAccountGet = async value => {
+    try {
+      const bankAccountData = await AsyncStorage.getItem(value);
+      const parsedBankAccountData = JSON.parse(bankAccountData);
+      setSelectedAccountToBeReceived(value);
+      console.log('selectedAccount::::' + selectedAccountToBeReceived);
+      const amount = parsedBankAccountData.amount;
+      const branchName = parsedBankAccountData.branchName;
+      const accountNo = parsedBankAccountData.accountNo;
+      const bankOfBuy=`${branchName} - ${accountNo}`;  
+      setNameOfBankBuy(bankOfBuy);    
+      console.log('amount:::: ' + amount);
+      setAmountOfReceivedBank(amount);
+    } catch (e) {
+      console.error(
+        "Error loading bank account's amount from async storage:",
+        e,
+      );
+    }
+  };
+  const updateAmountSell = async (newAmount, newAmountGet) => {
+    const bankAccountData = await AsyncStorage.getItem(selectedAccountToBeSold);
+    if (bankAccountData !== null) {
+      const parsedData = JSON.parse(bankAccountData);
+      parsedData.amount = newAmount;
+      await AsyncStorage.setItem(
+        selectedAccountToBeSold,
+        JSON.stringify(parsedData),
+      );
+    }
+    const bankAccountTLData = await AsyncStorage.getItem(
+      selectedAccountToBeReceived,
+    );
+    if (bankAccountTLData !== null) {
+      const parsedData = JSON.parse(bankAccountTLData);
+      parsedData.amount = newAmountGet;
+      await AsyncStorage.setItem(
+        selectedAccountToBeReceived,
+        JSON.stringify(parsedData),
+      );
+    }
+  };
+
   const handleButtonClick = () => {
-    if (selectedAccount == null) {
+    setIsLoading(true);
+    if (selectedAccountToBeSold == null) {
       showMessage({
-        message: `${currencyName} Hesabı seçiniz, yoksa hesap oluşturun`,
+        message: `${currencyNameToBeSold} Hesabı seçiniz, yoksa hesap oluşturun`,
         type: 'danger',
         duration: 3000,
       });
@@ -86,31 +162,124 @@ const Exchange = props => {
         type: 'danger',
         duration: 3000,
       });
-    } else if (selectedTLAccount == null) {
+    } else if (selectedAccountToBeReceived == null) {
       showMessage({
         message: 'TL hesabı seçiniz, yoksa hesap oluşturun',
         type: 'danger',
         duration: 3000,
       });
     } else {
+      const num = parseInt(inputValue, 10);
       if (isBuySelected == true) {
-        console.log('buy selected');
+        if (num <= amount) {
+          const outputValue = num / exchangeRate;
+          setOutputValue(outputValue.toFixed(2));
+          console.log("amountOfReceivedBank::::: " + amountOfReceivedBank);
+          console.log("outputValue : " + outputValue);
+          const newTotalAmount = ( parseInt(amountOfReceivedBank) +  parseInt(outputValue)).toFixed(2);
+          console.log("newTotalAmount: " + newTotalAmount);
+          updateAmountSell(
+            amount - inputValue, //Girilen değer bankadaki toplam paradan çıkarılıyor.
+            newTotalAmount            //output value : sonuç
+          );         
+          setTradeHistory({
+            ...tradeHistory,
+            currencyName: currencyNameToBeReceived,
+            bankAccountToBeSold: nameOfBankSold,
+            inputValue: inputValue,
+            bankAccountToBeReceived: nameOfBankBuy,
+            currencyToBeReceived: currencyNameToBeSold,
+            exchangeRate: exchangeRate,
+            outputValue: newTotalAmount,
+          });
+          console.log("currencyName: " + currencyNameToBeReceived);
+          console.log("nameOfBankSold: " + nameOfBankSold);
+          console.log("inputValue: " + inputValue);
+          console.log("nameOfBankBuy: " + nameOfBankBuy);
+          console.log("currencyNameToBeSold: " + currencyNameToBeSold);
+          console.log("exchangeRate: " + exchangeRate);
+          console.log("newTotalAmount: " + newTotalAmount);
+          console.log("sonuc: " + outputValue);
+
+          navigation.navigate('TradeSummaryScreen');
+        } else {
+          showMessage({
+            message: 'Hesabınızda yeterli bakiye bulunmamaktadır.',
+            type: 'danger',
+            duration: 3000,
+          });
+        }
       } else {
-        console.log('sell selected');
+        if (num <= amount) {
+          const outputValue = num * exchangeRate;
+          setOutputValue(outputValue.toFixed(2));
+          console.log("amountOfReceivedBank: " + amountOfReceivedBank);
+          console.log("outputValue: " + outputValue);
+          const newTotalAmount = (Number(amountOfReceivedBank) + Number(outputValue)).toFixed(2);
+          console.log("newTotalAmount: " + newTotalAmount);
+
+          updateAmountSell(
+            amount - inputValue,
+            newTotalAmount
+            );
+
+          setTradeHistory({
+            ...tradeHistory,
+            currencyName: currencyNameToBeReceived,
+            bankAccountToBeSold: nameOfBankSold,
+            inputValue: inputValue,
+            bankAccountToBeReceived: nameOfBankBuy,
+            currencyToBeReceived: currencyNameToBeSold,
+            exchangeRate: exchangeRate,
+            outputValue: newTotalAmount,
+          });
+          console.log("currencyName: " + currencyNameToBeReceived);
+          console.log("nameOfBankSold: " + nameOfBankSold);
+          console.log("inputValue: " + inputValue);
+          console.log("nameOfBankBuy: " + nameOfBankBuy);
+          console.log("currencyNameToBeSold: " + currencyNameToBeSold);
+          console.log("exchangeRate: " + exchangeRate);
+          console.log("newTotalAmount: " + newTotalAmount);
+          console.log("sonuc: " + outputValue);
+
+          navigation.navigate('TradeSummaryScreen');
+        } else {
+          showMessage({
+            message: 'Hesabınızda yeterli bakiye bulunmamaktadır.',
+            type: 'danger',
+            duration: 3000,
+          });
+        }
       }
-      console.log('girilen değer : ' + inputValue);
     }
+    setIsLoading(false);
   };
 
+  const handleBankAccountSelect = value => {
+    console.log('value:' + value); // seçilen banka hesabının bilgileri console'a yazdırılıyor
+    getAmountFromSelectedAccount(value);
+    console.log('amount:' + amount); // seçilen banka hesabının bilgileri console'a yazdırılıyor
+  };
+  const handleBankAccountSelectGet = value => {
+    console.log('value:' + value); // seçilen banka hesabının bilgileri console'a yazdırılıyor
+    getAmountFromSelectedAccountGet(value);
+    console.log('amount:' + amount); // seçilen banka hesabının bilgileri console'a yazdırılıyor
+  };
   const handleBuyPress = () => {
-    setBankTL([...bank]);
-    setBank([...bankTL]);
+    setBankAccountToBeReceived([...bankAccountToBeSold]);
+    setBankAccountToBeSold([...bankAccountToBeReceived]);
+    setCurrencyNameToBeSold('TL');
+    setCurrencyNameToBeReceived(nameOfCurrency);
+    setExchangeRate(props.route.params.sellValue);
     setIsBuySelected(true);
   };
 
   const handleSellPress = () => {
-    setBankTL([...bank]);
-    setBank([...bankTL]);
+    setBankAccountToBeReceived([...bankAccountToBeSold]);
+    setBankAccountToBeSold([...bankAccountToBeReceived]);
+    setCurrencyNameToBeSold(nameOfCurrency);
+    setCurrencyNameToBeReceived('TL');
+    setExchangeRate(props.route.params.buyValue);
     setIsBuySelected(false);
   };
 
@@ -126,7 +295,7 @@ const Exchange = props => {
             margin: 10,
             padding: 10,
           }}>
-          {currencyName}/TRY
+          {nameOfCurrency}/TRY
         </Text>
         <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
           <View style={!isBuySelected ? {margin: 7} : {}}>
@@ -147,9 +316,9 @@ const Exchange = props => {
         <View style={{marginLeft: 25, marginRight: 25, marginTop: 10}}>
           <Text>Satılacak Hesap: </Text>
           <SelectList
-            setSelected={val => setSelectedAccount(val)}
-            data={bank.map(item => ({
-              key: `${identityNo}_bankAccount_${currencyName}_${item.accountNo}`,
+            setSelected={handleBankAccountSelect}
+            data={bankAccountToBeSold.map(item => ({
+              key: `${identityNo}_bankAccount_${currencyNameToBeSold}_${item.accountNo}`,
               value: `${item.branchName} - ${item.accountNo}`,
             }))}
             searchPlaceholder="Ara"
@@ -158,13 +327,8 @@ const Exchange = props => {
           />
           <View style={{margin: 5}}>
             <Text>
-              {isBuySelected
-                ? 'Satılacak Para Birimi: TL'
-                : `Satılacak Para Birimi: ${currencyName}`}
+              Satılacak para birimi: {currencyNameToBeSold}
             </Text>
-          </View>
-          <View style={{margin: 5}}>
-            <Text>Selected Bank: {selectedAccount}</Text>
           </View>
         </View>
         <View>
@@ -174,6 +338,7 @@ const Exchange = props => {
             </Text>
           </View>
           <Input
+            keyboardType="numeric"
             placeholder="Miktar giriniz"
             value={inputValue}
             onType={setInputValue}
@@ -183,9 +348,9 @@ const Exchange = props => {
           <View style={{margin: 5}}>
             <Text>Aktarılacak hesap:</Text>
             <SelectList
-              setSelected={val => setSelectedTLAccount(val)}
-              data={bankTL.map(item => ({
-                key: `${identityNo}_bankAccount_TL_${item.accountNo}`,
+              setSelected={handleBankAccountSelectGet}
+              data={bankAccountToBeReceived.map(item => ({
+                key: `${identityNo}_bankAccount_${currencyNameToBeReceived}_${item.accountNo}`,
                 value: `${item.branchName} - ${item.accountNo}`,
               }))}
               searchPlaceholder="Ara"
@@ -195,23 +360,15 @@ const Exchange = props => {
           </View>
           <View style={{margin: 5}}>
             <Text>
-              {!isBuySelected
-                ? 'Alınacak Para Birimi: TL'
-                : `Alınacak Para Birimi: ${currencyName}`}
-            </Text>
+              Alınacak para birimi: {currencyNameToBeReceived}         
+            </Text>     
+          </View>
+
+          <View style={{margin: 5}}>
+            <Text>Kur oranı: {exchangeRate}</Text>
           </View>
           <View style={{margin: 5}}>
-            <Text>Selected Bank: {selectedTLAccount}</Text>
-          </View>
-          <View style={{margin: 5}}>
-            <Text>
-              {isBuySelected
-                ? `Kur oranı: ${currencyValues.sellValue}`
-                : `Kur oranı: ${currencyValues.buyValue}`}
-            </Text>
-          </View>
-          <View style={{margin: 5}}>
-            <Text>Sonuç:</Text>
+            <Text>Sonuç: {outputValue}</Text>
           </View>
         </View>
         <View style={{margin: 5}}>
@@ -221,6 +378,7 @@ const Exchange = props => {
             marginRight={25}
             marginLeft={25}
             onPress={handleButtonClick}
+            loading={isLoading}
           />
         </View>
       </ScrollView>

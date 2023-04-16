@@ -4,6 +4,7 @@ import {UserProvider} from './context/UserContext';
 import {BankProvider} from './context/BankAccountContext';
 import {ThemeProvider} from './context/ThemeContext';
 import {CurrencyProvider} from './context/CurrencyContext';
+import {TradeHistoryProvider} from './context/TradeHistoryContext';
 
 import FlashMessage from 'react-native-flash-message';
 export default () => {
@@ -12,9 +13,11 @@ export default () => {
     <UserProvider>
       <BankProvider>
         <CurrencyProvider>
-          <ThemeProvider>
-            <Router />
-          </ThemeProvider>
+          <TradeHistoryProvider>
+            <ThemeProvider>
+              <Router />
+            </ThemeProvider>
+          </TradeHistoryProvider>
         </CurrencyProvider>
         <FlashMessage style={{marginTop: 25}} position="top" />
       </BankProvider>

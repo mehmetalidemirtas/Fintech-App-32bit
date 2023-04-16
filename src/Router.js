@@ -24,6 +24,7 @@ import FavoriteCurrencies from './pages/FavoriteCurrencies';
 import io from 'socket.io-client';
 import TradeSummary from './pages/Trade/Summary';
 import Exchange from './pages/Trade/Exchange';
+import AllBankAccounts from './pages/AllBankAccounts';
 const socket = io('http://10.0.2.2:3000');
 
 const Stack = createNativeStackNavigator();
@@ -188,14 +189,22 @@ const App = () => {
           name="ExchangeScreen"
           component={Exchange}
           options={{
-            title: 'ExchangeScreen',
+            title: 'Exchange Money',
           }}
         />
         <Stack.Screen
           name="TradeSummaryScreen"
           component={TradeSummary}
           options={{
-            title: 'TradeSummaryScreen',
+            title: 'Receipt',
+            headerBackVisible: false,
+          }}
+        />
+        <Stack.Screen
+          name="AllBankAccountsScreen"
+          component={AllBankAccounts}
+          options={{
+            title: 'AllBankAccounts',            
           }}
         />
       </Stack.Navigator>

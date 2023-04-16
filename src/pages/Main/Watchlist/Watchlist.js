@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
   SafeAreaView,
 } from 'react-native';
-
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Button from '../../../components/Button/Button';
 import {ThemeContext} from '../../../context/ThemeContext';
 import {useTranslation} from 'react-i18next';
@@ -141,7 +141,12 @@ const Watchlist = ({navigation}) => {
         time: item.time,
       }));
       //console.log('values:' + currencyValues);
-      navigation.navigate('ExchangeScreen', {currency: item.currency});
+      navigation.navigate('ExchangeScreen', {
+        currency: item.currency,
+        buyValue: item.buyValue,
+        time: item.time,
+        sellValue: item.sellValue,
+      });
     };
     /*
     const formatDate = date => {
@@ -183,27 +188,60 @@ const Watchlist = ({navigation}) => {
               justifyContent: 'space-between',
               marginBottom: 10,
             }}>
-            <Button
-              contained
-              title={t('button.createBankAccount')}
-              onPress={() => navigation.navigate('BankAccountTypeScreen')}
-            />
-            <Button
-              contained
-              title="Favorite Currencies"
-              onPress={() => navigation.navigate('FavoriteCurrenciesScreen')}
-            />
-            <Button
-              contained
-              title="Exchange History"
-              onPress={() => navigation.navigate('HistoryScreen')}
-            />
+            <View style={{flexDirection: 'row'}}>
+              <View style={styles.icon}>
+                <Icon
+                  name="bank-plus"
+                  size={35}
+                  color={theme.primary}
+                  onPress={() => navigation.navigate('BankAccountTypeScreen')}
+                />
+                <Text style={[styles.icon_text, {color: theme.primary}]}>
+                  New bank account
+                </Text>
+              </View>
+              <View style={styles.icon}>
+                <Icon
+                  name="star-plus"
+                  size={35}
+                  color={theme.primary}
+                  onPress={() =>
+                    navigation.navigate('FavoriteCurrenciesScreen')
+                  }
+                />
+                <Text style={[styles.icon_text, {color: theme.primary}]}>
+                  Favorite currencies
+                </Text>
+              </View>
+              <View style={styles.icon}>
+                <Icon
+                  name="history"
+                  size={35}
+                  color={theme.primary}
+                  onPress={() => navigation.navigate('HistoryScreen')}
+                />
+                <Text style={[styles.icon_text, {color: theme.primary}]}>
+                  Trade history
+                </Text>
+              </View>
+              <View style={styles.icon}>
+                <Icon
+                  name="bank"
+                  size={35}
+                  color={theme.primary}
+                  onPress={() => navigation.navigate('AllBankAccountsScreen')}
+                />
+                <Text style={[styles.icon_text, {color: theme.primary}]}>
+                  All bank accounts
+                </Text>
+              </View>
+            </View>
           </View>
         </ScrollView>
         <View style={styles.bottom_container}>
-          <Text>Currency</Text>
-          <Text>Buy price</Text>
-          <Text>Sell price</Text>
+          <Text style={styles.bar}>Currency</Text>
+          <Text style={styles.bar}>Buy price</Text>
+          <Text style={styles.bar}>Sell price</Text>
           <Text style={styles.change}>Change%</Text>
         </View>
         {loading ? (
@@ -242,7 +280,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   item_container: {
-    flex: 1,
     margin: 10,
     marginBottom: 0,
   },
@@ -269,6 +306,12 @@ const styles = StyleSheet.create({
   change: {
     width: 90,
     textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  bar: {
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   date: {
     marginTop: 10,
@@ -290,6 +333,14 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     paddingHorizontal: 10,
   },
+  icon: {
+    paddingBottom: 2,
+    marginBottom: 5,
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginRight: 10,
+  },
+  icon_text: {},
 });
 
 export default Watchlist;

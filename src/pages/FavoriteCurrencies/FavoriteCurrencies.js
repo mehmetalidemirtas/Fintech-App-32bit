@@ -17,8 +17,6 @@ const ChooseFavoriteCurrencies = ({navigation}) => {
   const theme = useContext(ThemeContext);
   useEffect(() => {
     const loadFavorites = async () => {
-      setLoading(true);
-
       const key = `${identityNo}_favoriteCurrencies`;
       const favoriteCurrencies = await AsyncStorage.getItem(key);
       if (favoriteCurrencies) {
@@ -27,8 +25,8 @@ const ChooseFavoriteCurrencies = ({navigation}) => {
           favoritesObj[currency] = true;
         });
         setFavorites(favoritesObj);
-        setLoading(false);
       }
+      setLoading(false);
     };
 
     if (identityNo) {
