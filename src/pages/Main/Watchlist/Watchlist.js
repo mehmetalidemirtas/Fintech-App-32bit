@@ -17,6 +17,7 @@ import {useTranslation} from 'react-i18next';
 import io from 'socket.io-client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CurrencyContext from '../../../context/CurrencyContext';
+import styles from './Watchlist.style';
 
 const socket = io('http://10.0.2.2:3000');
 const Watchlist = ({navigation}) => {
@@ -148,16 +149,6 @@ const Watchlist = ({navigation}) => {
         sellValue: item.sellValue,
       });
     };
-    /*
-    const formatDate = date => {
-      const day = date.getDate().toString().padStart(2, '0');
-      const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      const year = date.getFullYear();
-      const hours = date.getHours().toString().padStart(2, '0');
-      const minutes = date.getMinutes().toString().padStart(2, '0');
-      return `${day}/${month}/${year} ${hours}:${minutes}`;
-      <Text>time: {formatDate(new Date(parseInt(currencyValues.time)))}</Text>
-    };*/
     return (
       <Pressable style={styles.item} onPress={() => goToCryptoDetail()}>
         <View style={styles.card_container}>
@@ -238,109 +229,32 @@ const Watchlist = ({navigation}) => {
             </View>
           </View>
         </ScrollView>
-        <View style={styles.bottom_container}>
-          <Text style={styles.bar}>Currency</Text>
-          <Text style={styles.bar}>Buy price</Text>
-          <Text style={styles.bar}>Sell price</Text>
-          <Text style={styles.change}>Change%</Text>
-        </View>
-        {loading ? (
-          <View
-            style={{
-              flex: 10,
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginBottom: 50,
-            }}>
-            <ActivityIndicator color="black" size="large" />
-            <Text style={{marginTop: 10}}>{t('loading.websocket')}</Text>
-          </View>
-        ) : (
-          <FlatList
-            data={data}
-            renderItem={renderItem}
-            keyExtractor={item => item.currency}
-          />
-        )}
       </View>
+      <View style={styles.bottom_container}>
+        <Text style={styles.bar}>Currency</Text>
+        <Text style={styles.bar}>Buy price</Text>
+        <Text style={styles.bar}>Sell price</Text>
+        <Text style={styles.change}>Change%</Text>
+      </View>
+      {loading ? (
+        <View
+          style={{
+            flex: 10,
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginBottom: 50,
+          }}>
+          <ActivityIndicator color="black" size="large" />
+          <Text style={{marginTop: 10}}>{t('loading.websocket')}</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={item => item.currency}
+        />
+      )}
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  item: {
-    backgroundColor: '#F0F0F0',
-    padding: 10,
-    marginVertical: 5,
-    marginHorizontal: 5,
-    borderRadius: 10,
-  },
-  item_container: {
-    margin: 10,
-    marginBottom: 0,
-  },
-  title: {
-    color: 'black',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  subtitle: {
-    color: 'black',
-    fontSize: 16,
-  },
-  card_container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  rate: {
-    padding: 10,
-    width: 100,
-    alignItems: 'center',
-    borderRadius: 10,
-  },
-  change: {
-    width: 90,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  bar: {
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  date: {
-    marginTop: 10,
-  },
-  currency: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  try: {
-    color: '#191825',
-    fontSize: 15,
-    marginLeft: 3,
-  },
-  bottom_container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginVertical: 5,
-    marginHorizontal: 5,
-    paddingHorizontal: 10,
-  },
-  icon: {
-    paddingBottom: 2,
-    marginBottom: 5,
-    flexDirection: 'column',
-    alignItems: 'center',
-    marginRight: 10,
-  },
-  icon_text: {},
-});
-
 export default Watchlist;

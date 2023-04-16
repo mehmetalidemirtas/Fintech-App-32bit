@@ -38,11 +38,15 @@ const Exchange = props => {
   //forHistory
   const [nameOfBankSold, setNameOfBankSold] = useState(null); //Satılacak hesap adı
   const [nameOfBankBuy, setNameOfBankBuy] = useState(null); //Aktarılacak hesap adı
-  const [currencyNameToBeReceived, setCurrencyNameToBeReceived] = useState('TL'); //Alınacak para birimi adı
-  const [currencyNameToBeSold, setCurrencyNameToBeSold] = useState(props.route.params.currency);  //Satılacak para birimi adı
+  const [currencyNameToBeReceived, setCurrencyNameToBeReceived] =
+    useState('TL'); //Alınacak para birimi adı
+  const [currencyNameToBeSold, setCurrencyNameToBeSold] = useState(
+    props.route.params.currency,
+  ); //Satılacak para birimi adı
   const [exchangeRate, setExchangeRate] = useState(props.route.params.buyValue); //Kur oranı
+  const [exchangeTime, setExchangeTime] = useState(props.route.params.time); //Kur oranı
   const [inputValue, setInputValue] = useState(''); //Girilen tutar
-  
+
   useEffect(() => {
     const getBankTLData = async () => {
       try {
@@ -92,8 +96,8 @@ const Exchange = props => {
       console.log('selectedAccountToBeSold::::' + selectedAccountToBeSold);
       const amount = parsedBankAccountData.amount;
       const branchName = parsedBankAccountData.branchName;
-      const accountNo = parsedBankAccountData.accountNo;      
-      const bankOfSell=`${branchName} - ${accountNo}`;
+      const accountNo = parsedBankAccountData.accountNo;
+      const bankOfSell = `${branchName} - ${accountNo}`;
       setNameOfBankSold(bankOfSell);
       console.log('amount:::: ' + amount);
       setAmount(amount);
@@ -114,8 +118,8 @@ const Exchange = props => {
       const amount = parsedBankAccountData.amount;
       const branchName = parsedBankAccountData.branchName;
       const accountNo = parsedBankAccountData.accountNo;
-      const bankOfBuy=`${branchName} - ${accountNo}`;  
-      setNameOfBankBuy(bankOfBuy);    
+      const bankOfBuy = `${branchName} - ${accountNo}`;
+      setNameOfBankBuy(bankOfBuy);
       console.log('amount:::: ' + amount);
       setAmountOfReceivedBank(amount);
     } catch (e) {
@@ -164,7 +168,7 @@ const Exchange = props => {
       });
     } else if (selectedAccountToBeReceived == null) {
       showMessage({
-        message: 'TL hesabı seçiniz, yoksa hesap oluşturun',
+        message: `${currencyNameToBeReceived} Hesabı seçiniz, yoksa hesap oluşturun`,
         type: 'danger',
         duration: 3000,
       });
@@ -174,33 +178,34 @@ const Exchange = props => {
         if (num <= amount) {
           const outputValue = num / exchangeRate;
           setOutputValue(outputValue.toFixed(2));
-          console.log("amountOfReceivedBank::::: " + amountOfReceivedBank);
-          console.log("outputValue : " + outputValue);
-          const newTotalAmount = ( parseInt(amountOfReceivedBank) +  parseInt(outputValue)).toFixed(2);
-          console.log("newTotalAmount: " + newTotalAmount);
+          const newTotalAmount = (
+            parseInt(amountOfReceivedBank) + parseInt(outputValue)
+          ).toFixed(2);
           updateAmountSell(
             amount - inputValue, //Girilen değer bankadaki toplam paradan çıkarılıyor.
-            newTotalAmount            //output value : sonuç
-          );         
+            newTotalAmount, //output value : sonuç
+          );
           setTradeHistory({
             ...tradeHistory,
-            currencyName: currencyNameToBeReceived,
+            currencyNameToBeSold: currencyNameToBeSold,
             bankAccountToBeSold: nameOfBankSold,
             inputValue: inputValue,
             bankAccountToBeReceived: nameOfBankBuy,
-            currencyToBeReceived: currencyNameToBeSold,
+            currencyToBeReceived: currencyNameToBeReceived,
             exchangeRate: exchangeRate,
-            outputValue: newTotalAmount,
+            outputValue: outputValue.toFixed(2),
+            newTotalAmount: newTotalAmount,
+            time: exchangeTime,
           });
-          console.log("currencyName: " + currencyNameToBeReceived);
-          console.log("nameOfBankSold: " + nameOfBankSold);
-          console.log("inputValue: " + inputValue);
-          console.log("nameOfBankBuy: " + nameOfBankBuy);
-          console.log("currencyNameToBeSold: " + currencyNameToBeSold);
-          console.log("exchangeRate: " + exchangeRate);
-          console.log("newTotalAmount: " + newTotalAmount);
-          console.log("sonuc: " + outputValue);
-
+          console.log('currencyName: ' + currencyNameToBeReceived);
+          console.log('nameOfBankSold: ' + nameOfBankSold);
+          console.log('inputValue: ' + inputValue);
+          console.log('nameOfBankBuy: ' + nameOfBankBuy);
+          console.log('currencyNameToBeSold: ' + currencyNameToBeSold);
+          console.log('exchangeRate: ' + exchangeRate);
+          console.log('newTotalAmount: ' + newTotalAmount);
+          console.log('sonuc: ' + outputValue);
+          console.log('time: ' + exchangeTime);
           navigation.navigate('TradeSummaryScreen');
         } else {
           showMessage({
@@ -213,34 +218,35 @@ const Exchange = props => {
         if (num <= amount) {
           const outputValue = num * exchangeRate;
           setOutputValue(outputValue.toFixed(2));
-          console.log("amountOfReceivedBank: " + amountOfReceivedBank);
-          console.log("outputValue: " + outputValue);
-          const newTotalAmount = (Number(amountOfReceivedBank) + Number(outputValue)).toFixed(2);
-          console.log("newTotalAmount: " + newTotalAmount);
+          const newTotalAmount = (
+            Number(amountOfReceivedBank) + Number(outputValue)
+          ).toFixed(2);
+          console.log('newTotalAmount: ' + newTotalAmount);
 
-          updateAmountSell(
-            amount - inputValue,
-            newTotalAmount
-            );
+          updateAmountSell(amount - inputValue, newTotalAmount);
 
           setTradeHistory({
             ...tradeHistory,
-            currencyName: currencyNameToBeReceived,
+            currencyNameToBeSold: currencyNameToBeSold,
             bankAccountToBeSold: nameOfBankSold,
             inputValue: inputValue,
             bankAccountToBeReceived: nameOfBankBuy,
-            currencyToBeReceived: currencyNameToBeSold,
+            currencyToBeReceived: currencyNameToBeReceived,
             exchangeRate: exchangeRate,
-            outputValue: newTotalAmount,
+            outputValue: outputValue.toFixed(2),
+            newTotalAmount: newTotalAmount,
+            time: exchangeTime,
           });
-          console.log("currencyName: " + currencyNameToBeReceived);
-          console.log("nameOfBankSold: " + nameOfBankSold);
-          console.log("inputValue: " + inputValue);
-          console.log("nameOfBankBuy: " + nameOfBankBuy);
-          console.log("currencyNameToBeSold: " + currencyNameToBeSold);
-          console.log("exchangeRate: " + exchangeRate);
-          console.log("newTotalAmount: " + newTotalAmount);
-          console.log("sonuc: " + outputValue);
+
+          console.log('currencyName: ' + currencyNameToBeReceived);
+          console.log('nameOfBankSold: ' + nameOfBankSold);
+          console.log('inputValue: ' + inputValue);
+          console.log('nameOfBankBuy: ' + nameOfBankBuy);
+          console.log('currencyNameToBeSold: ' + currencyNameToBeSold);
+          console.log('exchangeRate: ' + exchangeRate);
+          console.log('newTotalAmount: ' + newTotalAmount);
+          console.log('sonuc: ' + outputValue);
+          console.log('time: ' + exchangeTime);
 
           navigation.navigate('TradeSummaryScreen');
         } else {
@@ -326,9 +332,7 @@ const Exchange = props => {
             placeholder="Şube seçiniz"
           />
           <View style={{margin: 5}}>
-            <Text>
-              Satılacak para birimi: {currencyNameToBeSold}
-            </Text>
+            <Text>Satılacak para birimi: {currencyNameToBeSold}</Text>
           </View>
         </View>
         <View>
@@ -359,9 +363,7 @@ const Exchange = props => {
             />
           </View>
           <View style={{margin: 5}}>
-            <Text>
-              Alınacak para birimi: {currencyNameToBeReceived}         
-            </Text>     
+            <Text>Alınacak para birimi: {currencyNameToBeReceived}</Text>
           </View>
 
           <View style={{margin: 5}}>

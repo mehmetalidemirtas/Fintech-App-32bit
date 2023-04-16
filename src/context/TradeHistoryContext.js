@@ -3,13 +3,15 @@ const TradeHistoryContext = createContext();
 
 export const TradeHistoryProvider = ({children}) => {
   const [tradeHistory, setTradeHistory] = useState({
-    currencyName: '',
+    currencyNameToBeSold: '',
     bankAccountToBeSold: '',
     inputValue: '',
     bankAccountToBeReceived: '',
     currencyToBeReceived: '',
     exchangeRate: '',
     outputValue: '',
+    newTotalAmount: '',
+    time: '',
   });
 
   return (

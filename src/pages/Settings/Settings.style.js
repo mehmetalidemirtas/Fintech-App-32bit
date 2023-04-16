@@ -7,5 +7,9 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
       },
-
+      image: {
+        width: 150,
+        height: 150,
+        borderRadius:75,
+    },
 })

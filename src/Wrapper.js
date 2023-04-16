@@ -19,7 +19,7 @@ export default () => {
             </ThemeProvider>
           </TradeHistoryProvider>
         </CurrencyProvider>
-        <FlashMessage style={{marginTop: 25}} position="top" />
+        <FlashMessage style={{marginTop: 20}} position="top" />
       </BankProvider>
     </UserProvider>
   );
