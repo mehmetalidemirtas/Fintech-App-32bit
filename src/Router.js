@@ -25,6 +25,9 @@ import io from 'socket.io-client';
 import TradeSummary from './pages/Trade/Summary';
 import Exchange from './pages/Trade/Exchange';
 import AllBankAccounts from './pages/AllBankAccounts';
+import ChangePassword from './pages/Settings/SettingScreens/ChangePassword';
+import ChangePhoto from './pages/Settings/SettingScreens/ChangePhoto';
+import ChangePhone from './pages/Settings/SettingScreens/ChangePhone';
 const socket = io('http://10.0.2.2:3000');
 
 const Stack = createNativeStackNavigator();
@@ -40,6 +43,7 @@ const App = () => {
     statusBarStyle: theme.statusBarStyle,
     headerTintColor: colors.primary,
   };
+
   const handleLogin = async () => {
     try {
       await AsyncStorage.setItem('isLoggedIn', 'true');
@@ -119,6 +123,27 @@ const App = () => {
                 onPress={onLogout}
               />
             ),
+          }}
+        />
+        <Stack.Screen
+          name="ChangePasswordScreen"
+          component={ChangePassword}
+          options={{
+            title: 'ChangePassword',
+          }}
+        />
+        <Stack.Screen
+          name="ChangePhoneScreen"
+          component={ChangePhone}
+          options={{
+            title: 'ChangePhone',
+          }}
+        />
+        <Stack.Screen
+          name="ChangePhotoScreen"
+          component={ChangePhoto}
+          options={{
+            title: 'ChangePhoto',
           }}
         />
       </Stack.Navigator>

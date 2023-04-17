@@ -12,11 +12,14 @@ import styles from './Settings.style';
 import LanguageButton from '../../locales/LanguageButton';
 import {useTranslation} from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Settings = () => {
   const {t} = useTranslation();
   const theme = useContext(ThemeContext);
   const [user, setUser] = useState([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const getUserData = async () => {
@@ -33,9 +36,13 @@ const Settings = () => {
         console.log('Hata oluştu: ', e);
       }
     };
-    getUserData();
-    return () => {};
-  }, []);
+    const interval = setInterval(() => {
+      getUserData();
+    }, 3000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [user]);
   return (
     <SafeAreaView
       style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
@@ -59,15 +66,28 @@ const Settings = () => {
               <Text style={styles.text}>{user.phone}</Text>
             </View>
             <View style={styles.title_container}>
-              <Text style={styles.title}>Password</Text>
+              <Text style={styles.title}>Password:</Text>
               <Text style={styles.text}>{user.password}</Text>
             </View>
           </View>
         </View>
         <LanguageButton />
-        <Pressable onPress={() => null}>
+        <Pressable onPress={() => navigation.navigate('ChangePasswordScreen')}>
           <View style={styles.bottom_container}>
-            <Text style={styles.title}>Change language</Text>
+            <Text style={styles.title}>Change password</Text>
+            <Icon name="chevron-right" size={30} />
+          </View>
+        </Pressable>
+        <Pressable onPress={() => navigation.navigate('ChangePhoneScreen')}>
+          <View style={styles.bottom_container}>
+            <Text style={styles.title}>Change phone number</Text>
+            <Icon name="chevron-right" size={30} />
+          </View>
+        </Pressable>
+        <Pressable onPress={() => navigation.navigate('ChangePhotoScreen')}>
+          <View style={styles.bottom_container}>
+            <Text style={styles.title}>Change profile photo</Text>
+            <Icon name="chevron-right" size={30} />
           </View>
         </Pressable>
       </ScrollView>
