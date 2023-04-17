@@ -1,15 +1,63 @@
-import { StyleSheet } from "react-native";
+import {StyleSheet} from 'react-native';
 
-export default StyleSheet.create({ 
+export default StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  image: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+  },
+  image_container: {
+    flexDirection: 'row',
+    backgroundColor: '#f7f7f7',
+    borderRadius: 25,
+    padding: 10,
+    margin: 10,
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+  },
+  bottom_container: {
+    flexDirection: 'row',
+    backgroundColor: '#f7f7f7',
+    borderRadius: 25,
+    padding: 10,
+    margin: 15,
+    marginTop: 5,
+    height: 50,
+    marginBottom: 5,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
 
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-      image: {
-        width: 150,
-        height: 150,
-        borderRadius:75,
-    },
-})
+  name_text: {
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  text_container: {
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    padding: 5,
+  },
+  title: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    marginRight: 3,
+  },
+  title_container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  text: {
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+});

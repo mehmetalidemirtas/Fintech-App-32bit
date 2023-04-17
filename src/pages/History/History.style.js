@@ -14,7 +14,7 @@ export default StyleSheet.create({
     margin: 10,
     marginBottom: 0,
     borderRadius: 25,
-    backgroundColor: '#F0f0f0',
+    backgroundColor: '#f7f7f7',
   },
   title: {
     fontSize: 15,
@@ -51,5 +51,21 @@ export default StyleSheet.create({
   },
   disabledButton: {
     opacity: 0.4,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginHorizontal: 16,
+    marginTop: 16,
+  },
+  titlee: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  sortButton: {
+    color: '#007AFF',
+    fontWeight: 'bold',
   },
 });

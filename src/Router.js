@@ -175,6 +175,7 @@ const App = () => {
           name="HistoryScreen"
           component={History}
           options={{
+            headerShown: false,
             title: 'History',
           }}
         />
@@ -204,7 +205,7 @@ const App = () => {
           name="AllBankAccountsScreen"
           component={AllBankAccounts}
           options={{
-            title: 'AllBankAccounts',            
+            title: 'AllBankAccounts',
           }}
         />
       </Stack.Navigator>

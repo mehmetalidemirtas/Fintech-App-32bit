@@ -10,6 +10,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ThemeContext} from '../../context/ThemeContext';
 import styles from './History.style';
+import {Searchbar} from 'react-native-paper';
 
 const PAGE_SIZE = 5;
 
@@ -18,6 +19,9 @@ const Watchlist = ({navigation}) => {
   const theme = useContext(ThemeContext);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [searchText, setSearchText] = useState('');
+  const [searchData, setSearchData] = useState([]);
+  const [isAscending, setIsAscending] = useState(false);
 
   useEffect(() => {
     const getBankData = async () => {
@@ -52,11 +56,39 @@ const Watchlist = ({navigation}) => {
   };
 
   const getPageData = () => {
+    const data = searchData.length > 0 ? searchData : bank;
     const start = page * PAGE_SIZE;
     const end = start + PAGE_SIZE;
-    return bank.slice(start, end).sort((a, b) => b.time - a.time);
-  };
 
+    const sortedData = data.sort((a, b) =>
+      isAscending ? a.time - b.time : b.time - a.time,
+    );
+    const slicedData = sortedData.slice(start, end);
+
+    return slicedData;
+  };
+  const aramaYap = searchText => {
+    const start = page * PAGE_SIZE;
+    const end = start + PAGE_SIZE;
+    const filteredBank = bank.filter(
+      item =>
+        item.currencyNameToBeSold
+          .toLowerCase()
+          .includes(searchText.toLowerCase()) ||
+        item.currencyToBeReceived
+          .toLowerCase()
+          .includes(searchText.toLowerCase()) ||
+        item.bankAccountToBeSold
+          .toLowerCase()
+          .includes(searchText.toLowerCase()) ||
+        item.bankAccountToBeReceived
+          .toLowerCase()
+          .includes(searchText.toLowerCase()),
+    );
+
+    //setSearchData(filteredBank);
+    return filteredBank.slice(start, end).sort((a, b) => b.time - a.time);
+  };
   const formatDate = date => {
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -113,8 +145,30 @@ const Watchlist = ({navigation}) => {
         </View>
       ) : (
         <>
+          <View style={styles.header}>
+            <Text style={styles.titlee}>Trade History</Text>
+            <TouchableOpacity onPress={() => setIsAscending(prev => !prev)}>
+              <Text style={styles.sortButton}>
+                {isAscending ? 'Sort by Newest' : 'Sort by Oldest'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{marginTop: 10, marginHorizontal: 10}}>
+            <Searchbar
+              style={{
+                backgroundColor: '#f7f7f7',
+                color: 'black',
+                height: 45,
+              }}
+              inputStyle={{alignSelf: 'center'}}
+              placeholder="Ara"
+              onChangeText={text => setSearchText(text)}
+              value={searchText}
+            />
+          </View>
+
           <FlatList
-            data={getPageData()}
+            data={searchText !== '' ? aramaYap(searchText) : getPageData()}
             renderItem={({item}) => <Item item={item} />}
             keyExtractor={(item, index) => index.toString()}
           />

@@ -6,7 +6,7 @@ export default StyleSheet.create({
     backgroundColor: '#fff',
   },
   item: {
-    backgroundColor: '#F0F0F0',
+    backgroundColor: '#f2f2f2',
     padding: 10,
     marginVertical: 5,
     marginHorizontal: 10,
