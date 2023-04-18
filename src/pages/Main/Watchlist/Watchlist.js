@@ -25,7 +25,7 @@ const Watchlist = ({navigation}) => {
   const {currencyValues, setCurrencyValues} = useContext(CurrencyContext);
 
   const [loading, setLoading] = useState(true);
-  const theme = useContext(ThemeContext);
+  const {theme} = useContext(ThemeContext);
   const {t} = useTranslation();
   const [currencies, setCurrencies] = useState([]);
 

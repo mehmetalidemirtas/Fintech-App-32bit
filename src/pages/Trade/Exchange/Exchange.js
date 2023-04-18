@@ -19,7 +19,7 @@ import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/native';
 
 const Exchange = props => {
-  const theme = useContext(ThemeContext);
+  const {theme} = useContext(ThemeContext);
   const nameOfCurrency = props.route.params.currency;
   const {tradeHistory, setTradeHistory} = useContext(TradeHistoryContext);
   const [isBuySelected, setIsBuySelected] = useState(false);
@@ -46,6 +46,22 @@ const Exchange = props => {
   const [exchangeRate, setExchangeRate] = useState(props.route.params.buyValue); //Kur oranı
   const [exchangeTime, setExchangeTime] = useState(props.route.params.time); //Kur oranı
   const [inputValue, setInputValue] = useState(''); //Girilen tutar
+  const [counter, setCounter] = useState(60);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCounter(prevCounter => prevCounter - 1);
+    }, 1000);
+
+    if (counter === 0) {
+      clearInterval(timer);
+      navigation.navigate('WatchlistScreen');
+    }
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [counter, navigation]);
 
   useEffect(() => {
     const getBankTLData = async () => {
@@ -293,16 +309,14 @@ const Exchange = props => {
     <SafeAreaView
       style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
       <ScrollView style={{flex: 1}}>
-        <Text
-          style={{
-            fontWeight: 'bold',
-            fontSize: 25,
-            textAlign: 'center',
-            margin: 10,
-            padding: 10,
-          }}>
-          {nameOfCurrency}/TRY
-        </Text>
+        <Text style={styles.main_title}>{nameOfCurrency}/TRY</Text>
+        <View style={styles.counter_container}>
+          <Text style={styles.counter_title}>
+            İşlemi tamamlamanız için son{' '}
+          </Text>
+          <Text style={styles.counter}>{counter}</Text>
+          <Text style={styles.counter_title}> saniye</Text>
+        </View>
         <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
           <View style={!isBuySelected ? {margin: 7} : {}}>
             <Button
@@ -319,8 +333,8 @@ const Exchange = props => {
             />
           </View>
         </View>
-        <View style={{marginLeft: 25, marginRight: 25, marginTop: 10}}>
-          <Text>Satılacak Hesap: </Text>
+        <View style={styles.bottom_container}>
+          <Text style={styles.title}>Satılacak Hesap: </Text>
           <SelectList
             setSelected={handleBankAccountSelect}
             data={bankAccountToBeSold.map(item => ({
@@ -331,13 +345,20 @@ const Exchange = props => {
             notFoundText="Bulunamadı..."
             placeholder="Şube seçiniz"
           />
-          <View style={{margin: 5}}>
-            <Text>Satılacak para birimi: {currencyNameToBeSold}</Text>
+          <View style={{marginTop: 10, flexDirection: 'row'}}>
+            <Text style={styles.title}>Satılacak para birimi: </Text>
+            <Text style={{alignContent: 'center', fontSize: 16}}>
+              {currencyNameToBeSold}
+            </Text>
           </View>
         </View>
         <View>
-          <View style={{margin: 5}}>
-            <Text style={{marginLeft: 25, marginRight: 25}}>
+          <View>
+            <Text
+              style={[
+                styles.title,
+                {marginLeft: 25, marginRight: 25, marginBottom: 0},
+              ]}>
               Satılacak Para Tutarı:
             </Text>
           </View>
@@ -348,9 +369,9 @@ const Exchange = props => {
             onType={setInputValue}
           />
         </View>
-        <View style={{marginLeft: 25, marginRight: 25}}>
-          <View style={{margin: 5}}>
-            <Text>Aktarılacak hesap:</Text>
+        <View style={[styles.bottom_container, {marginTop: 0}]}>
+          <View>
+            <Text style={styles.title}>Aktarılacak hesap:</Text>
             <SelectList
               setSelected={handleBankAccountSelectGet}
               data={bankAccountToBeReceived.map(item => ({
@@ -362,18 +383,26 @@ const Exchange = props => {
               placeholder="Şube seçiniz"
             />
           </View>
-          <View style={{margin: 5}}>
-            <Text>Alınacak para birimi: {currencyNameToBeReceived}</Text>
+          <View style={{marginTop: 10, flexDirection: 'row'}}>
+            <Text style={styles.title}>Alınacak para birimi: </Text>
+            <Text style={{alignContent: 'center', fontSize: 16}}>
+              {currencyNameToBeReceived}
+            </Text>
           </View>
-
-          <View style={{margin: 5}}>
-            <Text>Kur oranı: {exchangeRate}</Text>
+          <View style={{marginTop: 0, flexDirection: 'row'}}>
+            <Text style={styles.title}>Kur oranı: </Text>
+            <Text style={{alignContent: 'center', fontSize: 16}}>
+              {exchangeRate}
+            </Text>
           </View>
-          <View style={{margin: 5}}>
-            <Text>Sonuç: {outputValue}</Text>
+          <View style={{marginTop: 0, flexDirection: 'row'}}>
+            <Text style={styles.title}>Sonuç: </Text>
+            <Text style={{alignContent: 'center', fontSize: 16}}>
+              {outputValue}
+            </Text>
           </View>
         </View>
-        <View style={{margin: 5}}>
+        <View>
           <Button
             contained
             title="Tamamla"

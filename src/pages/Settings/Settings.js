@@ -6,6 +6,7 @@ import {
   Text,
   Image,
   Pressable,
+  ActivityIndicator,
 } from 'react-native';
 import {ThemeContext} from '../../context/ThemeContext';
 import styles from './Settings.style';
@@ -14,64 +15,85 @@ import {useTranslation} from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import ThemeToggle from './SettingScreens/ThemeToggle';
 
 const Settings = () => {
   const {t} = useTranslation();
-  const theme = useContext(ThemeContext);
+  const {theme} = useContext(ThemeContext);
   const [user, setUser] = useState([]);
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
+
+  const getUserData = async () => {
+    try {
+      const identityNo = await AsyncStorage.getItem('currentUser');
+      const key = `${identityNo}_userAccount`;
+      const userData = await AsyncStorage.getItem(key);
+      if (userData !== null) {
+        const parsedUserData = JSON.parse(userData);
+        setUser(parsedUserData);
+      }
+    } catch (e) {
+      console.log('Hata oluştu: ', e);
+    }
+  };
 
   useEffect(() => {
-    const getUserData = async () => {
-      try {
-        const identityNo = await AsyncStorage.getItem('currentUser');
-        const key = `${identityNo}_userAccount`;
-        const userData = await AsyncStorage.getItem(key);
-        if (userData !== null) {
-          const parsedUserData = JSON.parse(userData);
-          setUser(parsedUserData);
-        } else {
-        }
-      } catch (e) {
-        console.log('Hata oluştu: ', e);
-      }
-    };
-    const interval = setInterval(() => {
+    getUserData();
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
       getUserData();
-    }, 3000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, [user]);
+    });
+    return unsubscribe;
+  }, [navigation, user]);
+
   return (
     <SafeAreaView
       style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
       <ScrollView>
-        <View style={styles.image_container}>
-          <Image style={styles.image} source={{uri: user.photo}} />
-          <View style={styles.text_container}>
-            <Text style={styles.name_text}>
-              {user.name} {user.surname}
-            </Text>
-            <View style={styles.title_container}>
-              <Text style={styles.title}>Date of birth:</Text>
-              <Text style={styles.text}>{user.birthDate}</Text>
-            </View>
-            <View style={styles.title_container}>
-              <Text style={styles.title}>Identity No:</Text>
-              <Text style={styles.text}>{user.identityNumber}</Text>
-            </View>
-            <View style={styles.title_container}>
-              <Text style={styles.title}>Phone No:</Text>
-              <Text style={styles.text}>{user.phone}</Text>
-            </View>
-            <View style={styles.title_container}>
-              <Text style={styles.title}>Password:</Text>
-              <Text style={styles.text}>{user.password}</Text>
-            </View>
+        {loading ? (
+          <View
+            style={{
+              flex: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginBottom: 50,
+            }}>
+            <ActivityIndicator color="black" size="large" />
+            <Text style={{marginTop: 10}}>Bilgiler getiriliyor...</Text>
           </View>
-        </View>
+        ) : (
+          <>
+            <View style={styles.image_container}>
+              <Image style={styles.image} source={{uri: user.photo}} />
+              <View style={styles.text_container}>
+                <Text style={styles.name_text}>
+                  {user.name} {user.surname}
+                </Text>
+                <View style={styles.title_container}>
+                  <Text style={styles.title}>Date of birth:</Text>
+                  <Text style={styles.text}>{user.birthDate}</Text>
+                </View>
+                <View style={styles.title_container}>
+                  <Text style={styles.title}>Identity No:</Text>
+                  <Text style={styles.text}>{user.identityNumber}</Text>
+                </View>
+                <View style={styles.title_container}>
+                  <Text style={styles.title}>Phone No:</Text>
+                  <Text style={styles.text}>{user.phone}</Text>
+                </View>
+                <View style={styles.title_container}>
+                  <Text style={styles.title}>Password:</Text>
+                  <Text style={styles.text}>{user.password}</Text>
+                </View>
+              </View>
+            </View>
+          </>
+        )}
         <LanguageButton />
+        <ThemeToggle />
         <Pressable onPress={() => navigation.navigate('ChangePasswordScreen')}>
           <View style={styles.bottom_container}>
             <Text style={styles.title}>Change password</Text>

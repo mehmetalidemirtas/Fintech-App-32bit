@@ -12,10 +12,7 @@ import {useTranslation} from 'react-i18next';
 const Password = () => {
   const {t} = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
-  const [buttonText, setButtonText] = useState(
-    t('button.completeRegistration'),
-  );
-  const theme = useContext(ThemeContext);
+  const {theme} = useContext(ThemeContext);
 
   const validationSchema = Yup.object().shape({
     password: Yup.string()
@@ -34,6 +31,7 @@ const Password = () => {
   const navigation = useNavigation();
 
   const uptadePassword = async newPassword => {
+    setIsLoading(true);
     const identityNumber = await AsyncStorage.getItem('currentUser');
     const userAccount = await AsyncStorage.getItem(
       `${identityNumber}_userAccount`,
@@ -45,6 +43,7 @@ const Password = () => {
       `${identityNumber}_userAccount`,
       JSON.stringify(parsedUserAccount),
     );
+    setIsLoading(false);
     navigation.navigate('Setting');
   };
   const handleFormSubmit = async values => {

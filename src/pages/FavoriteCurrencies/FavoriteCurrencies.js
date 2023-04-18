@@ -14,7 +14,7 @@ const ChooseFavoriteCurrencies = ({navigation}) => {
   const [identityNo, setIdentityNo] = useState(null);
   const [favorites, setFavorites] = useState({});
   const {t} = useTranslation();
-  const theme = useContext(ThemeContext);
+  const {theme} = useContext(ThemeContext);
   useEffect(() => {
     const loadFavorites = async () => {
       const key = `${identityNo}_favoriteCurrencies`;

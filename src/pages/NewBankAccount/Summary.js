@@ -12,7 +12,7 @@ import {ThemeContext} from '../../context/ThemeContext';
 const Summary = () => {
   const navigation = useNavigation();
   const {bank, setBank} = useContext(BankAccountContext);
-  const theme = useContext(ThemeContext);
+  const {theme} = useContext(ThemeContext);
 
   useEffect(() => {
     //Bir önceki aşamada seçilen branchName bir sonraki render işleminde context'e kaydolacağı için useEffect kullandımm.

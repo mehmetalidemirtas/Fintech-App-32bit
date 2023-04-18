@@ -11,7 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Photo = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
-  const theme = useContext(ThemeContext);
+  const {theme} = useContext(ThemeContext);
   const [selectedImage, setSelectedImage] = useState(null);
   const {t} = useTranslation();
 

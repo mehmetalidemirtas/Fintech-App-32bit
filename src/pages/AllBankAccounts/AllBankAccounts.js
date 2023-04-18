@@ -15,7 +15,7 @@ const PAGE_SIZE = 5;
 
 const AllBankAccounts = ({navigation}) => {
   const [bank, setBank] = useState([]);
-  const theme = useContext(ThemeContext);
+  const {theme} = useContext(ThemeContext);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
 

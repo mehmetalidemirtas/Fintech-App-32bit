@@ -1,25 +1,35 @@
-import React, { useState, useContext } from 'react';
-import { View, TextInput, StyleSheet, SafeAreaView } from 'react-native';
+import React, {useState, useContext} from 'react';
+import {View, TextInput, StyleSheet, SafeAreaView} from 'react-native';
 import styles from './Input.style';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../../styles/colors';
-import { ThemeContext } from '../../context/ThemeContext';
+import {ThemeContext} from '../../context/ThemeContext';
 
-const Input = ({placeholder,value,onType, iconName, isPassword, loading}) => {
+const Input = ({placeholder, value, onType, iconName, isPassword, loading}) => {
+  const [isFocused, setIsFocused] = useState(false);
+  const {theme} = useContext(ThemeContext);
 
-    const [isFocused, setIsFocused] = useState(false);
-    const theme = useContext(ThemeContext);
+  const handleFocus = () => setIsFocused(true);
+  const handleBlur = () => setIsFocused(false);
 
-    const handleFocus = () => setIsFocused(true);
-    const handleBlur = () => setIsFocused(false);
-  
-    return (
-      
-      <View style={styles.container}>
-        <View style={[styles.textInputContainer, isFocused && [styles.focusedTextInputContainer,{borderColor: theme.primary}]]}>
-            <View style={styles.bottom_container}>
-            <Icon name={iconName} size={25} color={isFocused ? theme.primary : '#ccc'} />
-            <TextInput style={styles.textInput}
+  return (
+    <View style={styles.container}>
+      <View
+        style={[
+          styles.textInputContainer,
+          isFocused && [
+            styles.focusedTextInputContainer,
+            {borderColor: theme.primary},
+          ],
+        ]}>
+        <View style={styles.bottom_container}>
+          <Icon
+            name={iconName}
+            size={25}
+            color={isFocused ? theme.primary : '#ccc'}
+          />
+          <TextInput
+            style={styles.textInput}
             placeholder={placeholder}
             onFocus={handleFocus}
             value={value}
@@ -27,14 +37,12 @@ const Input = ({placeholder,value,onType, iconName, isPassword, loading}) => {
             selectable={!loading}
             onChangeText={onType}
             secureTextEntry={isPassword}
-            onBlur={handleBlur}  />
-            </View>          
-        </View>        
+            onBlur={handleBlur}
+          />
+        </View>
       </View>
-      
-  
-      
-    );
-}
+    </View>
+  );
+};
 
 export default Input;

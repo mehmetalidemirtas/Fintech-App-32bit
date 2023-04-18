@@ -16,7 +16,7 @@ const PAGE_SIZE = 5;
 
 const Watchlist = ({navigation}) => {
   const [bank, setBank] = useState([]);
-  const theme = useContext(ThemeContext);
+  const {theme} = useContext(ThemeContext);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState('');
@@ -146,27 +146,27 @@ const Watchlist = ({navigation}) => {
       ) : (
         <>
           <View style={styles.header}>
-            <Text style={styles.titlee}>Trade History</Text>
-            <TouchableOpacity onPress={() => setIsAscending(prev => !prev)}>
+            <View style={{marginTop: 10, flex: 0.99}}>
+              <Searchbar
+                style={{
+                  backgroundColor: '#f7f7f7',
+                  color: 'black',
+                  height: 45,
+                }}
+                inputStyle={{alignSelf: 'center'}}
+                placeholder="Ara"
+                onChangeText={text => setSearchText(text)}
+                value={searchText}
+              />
+            </View>
+            <TouchableOpacity
+              style={{marginHorizontal: 5}}
+              onPress={() => setIsAscending(prev => !prev)}>
               <Text style={styles.sortButton}>
-                {isAscending ? 'Sort by Newest' : 'Sort by Oldest'}
+                {isAscending ? 'Newest' : 'Oldest'}
               </Text>
             </TouchableOpacity>
           </View>
-          <View style={{marginTop: 10, marginHorizontal: 10}}>
-            <Searchbar
-              style={{
-                backgroundColor: '#f7f7f7',
-                color: 'black',
-                height: 45,
-              }}
-              inputStyle={{alignSelf: 'center'}}
-              placeholder="Ara"
-              onChangeText={text => setSearchText(text)}
-              value={searchText}
-            />
-          </View>
-
           <FlatList
             data={searchText !== '' ? aramaYap(searchText) : getPageData()}
             renderItem={({item}) => <Item item={item} />}

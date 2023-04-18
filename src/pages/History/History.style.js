@@ -56,8 +56,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginHorizontal: 16,
-    marginTop: 16,
+    marginHorizontal: 10,
   },
   titlee: {
     fontSize: 24,

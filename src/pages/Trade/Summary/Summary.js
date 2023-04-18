@@ -8,7 +8,7 @@ import {useNavigation} from '@react-navigation/native';
 import TradeHistoryContext from '../../../context/TradeHistoryContext';
 
 const Exchange = props => {
-  const theme = useContext(ThemeContext);
+  const {theme} = useContext(ThemeContext);
   const navigation = useNavigation();
 
   const {tradeHistory, setTradeHistory} = useContext(TradeHistoryContext);

@@ -1,30 +1,51 @@
-import React, { createContext, useState, useEffect } from 'react';
-import { Appearance } from 'react-native';
+import React, {createContext, useState, useEffect} from 'react';
+import {Appearance} from 'react-native';
 import colors from '../styles/colors';
 export const ThemeContext = createContext();
 
-export const ThemeProvider = ({ children }) => {
+export const ThemeProvider = ({children}) => {
   const [theme, setTheme] = useState({
     backgroundColor: 'white',
     textColor: 'black',
   });
 
-  useEffect(() => {
-    const colorScheme = Appearance.getColorScheme();
+  const setAppTheme = colorScheme => {
     setTheme({
-      backgroundColor: colorScheme === 'dark' ? colors.dark_background : colors.light_background,
-      primary: colorScheme === 'dark' ?  colors.dark_primary: colors.light_primary,
+      backgroundColor:
+        colorScheme === 'dark'
+          ? colors.dark_background
+          : colors.light_background,
+      primary:
+        colorScheme === 'dark' ? colors.dark_primary : colors.light_primary,
       textColor: colorScheme === 'dark' ? colors.dark_text : colors.light_text,
-      cardColor: colorScheme === 'dark' ? colors.dark_card_bg : colors.light_card_bg,
+      cardColor:
+        colorScheme === 'dark' ? colors.dark_card_bg : colors.light_card_bg,
       statusBarStyle: colorScheme === 'dark' ? 'light' : 'dark',
     });
+  };
 
-    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+  const toggleAppTheme = () => {
+    const newMode =
+      theme.backgroundColor === colors.light_background ? 'dark' : 'light';
+    setAppTheme(newMode);
+  };
+
+  useEffect(() => {
+    const colorScheme = Appearance.getColorScheme();
+    setAppTheme({colorScheme});
+
+    const subscription = Appearance.addChangeListener(({colorScheme}) => {
       setTheme({
-        backgroundColor: colorScheme === 'dark' ? colors.dark_background : colors.light_background,
-        primary: colorScheme === 'dark' ?  colors.dark_primary: colors.light_primary,
-        textColor: colorScheme === 'dark' ? colors.dark_text : colors.light_text,
-        cardColor: colorScheme === 'dark' ? colors.dark_card_bg : colors.light_card_bg,
+        backgroundColor:
+          colorScheme === 'dark'
+            ? colors.dark_background
+            : colors.light_background,
+        primary:
+          colorScheme === 'dark' ? colors.dark_primary : colors.light_primary,
+        textColor:
+          colorScheme === 'dark' ? colors.dark_text : colors.light_text,
+        cardColor:
+          colorScheme === 'dark' ? colors.dark_card_bg : colors.light_card_bg,
         statusBarStyle: colorScheme === 'dark' ? 'light' : 'dark',
       });
     });
@@ -33,7 +54,7 @@ export const ThemeProvider = ({ children }) => {
   }, []);
 
   return (
-    <ThemeContext.Provider value={theme}>
+    <ThemeContext.Provider value={{theme, toggleAppTheme}}>
       {children}
     </ThemeContext.Provider>
   );

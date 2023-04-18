@@ -5,7 +5,7 @@ import {View, Text, Pressable} from 'react-native';
 import {ThemeContext} from '../context/ThemeContext';
 import styles from '../pages/Settings/Settings.style';
 const LanguageButton = () => {
-  const theme = useContext(ThemeContext);
+  const {theme} = useContext(ThemeContext);
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
@@ -13,6 +13,7 @@ const LanguageButton = () => {
       <Pressable onPress={() => setModalVisible(true)}>
         <View style={styles.bottom_container}>
           <Text style={styles.title}>Change language</Text>
+          <Icon name="translate" size={20} style={{marginRight: 5}} />
         </View>
       </Pressable>
       <LanguageModal

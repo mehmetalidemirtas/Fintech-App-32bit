@@ -34,7 +34,7 @@ const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
 const App = () => {
-  const theme = useContext(ThemeContext);
+  const {theme} = useContext(ThemeContext);
   const screenOptions = {
     headerStyle: {backgroundColor: theme.backgroundColor},
     headerTitleStyle: {color: theme.textColor},
@@ -113,7 +113,7 @@ const App = () => {
           name="Setting"
           component={Settings}
           options={{
-            title: 'Setting',
+            title: 'Settings',
             headerBackVisible: false,
             headerRight: () => (
               <Icon
@@ -129,21 +129,21 @@ const App = () => {
           name="ChangePasswordScreen"
           component={ChangePassword}
           options={{
-            title: 'ChangePassword',
+            title: 'Change Password',
           }}
         />
         <Stack.Screen
           name="ChangePhoneScreen"
           component={ChangePhone}
           options={{
-            title: 'ChangePhone',
+            title: 'Change Phone Number',
           }}
         />
         <Stack.Screen
           name="ChangePhotoScreen"
           component={ChangePhoto}
           options={{
-            title: 'ChangePhoto',
+            title: 'Change Profile Photo',
           }}
         />
       </Stack.Navigator>
@@ -200,8 +200,7 @@ const App = () => {
           name="HistoryScreen"
           component={History}
           options={{
-            headerShown: false,
-            title: 'History',
+            title: 'Trade History',
           }}
         />
         <Stack.Screen
@@ -230,16 +229,14 @@ const App = () => {
           name="AllBankAccountsScreen"
           component={AllBankAccounts}
           options={{
-            title: 'AllBankAccounts',
+            title: 'Bank Accounts',
           }}
         />
       </Stack.Navigator>
     );
   };
   const onLogout = async () => {
-    // Kullanıcının giriş durumunu "false" olarak ayarlayın
     setIsLoggedIn(false);
-    // AsyncStorage'de kullanıcının giriş durumunu güncelleyin
     try {
       await AsyncStorage.removeItem('isLoggedIn');
       await AsyncStorage.removeItem('currentUser');
@@ -260,7 +257,9 @@ const App = () => {
     const checkIsSignedIn = async () => {
       const signedIn = await getIsSignedIn();
       setIsLoggedIn(signedIn);
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
     };
 
     checkIsSignedIn();

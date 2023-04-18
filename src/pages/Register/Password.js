@@ -18,7 +18,7 @@ const Password = () => {
   const [buttonText, setButtonText] = useState(
     t('button.completeRegistration'),
   );
-  const theme = useContext(ThemeContext);
+  const {theme} = useContext(ThemeContext);
 
   const validationSchema = Yup.object().shape({
     phone: Yup.string()

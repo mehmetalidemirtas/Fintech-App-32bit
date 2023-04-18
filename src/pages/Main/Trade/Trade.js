@@ -4,7 +4,7 @@ import styles from './Trade.style';
 import {ThemeContext} from '../../../context/ThemeContext';
 
 const Trade = () => {
-  const theme = useContext(ThemeContext);
+  const {theme} = useContext(ThemeContext);
 
   return (
     <SafeAreaView
