@@ -1,6 +1,6 @@
 import React, {useState, useContext} from 'react';
 import UserContext from '../../context/UserContext';
-import {SafeAreaView, View, Text, StyleSheet} from 'react-native';
+import {SafeAreaView, View, Alert, Text, StyleSheet} from 'react-native';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import colors from '../../styles/colors';
@@ -9,6 +9,8 @@ import {useNavigation} from '@react-navigation/native';
 import * as Yup from 'yup';
 import {ThemeContext} from '../../context/ThemeContext';
 import {useTranslation} from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {showMessage} from 'react-native-flash-message';
 
 const Identity = () => {
   const {user, setUser} = useContext(UserContext);
@@ -43,15 +45,24 @@ const Identity = () => {
   const handleFormSubmit = async values => {
     setIsLoading(true);
     try {
-      await setUser({...user, ...values});
-      console.log(user);
-      navigation.navigate('PhotoScreen');
+      const key = `${values.identityNumber}_userAccount`;
+      const userAccount = await AsyncStorage.getItem(key);
+      if (userAccount) {
+        showMessage({
+          message: t('error.userExist'),
+          type: 'danger',
+          backgroundColor: colors.primary,
+        });
+      } else {
+        await AsyncStorage.setItem(key, JSON.stringify(values));
+        await setUser({...user, ...values});
+        navigation.navigate('PhotoScreen');
+      }
     } catch (error) {
       console.log(error);
     }
     setIsLoading(false);
   };
-
   return (
     <SafeAreaView
       style={[styles.container, {backgroundColor: theme.backgroundColor}]}>

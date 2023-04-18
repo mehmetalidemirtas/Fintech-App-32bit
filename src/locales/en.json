@@ -42,6 +42,7 @@
     "error.invalidDate": "Date format must be dd/mm/yyyy",
     "loading.websocket": "Waiting for connection to server...",
     "loading.currencies": "Currencies are listing...",
-    "button.createBankAccount": "New bank account"
+    "button.createBankAccount": "New bank account",
+    "error.userExist": "This user already exists"
   }
 }

@@ -3,6 +3,7 @@ import {
   SafeAreaView,
   View,
   Text,
+  Share,
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
@@ -11,6 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ThemeContext} from '../../context/ThemeContext';
 import styles from './History.style';
 import {Searchbar} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const PAGE_SIZE = 5;
 
@@ -97,6 +99,18 @@ const Watchlist = ({navigation}) => {
     const minutes = date.getMinutes().toString().padStart(2, '0');
     return `${day}/${month}/${year} ${hours}:${minutes}`;
   };
+  const shareItem = item => {
+    Share.share({
+      message:
+        `${item.currencyNameToBeSold} / ${item.currencyToBeReceived}\n` +
+        `Satılan hesap: ${item.bankAccountToBeSold}\n` +
+        `Aktarılan hesap: ${item.bankAccountToBeReceived}\n` +
+        `Kur oranı: ${item.exchangeRate}\n` +
+        `Toplam yeni bakiye: ${item.newTotalAmount} ${item.currencyToBeReceived}\n` +
+        `${formatDate(new Date(parseInt(item.time)))}\n` +
+        `+ ${item.outputValue} ${item.currencyToBeReceived}\n`,
+    });
+  };
 
   const Item = ({item}) => (
     <View style={styles.card_container}>
@@ -121,12 +135,22 @@ const Watchlist = ({navigation}) => {
           {item.newTotalAmount} {item.currencyToBeReceived}
         </Text>
       </View>
-      <Text style={{textAlign: 'right'}}>
-        {formatDate(new Date(parseInt(item.time)))}
-      </Text>
-      <Text style={{textAlign: 'right'}}>
-        + {item.outputValue} {item.currencyToBeReceived}
-      </Text>
+      <View style={styles.bottom_container}>
+        <View style={{flexDirection: 'column'}}>
+          <Text style={{textAlign: 'right'}}>
+            {formatDate(new Date(parseInt(item.time)))}
+          </Text>
+          <Text>
+            + {item.outputValue} {item.currencyToBeReceived}
+          </Text>
+        </View>
+        <Icon
+          name="share-variant"
+          size={20}
+          color="#aaa"
+          onPress={() => shareItem(item)}
+        />
+      </View>
     </View>
   );
 

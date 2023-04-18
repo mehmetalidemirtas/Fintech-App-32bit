@@ -67,4 +67,9 @@ export default StyleSheet.create({
     color: '#007AFF',
     fontWeight: 'bold',
   },
+  bottom_container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
 });

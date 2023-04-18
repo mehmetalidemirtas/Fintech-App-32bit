@@ -42,6 +42,7 @@
     "error.invalidDate": "Tarih formatı dd/mm/yyyy olmalıdır",
     "loading.websocket": "Sunucuya bağlantı bekleniyor...",
     "loading.currencies": "Para birimleri listeleniyor...",
-    "button.createBankAccount": "Banka hesabı oluştur"
+    "button.createBankAccount": "Banka hesabı oluştur",
+    "error.userExist": "Bu kullanıcı zaten var"
   }
 }

@@ -9,7 +9,7 @@ function Splash() {
     <View style={styles.container}>
       <Image
         style={styles.logo}
-        source={require('../../assets/splash-logo.jpg')}
+        source={require('../../assets/splash-logo.png')}
       />
     </View>
   );
@@ -23,8 +23,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   animation: {
-    width: 250,
-    height: 250,
+    width: 200,
+    height: 286,
   },
 });
 
