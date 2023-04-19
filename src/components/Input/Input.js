@@ -5,7 +5,15 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../../styles/colors';
 import {ThemeContext} from '../../context/ThemeContext';
 
-const Input = ({placeholder, value, onType, iconName, isPassword, loading}) => {
+const Input = ({
+  placeholder,
+  value,
+  onType,
+  iconName,
+  isPassword,
+  editable,
+  loading,
+}) => {
   const [isFocused, setIsFocused] = useState(false);
   const {theme} = useContext(ThemeContext);
 
@@ -33,8 +41,8 @@ const Input = ({placeholder, value, onType, iconName, isPassword, loading}) => {
             placeholder={placeholder}
             onFocus={handleFocus}
             value={value}
-            editable={!loading}
             selectable={!loading}
+            editable={!editable}
             onChangeText={onType}
             secureTextEntry={isPassword}
             onBlur={handleBlur}

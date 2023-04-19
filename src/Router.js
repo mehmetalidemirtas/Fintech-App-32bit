@@ -2,6 +2,8 @@ import React, {useState, useEffect, useContext} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from './styles/colors';
 import Login from './pages/Login';
@@ -31,7 +33,7 @@ import ChangePhone from './pages/Settings/SettingScreens/ChangePhone';
 const socket = io('http://10.0.2.2:3000');
 
 const Stack = createNativeStackNavigator();
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 
 const App = () => {
   const {theme} = useContext(ThemeContext);
@@ -75,7 +77,10 @@ const App = () => {
   const MainTabs = () => {
     return (
       <Tab.Navigator
-        screenOptions={{navigationBarColor: theme.backgroundColor}}
+        screenOptions={{
+          navigationBarColor: theme.backgroundColor,
+          headerShown: false,
+        }}
         initialRouteName="Home"
         activeColor={theme.textColor}
         inactiveColor={theme.primary}

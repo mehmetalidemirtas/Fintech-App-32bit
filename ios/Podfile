@@ -29,6 +29,10 @@ target 'Fintech' do
 
   pod 'lottie-react-native', :path => '../node_modules/lottie-react-native'
 
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
+  pod 'react-native-nfc-manager', :path => '../node_modules/react-native-nfc-manager'
+
   target 'FintechTests' do
     inherit! :complete
     # Pods for testing

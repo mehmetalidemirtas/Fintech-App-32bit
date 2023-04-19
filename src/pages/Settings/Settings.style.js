@@ -5,9 +5,9 @@ export default StyleSheet.create({
     flex: 1,
   },
   image: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
   },
   image_container: {
     flexDirection: 'row',

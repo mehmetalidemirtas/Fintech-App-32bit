@@ -19,7 +19,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import CurrencyContext from '../../../context/CurrencyContext';
 import styles from './Watchlist.style';
 
-const socket = io('http://10.0.2.2:3000');
+const socket = io('http://192.168.118.38:3000');
 const Watchlist = ({navigation}) => {
   const [data, setData] = useState([]);
   const {currencyValues, setCurrencyValues} = useContext(CurrencyContext);

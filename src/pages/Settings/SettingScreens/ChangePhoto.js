@@ -128,12 +128,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   image: {
-    width: 300,
-    height: 300,
+    width: 200,
+    height: 200,
     resizeMode: 'contain',
     alignItems: 'center',
     alignSelf: 'center',
-    borderRadius: 150,
+    borderRadius: 100,
     marginVertical: 10,
   },
 });

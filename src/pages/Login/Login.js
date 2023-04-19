@@ -71,7 +71,7 @@ const Login = ({navigation, handleLogin}) => {
             type: 'danger',
             backgroundColor: colors.primary,
           });
-          //Vibration.vibrate(500);
+          Vibration.vibrate(500);
         }
       } else {
         console.log('kullanıcı kayıtlı değil');
@@ -80,7 +80,7 @@ const Login = ({navigation, handleLogin}) => {
           type: 'danger',
           backgroundColor: colors.primary,
         });
-        //Vibration.vibrate(500);
+        Vibration.vibrate(500);
       }
     } catch (error) {
       console.log(error);
