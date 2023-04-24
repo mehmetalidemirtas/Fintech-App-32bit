@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   Modal,
   Text,
@@ -11,10 +11,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '../components/Button';
 import {useTranslation} from 'react-i18next';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {ThemeContext} from '../context/ThemeContext';
 
 const LanguageModal = ({isVisible, onClose}) => {
   const {t, i18n} = useTranslation();
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
+  const {theme} = useContext(ThemeContext);
 
   const handleLanguageChange = async () => {
     await AsyncStorage.setItem('selectedLanguage', selectedLanguage);
@@ -28,7 +30,7 @@ const LanguageModal = ({isVisible, onClose}) => {
         <View style={styles.modalView}>
           <Text style={styles.modalText}>{t('languageModal.title')}</Text>
           <Pressable
-            style={[styles.button]}
+            style={[styles.button, {backgroundColor: theme.primary}]}
             onPress={() => setSelectedLanguage('en')}>
             <Text
               style={[
@@ -39,7 +41,7 @@ const LanguageModal = ({isVisible, onClose}) => {
             </Text>
           </Pressable>
           <Pressable
-            style={[styles.button]}
+            style={[styles.button, {backgroundColor: theme.primary}]}
             onPress={() => setSelectedLanguage('tr')}>
             <Text
               style={[
@@ -81,6 +83,8 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
+    width: '60%',
+    height: '33%',
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
@@ -95,7 +99,6 @@ const styles = StyleSheet.create({
   },
   button: {
     margin: 5,
-    backgroundColor: '#2196F3',
     borderRadius: 20,
     padding: 10,
     elevation: 2,

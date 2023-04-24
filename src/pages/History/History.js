@@ -192,28 +192,33 @@ const Watchlist = ({navigation}) => {
             </TouchableOpacity>
           </View>
           <FlatList
+            showsVerticalScrollIndicator={false}
             data={searchText !== '' ? aramaYap(searchText) : getPageData()}
             renderItem={({item}) => <Item item={item} />}
             keyExtractor={(item, index) => index.toString()}
-          />
-          <View style={styles.pagination}>
-            <TouchableOpacity
-              disabled={page === 0}
-              style={[styles.button, page === 0 && styles.disabledButton]}
-              onPress={handlePrevPage}>
-              <Text style={styles.buttonText}>{'<'}</Text>
-            </TouchableOpacity>
+            ListFooterComponent={
+              //Butonların sadece en altta kalması için
+              <View style={styles.pagination}>
+                <TouchableOpacity
+                  disabled={page === 0}
+                  style={[styles.button, page === 0 && styles.disabledButton]}
+                  onPress={handlePrevPage}>
+                  <Text style={styles.buttonText}>{'<'}</Text>
+                </TouchableOpacity>
 
-            <TouchableOpacity
-              disabled={(page + 1) * PAGE_SIZE >= bank.length}
-              style={[
-                styles.button,
-                (page + 1) * PAGE_SIZE >= bank.length && styles.disabledButton,
-              ]}
-              onPress={handleNextPage}>
-              <Text style={styles.buttonText}>{'>'}</Text>
-            </TouchableOpacity>
-          </View>
+                <TouchableOpacity
+                  disabled={(page + 1) * PAGE_SIZE >= bank.length}
+                  style={[
+                    styles.button,
+                    (page + 1) * PAGE_SIZE >= bank.length &&
+                      styles.disabledButton,
+                  ]}
+                  onPress={handleNextPage}>
+                  <Text style={styles.buttonText}>{'>'}</Text>
+                </TouchableOpacity>
+              </View>
+            }
+          />
         </>
       )}
     </SafeAreaView>

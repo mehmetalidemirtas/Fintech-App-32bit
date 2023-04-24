@@ -120,6 +120,8 @@ const Password = () => {
                 iconName="phone"
                 onType={handleChange('phone')}
                 onBlur={handleBlur('phone')}
+                keyboardType="numeric"
+                maxLengthValue={12}
                 value={values.phone}
               />
               {touched.phone && errors.phone && (

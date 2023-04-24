@@ -21,6 +21,8 @@ import {useTranslation} from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {showMessage} from 'react-native-flash-message';
 import NfcManager, {NfcTech, Ndef, NfcEvents} from 'react-native-nfc-manager';
+import Lottie from 'lottie-react-native';
+import DatePicker from 'react-native-date-picker';
 
 const Identity = () => {
   const {user, setUser} = useContext(UserContext);
@@ -29,7 +31,6 @@ const Identity = () => {
   const {theme} = useContext(ThemeContext);
   const {t} = useTranslation();
   const [isModalVisible, setModalVisible] = useState(false);
-
   const [hasNfc, setHasNFC] = useState(null);
   const [tag, setTag] = useState(null);
   const [name, setName] = useState('');
@@ -38,6 +39,23 @@ const Identity = () => {
   const [identityNumber, setidentityNumber] = useState('');
   const [data, setData] = useState([]);
   const [showForm, setShowForm] = useState(false);
+
+  const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [formattedDate, setFormattedDate] = useState('');
+
+  const handleDateChange = date => {
+    setSelectedDate(date);
+    setFormattedDate(formatDate(date));
+  };
+
+  const formatDate = date => {
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -76,9 +94,6 @@ const Identity = () => {
 
           console.log(jsonData);
           const parsedData = JSON.parse(jsonData);
-
-          //const {name, surname, birthday, identityno} = parsedData;
-
           setData(parsedData);
           setName(parsedData.name);
           setSurname(parsedData.surname);
@@ -113,12 +128,6 @@ const Identity = () => {
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t('error.enterName')),
     surname: Yup.string().required(t('error.enterSurname')),
-    birthDate: Yup.string()
-      .required(t('error.enterDate'))
-      .matches(
-        /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/(19|20)\d{2}$/,
-        t('error.invalidDate'),
-      ),
     identityNumber: Yup.string()
       .required(t('error.enterIdentityNo'))
       .matches(/^[1-9]{1}[0-9]{9}[02468]{1}$/, t('error.invalidId'))
@@ -167,8 +176,7 @@ const Identity = () => {
           backgroundColor: colors.primary,
         });
       } else {
-        //await AsyncStorage.setItem(key, JSON.stringify(values));
-        await setUser({...user, ...values});
+        await setUser({...user, ...values, birthDate: formattedDate});
         navigation.navigate('PhotoScreen');
       }
     } catch (error) {
@@ -176,6 +184,14 @@ const Identity = () => {
     }
     setIsLoading(false);
   };
+  const validate = () => {
+    const errors = {};
+    if (formattedDate == '') {
+      errors.birthDate = t('error.enterDate');
+    }
+    return errors;
+  };
+
   return (
     <SafeAreaView
       style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
@@ -184,6 +200,7 @@ const Identity = () => {
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
+            validate={validate}
             onSubmit={handleFormSubmit}>
             {({
               handleChange,
@@ -194,6 +211,24 @@ const Identity = () => {
               touched,
             }) => (
               <>
+                <View>
+                  <DatePicker
+                    date={selectedDate}
+                    title={null}
+                    onDateChange={handleDateChange}
+                    modal
+                    open={open}
+                    mode="date"
+                    onConfirm={date => {
+                      setOpen(false);
+                      setSelectedDate(date);
+                      setFormattedDate(formatDate(date));
+                    }}
+                    onCancel={() => {
+                      setOpen(false);
+                    }}
+                  />
+                </View>
                 <Text style={[styles.title, {color: theme.primary}]}>
                   {t('title.enterYourCredentials')}
                 </Text>
@@ -217,15 +252,21 @@ const Identity = () => {
                 {touched.surname && errors.surname && (
                   <Text style={styles.error_message}>{errors.surname}</Text>
                 )}
-                <Input
-                  placeholder={t('input.date')}
-                  label="Doğum tarihi"
-                  iconName="calendar-range"
-                  onType={handleChange('birthDate')}
-                  onBlur={handleBlur('birthDate')}
-                  value={values.birthDate}
-                />
-                {touched.birthDate && errors.birthDate && (
+                <TouchableOpacity onPress={() => setOpen(true)}>
+                  <Input
+                    placeholder={t('input.date')}
+                    label="Doğum tarihi"
+                    iconName="calendar-range"
+                    onType={handleChange('birthDate')}
+                    onBlur={handleBlur('birthDate')}
+                    value={formattedDate}
+                    clickedIcon={() => setOpen(true)}
+                    clickedInput={() => setOpen(true)}
+                    selectTextOnFocus
+                    editable={true}
+                  />
+                </TouchableOpacity>
+                {errors.birthDate && (
                   <Text style={styles.error_message}>{errors.birthDate}</Text>
                 )}
                 <Input
@@ -235,6 +276,8 @@ const Identity = () => {
                   onType={handleChange('identityNumber')}
                   value={values.identityNumber}
                   onBlur={handleBlur('identityNumber')}
+                  keyboardType="numeric"
+                  maxLengthValue={11}
                 />
                 {touched.identityNumber && errors.identityNumber && (
                   <Text style={styles.error_message}>
@@ -273,14 +316,24 @@ const Identity = () => {
                   }}>
                   <View style={styles.centeredView}>
                     <View style={styles.modalView}>
+                      <Lottie
+                        style={styles.animation}
+                        source={require('../../assets/nfc_animation.json')}
+                        autoPlay
+                        loop
+                      />
+
                       <Text style={styles.modalText}>
                         Kimlik kartınızı nfc okuyucusuna yaklaştırın !
                       </Text>
-                      <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => setModalVisible(!isModalVisible)}>
-                        <Text style={styles.textStyle}>İptal et</Text>
-                      </Pressable>
+                      <Button
+                        contained
+                        onPress={() => setModalVisible(!isModalVisible)}
+                        title="Cancel"
+                        border={1}
+                        marginLeft={25}
+                        marginRight={25}
+                      />
                     </View>
                   </View>
                 </Modal>
@@ -321,6 +374,8 @@ const Identity = () => {
               label="Kimlik Numarası"
               iconName="card-account-details"
               value={identityNumber}
+              maxLengthValue={11}
+              keyboardType="numeric"
               editable
             />
 
@@ -362,6 +417,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 22,
   },
+  animation: {
+    width: 250,
+    height: 250,
+  },
   modalView: {
     margin: 20,
     width: '80%',
@@ -370,7 +429,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -397,8 +456,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   modalText: {
-    marginBottom: 15,
+    marginBottom: 17,
     textAlign: 'center',
+    fontWeight: 'bold',
+    marginTop: 20,
   },
   button_container: {
     flexDirection: 'row',

@@ -80,11 +80,12 @@ const App = () => {
         screenOptions={{
           navigationBarColor: theme.backgroundColor,
           headerShown: false,
-        }}
-        initialRouteName="Home"
-        activeColor={theme.textColor}
-        inactiveColor={theme.primary}
-        barStyle={{backgroundColor: theme.backgroundColor}}>
+          tabBarActiveTintColor: theme.primary,
+          tabBarInactiveTintColor: '#aaa',
+          tabBarLabelStyle: {
+            fontSize: 13,
+          },
+        }}>
         <Tab.Screen
           screenOptions={{navigationBarColor: theme.backgroundColor}}
           name="WatchlistStack"

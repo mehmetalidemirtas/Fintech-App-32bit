@@ -117,6 +117,8 @@ const Login = ({navigation, handleLogin}) => {
                 onType={handleChange('identityNumber')}
                 onBlur={handleBlur('identityNumber')}
                 value={values.identityNumber}
+                maxLengthValue={11}
+                keyboardType="numeric"
                 loading={isLoading}
               />
               {touched.identityNumber && errors.identityNumber && (

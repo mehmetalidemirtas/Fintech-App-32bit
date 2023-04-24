@@ -43,7 +43,7 @@ export default StyleSheet.create({
   title: {
     fontSize: 15,
     fontWeight: 'bold',
-    marginRight: 3,
+    marginLeft: 6,
   },
   title_container: {
     flexDirection: 'row',

@@ -13,6 +13,10 @@ const Input = ({
   isPassword,
   editable,
   loading,
+  maxLengthValue,
+  keyboardType,
+  clickedIcon,
+  clickedInput,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const {theme} = useContext(ThemeContext);
@@ -34,6 +38,7 @@ const Input = ({
           <Icon
             name={iconName}
             size={25}
+            onPress={clickedIcon}
             color={isFocused ? theme.primary : '#ccc'}
           />
           <TextInput
@@ -42,10 +47,14 @@ const Input = ({
             onFocus={handleFocus}
             value={value}
             selectable={!loading}
+            selectTextOnFocus={false}
             editable={!editable}
+            maxLength={maxLengthValue}
             onChangeText={onType}
             secureTextEntry={isPassword}
             onBlur={handleBlur}
+            keyboardType={keyboardType}
+            onPressIn={clickedInput}
           />
         </View>
       </View>
