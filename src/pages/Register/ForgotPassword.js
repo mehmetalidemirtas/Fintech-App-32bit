@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
-import colors from '../../styles/colors';
 import {ThemeContext} from '../../context/ThemeContext';
 
 const ForgotPassword = ({navigation}) => {

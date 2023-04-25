@@ -3,7 +3,6 @@ import UserContext from '../../context/UserContext';
 import {SafeAreaView, View, Text, StyleSheet} from 'react-native';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
-import colors from '../../styles/colors';
 import {Formik} from 'formik';
 import {useNavigation} from '@react-navigation/native';
 import * as Yup from 'yup';
@@ -21,9 +20,6 @@ const Password = () => {
   const {theme} = useContext(ThemeContext);
 
   const validationSchema = Yup.object().shape({
-    phone: Yup.string()
-      .matches(/^(\+90|90)?([0-9]{10})$/, t('error.phoneMustBe'))
-      .required(t('error.enterPhone')),
     password: Yup.string()
       .min(8, t('error.minPassword'))
       .required(t('error.enterPassword')),
@@ -64,7 +60,7 @@ const Password = () => {
     };
 
     try {
-      const key = `${identityNumber}_userAccount`; // Her bir kullanıcı hesabı için ayrı bir anahtar oluşturun
+      const key = `${identityNumber}_userAccount`;
       console.log('key: ' + key);
       console.log(data);
       await AsyncStorage.setItem(key, JSON.stringify(data));
@@ -79,27 +75,56 @@ const Password = () => {
 
   const handleFormSubmit = async values => {
     if (buttonText === t('button.completeRegistration')) {
-      // İlk kez tıklama durumu
       try {
-        await setUser({...user, ...values}); //setUser() fonksiyonu asenkron bir fonksiyon değildir. Bu nedenle, await kullanarak setUser()'ın tamamlanmasını bekleyemiyoruz.
+        await setUser({...user, ...values, phone: phone});
         console.log(user);
-        //await saveUserToAsyncStorage();
       } catch (error) {
         console.log(error);
       }
       setButtonText(t('button.goToSignUp'));
     } else {
-      // İkinci kez tıklama durumu
       await saveUserToAsyncStorage();
     }
   };
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phone, setPhone] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
 
+  const handleTextChange = phoneInput => {
+    const cleanedNumber = phoneInput.replace(/\D/g, '');
+    const match = cleanedNumber.match(/^(\d{3})(\d{3})(\d{4})$/);
+    if (cleanedNumber.length > 0 && cleanedNumber.charAt(0) !== '5') {
+      setShowAlert(true);
+      return;
+    }
+    if (match) {
+      const formattedText = `(${match[1]}) ${match[2]} ${match[3]}`;
+      setShowAlert(false);
+      setPhoneNumber(formattedText);
+      const phone = `+90${phoneInput}`;
+      setPhone(phone);
+    } else {
+      setPhoneNumber(cleanedNumber);
+      setShowAlert(false);
+    }
+  };
+  const validate = () => {
+    const errors = {};
+    if (phoneNumber == '') {
+      errors.phoneNumber = t('error.enterPhone');
+    }
+    if (phoneNumber.length < 10) {
+      errors.phoneNumberLength = 'Telefon numarası yanlış';
+    }
+    return errors;
+  };
   return (
     <SafeAreaView
       style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
+        validate={validate}
         onSubmit={handleFormSubmit}>
         {({
           handleChange,
@@ -113,20 +138,31 @@ const Password = () => {
             <Text style={[styles.title, {color: theme.primary}]}>
               {t('title.setPassword')}
             </Text>
-
             <View>
               <Input
-                placeholder={t('input.phone')}
                 iconName="phone"
-                onType={handleChange('phone')}
-                onBlur={handleBlur('phone')}
+                value={phoneNumber}
+                onType={handleTextChange}
+                maxLengthValue={14}
                 keyboardType="numeric"
-                maxLengthValue={12}
-                value={values.phone}
+                placeholder={t('input.phone')}
+                onBlur={handleBlur('phone')}
               />
-              {touched.phone && errors.phone && (
-                <Text style={styles.error_message}>{errors.phone}</Text>
+              {errors.phoneNumber && (
+                <Text style={styles.error_message}>{errors.phoneNumber}</Text>
               )}
+              {errors.phoneNumberLength && (
+                <Text style={styles.error_message}>
+                  {errors.phoneNumberLength}
+                </Text>
+              )}
+              {showAlert && (
+                <Text style={styles.error_message}>
+                  Telefon numarası 5XXXXXXXXX formatında olmalıdır.
+                </Text>
+              )}
+            </View>
+            <View>
               <Input
                 placeholder={t('input.password')}
                 iconName="lock"

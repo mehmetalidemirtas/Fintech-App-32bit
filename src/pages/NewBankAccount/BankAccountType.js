@@ -30,9 +30,7 @@ const BankAccountType = () => {
       });
       return;
     }
-    console.log('selected::: ' + selected);
     setBank(prev => ({...prev, bankType: selected}));
-    console.log(bank);
     navigation.navigate('BankCurrencyTypeScreen');
   };
 
@@ -42,7 +40,9 @@ const BankAccountType = () => {
       <Text style={[styles.title, {color: theme.primary}]}>
         Bank Account Type
       </Text>
-      <Text style={styles.text}> Lütfen hesap türü seçiniz</Text>
+      <Text style={[styles.text, {color: theme.textColor}]}>
+        Lütfen hesap türü seçiniz
+      </Text>
       <View style={{margin: 20}}>
         <SelectList
           setSelected={val => setSelected(val)}
@@ -53,6 +53,10 @@ const BankAccountType = () => {
           placeholder="Hesap türünü seçiniz"
           save="value"
           defaultOption={bank.bankType}
+          dropdownTextStyles={{color: theme.textColor}}
+          dropdownItemStyles={{color: theme.textColor}}
+          boxStyles={theme.textColor}
+          inputStyles={{color: theme.textColor}}
         />
       </View>
       <View style={styles.button_container}>

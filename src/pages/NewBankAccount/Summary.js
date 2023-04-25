@@ -1,5 +1,4 @@
 import React, {useContext, useEffect} from 'react';
-import UserContext from '../../context/UserContext';
 import {SafeAreaView, View, Text, StyleSheet} from 'react-native';
 import Button from '../../components/Button';
 import colors from '../../styles/colors';
@@ -14,9 +13,7 @@ const Summary = () => {
   const {bank, setBank} = useContext(BankAccountContext);
   const {theme} = useContext(ThemeContext);
 
-  useEffect(() => {
-    //Bir önceki aşamada seçilen branchName bir sonraki render işleminde context'e kaydolacağı için useEffect kullandımm.
-  }, [bank]);
+  useEffect(() => {}, [bank]);
 
   const saveBankAccountToAsyncStorage = async () => {
     const {bankType, currencyType, branchName, accountNo, iban, amount} = bank;
@@ -30,11 +27,8 @@ const Summary = () => {
     };
 
     const identityNo = await AsyncStorage.getItem('currentUser');
-    console.log('identity: ' + identityNo);
     const currency = currencyType.split('-')[0].trim(); // "USD"
-    console.log('currency::::: ' + currency);
-    const key = `${identityNo}_bankAccount_${currency}_${accountNo}`; // Her bir banka hesabı için ayrı bir anahtar oluşturun
-    console.log('key: ' + key);
+    const key = `${identityNo}_bankAccount_${currency}_${accountNo}`;
     try {
       console.log(data);
       AsyncStorage.setItem(key, JSON.stringify(data));
@@ -55,10 +49,10 @@ const Summary = () => {
   return (
     <SafeAreaView
       style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
-      <Text style={[styles.title, {color: theme.primary}]}>Hesap Özeti</Text>
+      <Text style={[styles.title, {color: theme.textColor}]}>Hesap Özeti</Text>
       <View
         style={{
-          backgroundColor: theme.cardColor,
+          backgroundColor: theme.itemColor,
           borderRadius: 30,
           margin: 20,
         }}>
@@ -69,13 +63,7 @@ const Summary = () => {
         <Card title="Iban:" text={bank.iban} />
       </View>
       <View style={styles.button_container}>
-        <Button
-          contained
-          buttonColor="#7286D3"
-          textColor="white"
-          onPress={handleSubmit}
-          title="Ana sayfaya git"
-        />
+        <Button contained onPress={handleSubmit} title="Ana sayfaya git" />
       </View>
     </SafeAreaView>
   );

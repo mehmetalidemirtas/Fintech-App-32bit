@@ -1,5 +1,5 @@
-import React, {useState, useContext, useEffect} from 'react';
-import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
+import React, {useContext, useEffect} from 'react';
+import {View, Text, SafeAreaView} from 'react-native';
 import styles from './Summary.style';
 import {ThemeContext} from '../../../context/ThemeContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -35,7 +35,7 @@ const Exchange = props => {
       style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
       <View>
         <View style={styles.bottom_container}>
-          <Text style={[styles.title, {color: theme.primary}]}>
+          <Text style={[styles.title, {color: theme.textColor}]}>
             İŞLEMİNİZ BAŞARIYLA GERÇEKLEŞTİRİLMİŞTİR
           </Text>
           <Text style={[styles.text, {color: theme.textColor}]}>
@@ -43,13 +43,7 @@ const Exchange = props => {
           </Text>
         </View>
         <View style={styles.button}>
-          <Button
-            contained
-            buttonColor="#7286D3"
-            textColor="white"
-            onPress={handleSubmit}
-            title="Ana sayfaya git"
-          />
+          <Button contained onPress={handleSubmit} title="Ana sayfaya git" />
         </View>
       </View>
     </SafeAreaView>

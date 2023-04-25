@@ -27,9 +27,7 @@ const BankBranch = () => {
       });
       return;
     }
-    console.log('selected::: ' + selected);
     setBank(prev => ({...prev, branchName: selected}));
-    console.log(bank);
     navigation.navigate('ConfirmationScreen');
   };
 
@@ -47,6 +45,10 @@ const BankBranch = () => {
           notFoundText="Bulunamadı..."
           placeholder="Şube seçiniz"
           defaultOption={bank.branchName}
+          dropdownTextStyles={{color: theme.textColor}}
+          dropdownItemStyles={{color: theme.textColor}}
+          boxStyles={theme.textColor}
+          inputStyles={{color: theme.textColor}}
         />
       </View>
       <View style={styles.button_container}>

@@ -4,7 +4,6 @@ import Button from '../../../components/Button';
 import Input from '../../../components/Input';
 import {Formik} from 'formik';
 import {useNavigation} from '@react-navigation/native';
-import * as Yup from 'yup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ThemeContext} from '../../../context/ThemeContext';
 import {useTranslation} from 'react-i18next';
@@ -13,16 +12,12 @@ const Password = () => {
   const {t} = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const {theme} = useContext(ThemeContext);
-
-  const validationSchema = Yup.object().shape({
-    phone: Yup.string()
-      .matches(/^(\+90|90)?([0-9]{10})$/, t('error.phoneMustBe'))
-      .required(t('error.enterPhone')),
-  });
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phone, setPhone] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
 
   const initialValues = {
-    password: '',
-    confirmPassword: '',
+    phone: '',
   };
 
   const navigation = useNavigation();
@@ -43,25 +38,47 @@ const Password = () => {
     setIsLoading(false);
     navigation.navigate('Setting');
   };
-  const handleFormSubmit = async values => {
-    updatePhoneNumber(values.phone);
+  const handleFormSubmit = async () => {
+    console.log(phone);
+    updatePhoneNumber(phone);
   };
 
+  const handleTextChange = phoneInput => {
+    const cleanedNumber = phoneInput.replace(/\D/g, '');
+    const match = cleanedNumber.match(/^(\d{3})(\d{3})(\d{4})$/);
+    if (cleanedNumber.length > 0 && cleanedNumber.charAt(0) !== '5') {
+      setShowAlert(true);
+      return;
+    }
+    if (match) {
+      const formattedText = `(${match[1]}) ${match[2]} ${match[3]}`;
+      setShowAlert(false);
+      setPhoneNumber(formattedText);
+      const phone = `+90${phoneInput}`;
+      setPhone(phone);
+    } else {
+      setPhoneNumber(cleanedNumber);
+      setShowAlert(false);
+    }
+  };
+  const validate = () => {
+    const errors = {};
+    if (phoneNumber == '') {
+      errors.phoneNumber = t('error.enterPhone');
+    }
+    if (phoneNumber.length < 10) {
+      errors.phoneNumberLength = 'Telefon numarası yanlış';
+    }
+    return errors;
+  };
   return (
     <SafeAreaView
       style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema}
+        validate={validate}
         onSubmit={handleFormSubmit}>
-        {({
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          values,
-          errors,
-          touched,
-        }) => (
+        {({handleBlur, handleSubmit, errors}) => (
           <>
             <Text style={[styles.title, {color: theme.primary}]}>
               Yeni telefon numaranızı belirleyin
@@ -69,14 +86,26 @@ const Password = () => {
 
             <View>
               <Input
-                placeholder={t('input.phone')}
                 iconName="phone"
-                onType={handleChange('phone')}
+                value={phoneNumber}
+                onType={handleTextChange}
+                maxLengthValue={14}
+                keyboardType="numeric"
+                placeholder={t('input.phone')}
                 onBlur={handleBlur('phone')}
-                value={values.phone}
               />
-              {touched.phone && errors.phone && (
-                <Text style={styles.error_message}>{errors.phone}</Text>
+              {errors.phoneNumber && (
+                <Text style={styles.error_message}>{errors.phoneNumber}</Text>
+              )}
+              {errors.phoneNumberLength && (
+                <Text style={styles.error_message}>
+                  {errors.phoneNumberLength}
+                </Text>
+              )}
+              {showAlert && (
+                <Text style={styles.error_message}>
+                  Telefon numarası 5XXXXXXXXX formatında olmalıdır.
+                </Text>
               )}
             </View>
             <View style={styles.button_container}>

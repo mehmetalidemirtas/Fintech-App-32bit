@@ -1,11 +1,5 @@
 import React, {useContext, useEffect} from 'react';
-import {
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet} from 'react-native';
 import Button from '../../components/Button';
 import colors from '../../styles/colors';
 import {useNavigation} from '@react-navigation/native';
@@ -57,10 +51,13 @@ const Confirmation = () => {
     <SafeAreaView
       style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
       <Text style={[styles.title, {color: theme.primary}]}>Confirmation</Text>
-      <Text style={styles.text}> Lütfen hesap açma işlemini onaylayınız</Text>
+      <Text style={[styles.text, {color: theme.primary}]}>
+        {' '}
+        Lütfen hesap açma işlemini onaylayınız
+      </Text>
       <View
         style={{
-          backgroundColor: theme.cardColor,
+          backgroundColor: theme.itemColor,
           borderRadius: 30,
           margin: 20,
         }}>
@@ -81,13 +78,7 @@ const Confirmation = () => {
         />
       </View>
       <View style={styles.button_container}>
-        <Button
-          contained
-          buttonColor="#7286D3"
-          textColor="white"
-          onPress={handleSubmit}
-          title="Onaylıyorum"
-        />
+        <Button contained onPress={handleSubmit} title="Onaylıyorum" />
       </View>
     </SafeAreaView>
   );

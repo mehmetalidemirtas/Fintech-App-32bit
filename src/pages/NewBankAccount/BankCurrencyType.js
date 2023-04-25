@@ -27,9 +27,7 @@ const BankCurrencyType = () => {
       });
       return;
     }
-    console.log('selected::: ' + selected);
     setBank(prev => ({...prev, currencyType: selected}));
-    console.log(bank);
     navigation.navigate('BankBranchScreen');
   };
   return (
@@ -46,6 +44,10 @@ const BankCurrencyType = () => {
           searchPlaceholder="Ara"
           notFoundText="Bulunamadı..."
           placeholder="Döviz tipi seçiniz"
+          dropdownTextStyles={{color: theme.textColor}}
+          dropdownItemStyles={{color: theme.textColor}}
+          boxStyles={theme.textColor}
+          inputStyles={{color: theme.textColor}}
           defaultOption={bank.currencyType}
         />
       </View>

@@ -4,9 +4,7 @@ import {
   SafeAreaView,
   View,
   TouchableOpacity,
-  Alert,
   Modal,
-  Pressable,
   Text,
   StyleSheet,
 } from 'react-native';
@@ -40,9 +38,19 @@ const Identity = () => {
   const [data, setData] = useState([]);
   const [showForm, setShowForm] = useState(false);
 
-  const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const today = new Date();
+  const maxDate = new Date(
+    today.getFullYear() - 18,
+    today.getMonth(),
+    today.getDate(),
+  );
+  const minDate = new Date(
+    today.getFullYear() - 100,
+    today.getMonth(),
+    today.getDate(),
+  );
+  const [selectedDate, setSelectedDate] = useState(maxDate);
   const [formattedDate, setFormattedDate] = useState('');
 
   const handleDateChange = date => {
@@ -72,6 +80,7 @@ const Identity = () => {
 
     checkIsSupported();
   }, []);
+
   useEffect(() => {
     NfcManager.setEventListener(NfcEvents.DiscoverTag, tag => {
       console.log('Tag Discovered', tag);
@@ -219,6 +228,12 @@ const Identity = () => {
                     modal
                     open={open}
                     mode="date"
+                    maximumDate={maxDate}
+                    minimumDate={minDate}
+                    confirmButtonStyle={{backgroundColor: 'green'}}
+                    cancelButtonStyle={{backgroundColor: 'red'}}
+                    confirmText="Kaydet"
+                    cancelText="İptal"
                     onConfirm={date => {
                       setOpen(false);
                       setSelectedDate(date);
@@ -308,14 +323,21 @@ const Identity = () => {
                 />
                 <Modal
                   animationType="slide"
-                  transparent={false}
+                  transparent={true}
                   visible={isModalVisible}
                   onRequestClose={() => {
-                    Alert.alert('Modal has been closed.');
                     setModalVisible(!isModalVisible);
                   }}>
-                  <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
+                  <View
+                    style={[
+                      styles.centeredView,
+                      {backgroundColor: theme.backgroundColor},
+                    ]}>
+                    <View
+                      style={[
+                        styles.modalView,
+                        {backgroundColor: theme.itemColor},
+                      ]}>
                       <Lottie
                         style={styles.animation}
                         source={require('../../assets/nfc_animation.json')}
@@ -323,7 +345,8 @@ const Identity = () => {
                         loop
                       />
 
-                      <Text style={styles.modalText}>
+                      <Text
+                        style={[styles.modalText, {color: theme.textColor}]}>
                         Kimlik kartınızı nfc okuyucusuna yaklaştırın !
                       </Text>
                       <Button

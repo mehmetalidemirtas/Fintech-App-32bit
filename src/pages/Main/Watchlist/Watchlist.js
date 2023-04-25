@@ -3,8 +3,6 @@ import {
   View,
   Text,
   FlatList,
-  StyleSheet,
-  RefreshControl,
   ScrollView,
   Pressable,
   ActivityIndicator,
@@ -19,7 +17,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import CurrencyContext from '../../../context/CurrencyContext';
 import styles from './Watchlist.style';
 
-const socket = io('http://192.168.67.38:3000');
+const socket = io('http://192.168.90.38:3000');
 const Watchlist = ({navigation}) => {
   const [data, setData] = useState([]);
   const {currencyValues, setCurrencyValues} = useContext(CurrencyContext);
@@ -27,7 +25,6 @@ const Watchlist = ({navigation}) => {
   const [loading, setLoading] = useState(true);
   const {theme} = useContext(ThemeContext);
   const {t} = useTranslation();
-  const [currencies, setCurrencies] = useState([]);
 
   const getFavoriteCurrencies = async () => {
     const identityNo = await AsyncStorage.getItem('currentUser');
@@ -150,14 +147,22 @@ const Watchlist = ({navigation}) => {
       });
     };
     return (
-      <Pressable style={styles.item} onPress={() => goToCryptoDetail()}>
+      <Pressable
+        style={[styles.item, {backgroundColor: theme.itemColor}]}
+        onPress={() => goToCryptoDetail()}>
         <View style={styles.card_container}>
           <View style={styles.currency}>
-            <Text style={styles.title}>{item.currency}</Text>
-            <Text style={styles.try}>/TRY</Text>
+            <Text style={[styles.title, {color: theme.textColor}]}>
+              {item.currency}
+            </Text>
+            <Text style={[styles.try, {color: theme.textColor}]}>/TRY</Text>
           </View>
-          <Text style={styles.subtitle}>{item.buyValue}</Text>
-          <Text style={styles.subtitle}>{item.sellValue}</Text>
+          <Text style={[styles.subtitle, {color: theme.textColor}]}>
+            {item.buyValue}
+          </Text>
+          <Text style={[styles.subtitle, {color: theme.textColor}]}>
+            {item.sellValue}
+          </Text>
           <View style={[styles.rate, {backgroundColor: item.backgroundColor}]}>
             <Text style={[styles.subtitle, {color: 'white'}]}>
               {item.changeRate}%
@@ -231,10 +236,10 @@ const Watchlist = ({navigation}) => {
         </ScrollView>
       </View>
       <View style={styles.bottom_container}>
-        <Text style={styles.bar}>Currency</Text>
-        <Text style={styles.bar}>Buy price</Text>
-        <Text style={styles.bar}>Sell price</Text>
-        <Text style={styles.change}>Change%</Text>
+        <Text style={[styles.bar, {color: theme.textColor}]}>Currency</Text>
+        <Text style={[styles.bar, {color: theme.textColor}]}>Buy price</Text>
+        <Text style={[styles.bar, {color: theme.textColor}]}>Sell price</Text>
+        <Text style={[styles.change, {color: theme.textColor}]}>Change%</Text>
       </View>
       {loading ? (
         <View
