@@ -1,9 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from './styles/colors';
 import Login from './pages/Login';
@@ -44,6 +42,11 @@ const App = () => {
     statusBarColor: theme.backgroundColor,
     statusBarStyle: theme.statusBarStyle,
     headerTintColor: colors.primary,
+    navigationBarColor: theme.backgroundColor,
+    transitionSpec: {
+      open: {animation: 'timing', config: {duration: 0}},
+      close: {animation: 'timing', config: {duration: 0}},
+    },
   };
 
   const handleLogin = async () => {
@@ -77,17 +80,26 @@ const App = () => {
   const MainTabs = () => {
     return (
       <Tab.Navigator
+        backgroundColor={theme.backgroundColor}
         screenOptions={{
+          tabBarStyle: {
+            backgroundColor: theme.backgroundColor,
+            padding: 5,
+          },
           navigationBarColor: theme.backgroundColor,
           headerShown: false,
-          tabBarActiveTintColor: theme.primary,
+          backgroundColor: theme.backgroundColor,
+          tabBarActiveTintColor: theme.textColor,
           tabBarInactiveTintColor: '#aaa',
           tabBarLabelStyle: {
             fontSize: 13,
           },
         }}>
         <Tab.Screen
-          screenOptions={{navigationBarColor: theme.backgroundColor}}
+          screenOptions={{
+            navigationBarColor: theme.backgroundColor,
+            backgroundColor: theme.backgroundColor,
+          }}
           name="WatchlistStack"
           component={WatchlistStack}
           options={{
@@ -125,7 +137,7 @@ const App = () => {
               <Icon
                 name="logout"
                 size={25}
-                color={theme.primary}
+                color={theme.textColor}
                 onPress={onLogout}
               />
             ),
@@ -274,13 +286,16 @@ const App = () => {
   if (isLoading) {
     return <Splash />;
   }
-  console.log('isLoggedIn: ' + isLoggedIn);
 
   return (
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
+          transitionSpec: {
+            open: {animation: 'timing', config: {duration: 0}},
+            close: {animation: 'timing', config: {duration: 0}},
+          },
         }}>
         {isLoggedIn ? (
           <Stack.Screen name="MainTabs" component={MainTabs} />

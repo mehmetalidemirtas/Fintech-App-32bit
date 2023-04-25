@@ -10,8 +10,8 @@ const CustomCard = ({title, text, onPress}) => {
   return (
     <View style={styles.container}>
       <View style={styles.text_container}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.text}>{text}</Text>
+        <Text style={[styles.title, {color: theme.textColor}]}>{title}</Text>
+        <Text style={[styles.text, {color: theme.textColor}]}>{text}</Text>
       </View>
       {onPress ? (
         <View style={styles.button_container}>

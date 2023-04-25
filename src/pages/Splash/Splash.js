@@ -6,7 +6,7 @@ function Splash() {
   const {theme} = useContext(ThemeContext);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
       <Image
         style={styles.logo}
         source={require('../../assets/splash-logo.png')}

@@ -27,26 +27,35 @@ const LanguageModal = ({isVisible, onClose}) => {
   return (
     <Modal visible={isVisible} animationType="slide" transparent={true}>
       <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-          <Text style={styles.modalText}>{t('languageModal.title')}</Text>
+        <View
+          style={[styles.modalView, {backgroundColor: theme.backgroundColor}]}>
+          <Text style={[styles.modalText, {color: theme.textColor}]}>
+            {t('languageModal.title')}
+          </Text>
           <Pressable
-            style={[styles.button, {backgroundColor: theme.primary}]}
+            style={[styles.button, {backgroundColor: theme.itemColor}]}
             onPress={() => setSelectedLanguage('en')}>
             <Text
               style={[
                 styles.textStyle,
-                {fontWeight: selectedLanguage === 'en' ? 'bold' : 'normal'},
+                {
+                  color: theme.textColor,
+                  fontWeight: selectedLanguage === 'en' ? 'bold' : 'normal',
+                },
               ]}>
               {t('english')}
             </Text>
           </Pressable>
           <Pressable
-            style={[styles.button, {backgroundColor: theme.primary}]}
+            style={[styles.button, {backgroundColor: theme.itemColor}]}
             onPress={() => setSelectedLanguage('tr')}>
             <Text
               style={[
                 styles.textStyle,
-                {fontWeight: selectedLanguage === 'tr' ? 'bold' : 'normal'},
+                {
+                  color: theme.textColor,
+                  fontWeight: selectedLanguage === 'tr' ? 'bold' : 'normal',
+                },
               ]}>
               {t('turkish')}
             </Text>

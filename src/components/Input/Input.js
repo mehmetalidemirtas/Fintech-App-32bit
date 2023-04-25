@@ -17,6 +17,7 @@ const Input = ({
   keyboardType,
   clickedIcon,
   clickedInput,
+  onClearText,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const {theme} = useContext(ThemeContext);
@@ -39,10 +40,12 @@ const Input = ({
             name={iconName}
             size={25}
             onPress={clickedIcon}
-            color={isFocused ? theme.primary : '#ccc'}
+            color={isFocused ? theme.primary : '#aaa'}
           />
           <TextInput
             style={styles.textInput}
+            placeholderTextColor="#aaa"
+            color={theme.textColor}
             placeholder={placeholder}
             onFocus={handleFocus}
             value={value}
@@ -55,6 +58,7 @@ const Input = ({
             onBlur={handleBlur}
             keyboardType={keyboardType}
             onPressIn={clickedInput}
+            onClearText={onClearText}
           />
         </View>
       </View>

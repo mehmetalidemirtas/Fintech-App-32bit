@@ -63,7 +63,6 @@ const ChooseFavoriteCurrencies = ({navigation}) => {
       currency => favorites[currency],
     );
     const key = `${identityNo}_favoriteCurrencies`;
-    console.log('key:: ' + key);
 
     try {
       // Async storage'de var olan kaydı silmek için
@@ -85,7 +84,7 @@ const ChooseFavoriteCurrencies = ({navigation}) => {
       style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
       <View
         style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
-        <Text style={[styles.title, {color: theme.primary}]}>
+        <Text style={[styles.title, {color: theme.textColor}]}>
           Choose your favorite currencies
         </Text>
         {loading ? (
@@ -104,6 +103,8 @@ const ChooseFavoriteCurrencies = ({navigation}) => {
             {data.map(currency => (
               <Checkbox.Item
                 key={currency}
+                color={theme.primary}
+                labelStyle={{color: theme.textColor}}
                 label={currency}
                 status={favorites[currency] ? 'checked' : 'unchecked'}
                 onPress={() => toggleCheckbox(currency)}

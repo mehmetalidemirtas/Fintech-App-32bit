@@ -66,27 +66,47 @@ const Settings = () => {
           </View>
         ) : (
           <>
-            <View style={styles.image_container}>
+            <View
+              style={[
+                styles.image_container,
+                {backgroundColor: theme.itemColor},
+              ]}>
               <Image style={styles.image} source={{uri: user.photo}} />
               <View style={styles.text_container}>
-                <Text style={styles.name_text}>
+                <Text style={[styles.name_text, {color: theme.textColor}]}>
                   {user.name} {user.surname}
                 </Text>
                 <View style={styles.title_container}>
-                  <Text style={styles.title}>Date of birth:</Text>
-                  <Text style={styles.text}>{user.birthDate}</Text>
+                  <Text style={[styles.title, {color: theme.textColor}]}>
+                    Date of birth:
+                  </Text>
+                  <Text style={[styles.text, {color: theme.textColor}]}>
+                    {user.birthDate}
+                  </Text>
                 </View>
                 <View style={styles.title_container}>
-                  <Text style={styles.title}>Identity No:</Text>
-                  <Text style={styles.text}>{user.identityNumber}</Text>
+                  <Text style={[styles.title, {color: theme.textColor}]}>
+                    Identity No:
+                  </Text>
+                  <Text style={[styles.text, {color: theme.textColor}]}>
+                    {user.identityNumber}
+                  </Text>
                 </View>
                 <View style={styles.title_container}>
-                  <Text style={styles.title}>Phone No:</Text>
-                  <Text style={styles.text}>{user.phone}</Text>
+                  <Text style={[styles.title, {color: theme.textColor}]}>
+                    Phone No:
+                  </Text>
+                  <Text style={[styles.text, {color: theme.textColor}]}>
+                    {user.phone}
+                  </Text>
                 </View>
                 <View style={styles.title_container}>
-                  <Text style={styles.title}>Password:</Text>
-                  <Text style={styles.text}>{user.password}</Text>
+                  <Text style={[styles.title, {color: theme.textColor}]}>
+                    Password:
+                  </Text>
+                  <Text style={[styles.text, {color: theme.textColor}]}>
+                    {user.password}
+                  </Text>
                 </View>
               </View>
             </View>
@@ -95,21 +115,39 @@ const Settings = () => {
         <LanguageButton />
         <ThemeToggle />
         <Pressable onPress={() => navigation.navigate('ChangePasswordScreen')}>
-          <View style={styles.bottom_container}>
-            <Text style={styles.title}>Change password</Text>
-            <Icon name="chevron-right" size={30} />
+          <View
+            style={[
+              styles.bottom_container,
+              {backgroundColor: theme.itemColor},
+            ]}>
+            <Text style={[styles.title, {color: theme.textColor}]}>
+              Change password
+            </Text>
+            <Icon name="chevron-right" size={30} color={theme.iconColor} />
           </View>
         </Pressable>
         <Pressable onPress={() => navigation.navigate('ChangePhoneScreen')}>
-          <View style={styles.bottom_container}>
-            <Text style={styles.title}>Change phone number</Text>
-            <Icon name="chevron-right" size={30} />
+          <View
+            style={[
+              styles.bottom_container,
+              {backgroundColor: theme.itemColor},
+            ]}>
+            <Text style={[styles.title, {color: theme.textColor}]}>
+              Change phone number
+            </Text>
+            <Icon name="chevron-right" size={30} color={theme.iconColor} />
           </View>
         </Pressable>
         <Pressable onPress={() => navigation.navigate('ChangePhotoScreen')}>
-          <View style={styles.bottom_container}>
-            <Text style={styles.title}>Change profile photo</Text>
-            <Icon name="chevron-right" size={30} />
+          <View
+            style={[
+              styles.bottom_container,
+              {backgroundColor: theme.itemColor},
+            ]}>
+            <Text style={[styles.title, {color: theme.textColor}]}>
+              Change profile photo
+            </Text>
+            <Icon name="chevron-right" size={30} color={theme.iconColor} />
           </View>
         </Pressable>
       </ScrollView>

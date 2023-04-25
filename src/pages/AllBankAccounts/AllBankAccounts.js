@@ -23,17 +23,16 @@ const AllBankAccounts = ({navigation}) => {
     setLoading(true);
 
     try {
-      const keys = await AsyncStorage.getAllKeys(); // Tüm async storage anahtarlarını al
+      const keys = await AsyncStorage.getAllKeys();
       const identityNo = await AsyncStorage.getItem('currentUser');
       const filterKey = `${identityNo}_bankAccount_`;
-      const bankAccountKeys = keys.filter(key => key.includes(filterKey)); // Sadece banka hesapları için anahtarları filtrele
+      const bankAccountKeys = keys.filter(key => key.includes(filterKey));
       const bankAccounts = await Promise.all(
         bankAccountKeys.map(async key => {
-          const bankAccount = await AsyncStorage.getItem(key); // Her bir banka hesabı için getItem ile async storage'dan verileri yükle
+          const bankAccount = await AsyncStorage.getItem(key);
           return JSON.parse(bankAccount);
         }),
       );
-      // Banka hesaplarını tarihlerine göre sırala
       setBank(bankAccounts);
       setLoading(false);
     } catch (e) {
@@ -64,29 +63,47 @@ const AllBankAccounts = ({navigation}) => {
     return newAmount;
   }
   const Item = ({item}) => (
-    <View style={styles.card_container}>
-      <Text style={[styles.title, {textAlign: 'center', marginBottom: 2}]}>
+    <View style={[styles.card_container, {backgroundColor: theme.itemColor}]}>
+      <Text
+        style={[
+          styles.title,
+          {textAlign: 'center', marginBottom: 2, color: theme.textColor},
+        ]}>
         {item.currencyType}
       </Text>
       <View style={styles.title_container}>
-        <Text style={styles.title}>Hesap türü: </Text>
-        <Text style={styles.text}>{item.bankType}</Text>
+        <Text style={[styles.title, {color: theme.textColor}]}>
+          Hesap türü:
+        </Text>
+        <Text style={[styles.text, {color: theme.textColor}]}>
+          {item.bankType}
+        </Text>
       </View>
       <View style={styles.title_container}>
-        <Text style={styles.title}>Şube adı: </Text>
-        <Text style={styles.text}>{item.branchName}</Text>
+        <Text style={[styles.title, {color: theme.textColor}]}>Şube adı: </Text>
+        <Text style={[styles.text, {color: theme.textColor}]}>
+          {item.branchName}
+        </Text>
       </View>
       <View style={styles.title_container}>
-        <Text style={styles.title}>Hesap numarası: </Text>
-        <Text style={styles.text}>{item.accountNo}</Text>
+        <Text style={[styles.title, {color: theme.textColor}]}>
+          Hesap numarası:
+        </Text>
+        <Text style={[styles.text, {color: theme.textColor}]}>
+          {item.accountNo}
+        </Text>
       </View>
       <View style={styles.title_container}>
-        <Text style={styles.title}>IBAN: </Text>
-        <Text style={styles.text}>{item.iban}</Text>
+        <Text style={[styles.title, {color: theme.textColor}]}>IBAN: </Text>
+        <Text style={[styles.text, {color: theme.textColor}]}>{item.iban}</Text>
       </View>
       <View style={styles.title_container}>
-        <Text style={styles.title}>Toplam bakiye: </Text>
-        <Text style={styles.text}>{formatAmount(item.amount)}</Text>
+        <Text style={[styles.title, {color: theme.textColor}]}>
+          Toplam bakiye:
+        </Text>
+        <Text style={[styles.text, {color: theme.textColor}]}>
+          {formatAmount(item.amount)}
+        </Text>
       </View>
     </View>
   );
@@ -110,25 +127,33 @@ const AllBankAccounts = ({navigation}) => {
             data={getPageData()}
             renderItem={({item}) => <Item item={item} />}
             keyExtractor={(item, index) => index.toString()}
-          />
-          <View style={styles.pagination}>
-            <TouchableOpacity
-              disabled={page === 0}
-              style={[styles.button, page === 0 && styles.disabledButton]}
-              onPress={handlePrevPage}>
-              <Text style={styles.buttonText}>{'<'}</Text>
-            </TouchableOpacity>
+            ListFooterComponent={
+              <View style={styles.pagination}>
+                <TouchableOpacity
+                  disabled={page === 0}
+                  style={[
+                    styles.button,
+                    {backgroundColor: theme.buttonColor},
+                    page === 0 && styles.disabledButton,
+                  ]}
+                  onPress={handlePrevPage}>
+                  <Text style={styles.buttonText}>{'<'}</Text>
+                </TouchableOpacity>
 
-            <TouchableOpacity
-              disabled={(page + 1) * PAGE_SIZE >= bank.length}
-              style={[
-                styles.button,
-                (page + 1) * PAGE_SIZE >= bank.length && styles.disabledButton,
-              ]}
-              onPress={handleNextPage}>
-              <Text style={styles.buttonText}>{'>'}</Text>
-            </TouchableOpacity>
-          </View>
+                <TouchableOpacity
+                  disabled={(page + 1) * PAGE_SIZE >= bank.length}
+                  style={[
+                    styles.button,
+                    {backgroundColor: theme.buttonColor},
+                    (page + 1) * PAGE_SIZE >= bank.length &&
+                      styles.disabledButton,
+                  ]}
+                  onPress={handleNextPage}>
+                  <Text style={styles.buttonText}>{'>'}</Text>
+                </TouchableOpacity>
+              </View>
+            }
+          />
         </>
       )}
     </SafeAreaView>

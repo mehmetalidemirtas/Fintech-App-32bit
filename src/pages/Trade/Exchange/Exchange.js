@@ -66,14 +66,14 @@ const Exchange = props => {
   useEffect(() => {
     const getBankTLData = async () => {
       try {
-        const keys = await AsyncStorage.getAllKeys(); // Tüm async storage anahtarlarını al
+        const keys = await AsyncStorage.getAllKeys();
         const identityNo = await AsyncStorage.getItem('currentUser');
         setIdentityNo(identityNo);
         const filterKey = `${identityNo}_bankAccount_TL_`;
-        const bankAccountKeys = keys.filter(key => key.includes(filterKey)); // Sadece banka hesapları için anahtarları filtrele
+        const bankAccountKeys = keys.filter(key => key.includes(filterKey));
         const bankAccounts = await Promise.all(
           bankAccountKeys.map(async key => {
-            const bankAccount = await AsyncStorage.getItem(key); // Her bir banka hesabı için getItem ile async storage'dan verileri yükle
+            const bankAccount = await AsyncStorage.getItem(key);
             return JSON.parse(bankAccount);
           }),
         );
@@ -84,13 +84,13 @@ const Exchange = props => {
     };
     const getBankData = async () => {
       try {
-        const keys = await AsyncStorage.getAllKeys(); // Tüm async storage anahtarlarını al
+        const keys = await AsyncStorage.getAllKeys();
         const identityNo = await AsyncStorage.getItem('currentUser');
-        const filterKey = `${identityNo}_bankAccount_${nameOfCurrency}_`; //????????????????? currencyNameToBeSold
-        const bankAccountKeys = keys.filter(key => key.includes(filterKey)); // Sadece banka hesapları için anahtarları filtrele
+        const filterKey = `${identityNo}_bankAccount_${nameOfCurrency}_`;
+        const bankAccountKeys = keys.filter(key => key.includes(filterKey));
         const bankAccounts = await Promise.all(
           bankAccountKeys.map(async key => {
-            const bankAccount = await AsyncStorage.getItem(key); // Her bir banka hesabı için getItem ile async storage'dan verileri yükle
+            const bankAccount = await AsyncStorage.getItem(key);
             return JSON.parse(bankAccount);
           }),
         );
@@ -109,13 +109,11 @@ const Exchange = props => {
       const bankAccountData = await AsyncStorage.getItem(value);
       const parsedBankAccountData = JSON.parse(bankAccountData);
       setSelectedAccountToBeSold(value);
-      console.log('selectedAccountToBeSold::::' + selectedAccountToBeSold);
       const amount = parsedBankAccountData.amount;
       const branchName = parsedBankAccountData.branchName;
       const accountNo = parsedBankAccountData.accountNo;
       const bankOfSell = `${branchName} - ${accountNo}`;
       setNameOfBankSold(bankOfSell);
-      console.log('amount:::: ' + amount);
       setAmount(amount);
     } catch (e) {
       console.error(
@@ -130,13 +128,11 @@ const Exchange = props => {
       const bankAccountData = await AsyncStorage.getItem(value);
       const parsedBankAccountData = JSON.parse(bankAccountData);
       setSelectedAccountToBeReceived(value);
-      console.log('selectedAccount::::' + selectedAccountToBeReceived);
       const amount = parsedBankAccountData.amount;
       const branchName = parsedBankAccountData.branchName;
       const accountNo = parsedBankAccountData.accountNo;
       const bankOfBuy = `${branchName} - ${accountNo}`;
       setNameOfBankBuy(bankOfBuy);
-      console.log('amount:::: ' + amount);
       setAmountOfReceivedBank(amount);
     } catch (e) {
       console.error(
@@ -213,15 +209,7 @@ const Exchange = props => {
             newTotalAmount: newTotalAmount,
             time: exchangeTime,
           });
-          console.log('currencyName: ' + currencyNameToBeReceived);
-          console.log('nameOfBankSold: ' + nameOfBankSold);
-          console.log('inputValue: ' + inputValue);
-          console.log('nameOfBankBuy: ' + nameOfBankBuy);
-          console.log('currencyNameToBeSold: ' + currencyNameToBeSold);
-          console.log('exchangeRate: ' + exchangeRate);
-          console.log('newTotalAmount: ' + newTotalAmount);
-          console.log('sonuc: ' + outputValue);
-          console.log('time: ' + exchangeTime);
+
           navigation.navigate('TradeSummaryScreen');
         } else {
           showMessage({
@@ -237,7 +225,6 @@ const Exchange = props => {
           const newTotalAmount = (
             Number(amountOfReceivedBank) + Number(outputValue)
           ).toFixed(2);
-          console.log('newTotalAmount: ' + newTotalAmount);
 
           updateAmountSell(amount - inputValue, newTotalAmount);
 
@@ -254,16 +241,6 @@ const Exchange = props => {
             time: exchangeTime,
           });
 
-          console.log('currencyName: ' + currencyNameToBeReceived);
-          console.log('nameOfBankSold: ' + nameOfBankSold);
-          console.log('inputValue: ' + inputValue);
-          console.log('nameOfBankBuy: ' + nameOfBankBuy);
-          console.log('currencyNameToBeSold: ' + currencyNameToBeSold);
-          console.log('exchangeRate: ' + exchangeRate);
-          console.log('newTotalAmount: ' + newTotalAmount);
-          console.log('sonuc: ' + outputValue);
-          console.log('time: ' + exchangeTime);
-
           navigation.navigate('TradeSummaryScreen');
         } else {
           showMessage({
@@ -278,14 +255,10 @@ const Exchange = props => {
   };
 
   const handleBankAccountSelect = value => {
-    console.log('value:' + value); // seçilen banka hesabının bilgileri console'a yazdırılıyor
     getAmountFromSelectedAccount(value);
-    console.log('amount:' + amount); // seçilen banka hesabının bilgileri console'a yazdırılıyor
   };
   const handleBankAccountSelectGet = value => {
-    console.log('value:' + value); // seçilen banka hesabının bilgileri console'a yazdırılıyor
     getAmountFromSelectedAccountGet(value);
-    console.log('amount:' + amount); // seçilen banka hesabının bilgileri console'a yazdırılıyor
   };
   const handleBuyPress = () => {
     setBankAccountToBeReceived([...bankAccountToBeSold]);
@@ -309,13 +282,20 @@ const Exchange = props => {
     <SafeAreaView
       style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
       <ScrollView style={{flex: 1}}>
-        <Text style={styles.main_title}>{nameOfCurrency}/TRY</Text>
+        <Text style={[styles.main_title, {color: theme.textColor}]}>
+          {nameOfCurrency}/TRY
+        </Text>
         <View style={styles.counter_container}>
-          <Text style={styles.counter_title}>
+          <Text style={[styles.counter_title, {color: theme.textColor}]}>
             İşlemi tamamlamanız için son{' '}
           </Text>
-          <Text style={styles.counter}>{counter}</Text>
-          <Text style={styles.counter_title}> saniye</Text>
+          <Text style={[styles.counter, {color: theme.textColor}]}>
+            {counter}
+          </Text>
+          <Text style={[styles.counter_title, {color: theme.textColor}]}>
+            {' '}
+            saniye
+          </Text>
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
           <View style={!isBuySelected ? {margin: 7} : {}}>
@@ -334,7 +314,9 @@ const Exchange = props => {
           </View>
         </View>
         <View style={styles.bottom_container}>
-          <Text style={styles.title}>Satılacak Hesap: </Text>
+          <Text style={[styles.title, {color: theme.textColor}]}>
+            Satılacak Hesap:{' '}
+          </Text>
           <SelectList
             setSelected={handleBankAccountSelect}
             data={bankAccountToBeSold.map(item => ({
@@ -344,10 +326,21 @@ const Exchange = props => {
             searchPlaceholder="Ara"
             notFoundText="Bulunamadı..."
             placeholder="Şube seçiniz"
+            dropdownTextStyles={{color: theme.textColor}}
+            dropdownItemStyles={{color: theme.textColor}}
+            boxStyles={theme.textColor}
+            inputStyles={{color: theme.textColor}}
           />
           <View style={{marginTop: 10, flexDirection: 'row'}}>
-            <Text style={styles.title}>Satılacak para birimi: </Text>
-            <Text style={{alignContent: 'center', fontSize: 16}}>
+            <Text style={[styles.title, {color: theme.textColor}]}>
+              Satılacak para birimi:{' '}
+            </Text>
+            <Text
+              style={{
+                alignContent: 'center',
+                fontSize: 16,
+                color: theme.textColor,
+              }}>
               {currencyNameToBeSold}
             </Text>
           </View>
@@ -357,7 +350,12 @@ const Exchange = props => {
             <Text
               style={[
                 styles.title,
-                {marginLeft: 25, marginRight: 25, marginBottom: 0},
+                {
+                  marginLeft: 25,
+                  color: theme.textColor,
+                  marginRight: 25,
+                  marginBottom: 0,
+                },
               ]}>
               Satılacak Para Tutarı:
             </Text>
@@ -371,7 +369,9 @@ const Exchange = props => {
         </View>
         <View style={[styles.bottom_container, {marginTop: 0}]}>
           <View>
-            <Text style={styles.title}>Aktarılacak hesap:</Text>
+            <Text style={[styles.title, {color: theme.textColor}]}>
+              Aktarılacak hesap:
+            </Text>
             <SelectList
               setSelected={handleBankAccountSelectGet}
               data={bankAccountToBeReceived.map(item => ({
@@ -381,28 +381,53 @@ const Exchange = props => {
               searchPlaceholder="Ara"
               notFoundText="Bulunamadı..."
               placeholder="Şube seçiniz"
+              dropdownTextStyles={{color: theme.textColor}}
+              dropdownItemStyles={{color: theme.textColor}}
+              boxStyles={theme.textColor}
+              inputStyles={{color: theme.textColor}}
             />
           </View>
           <View style={{marginTop: 10, flexDirection: 'row'}}>
-            <Text style={styles.title}>Alınacak para birimi: </Text>
-            <Text style={{alignContent: 'center', fontSize: 16}}>
+            <Text style={[styles.title, {color: theme.textColor}]}>
+              Alınacak para birimi:{' '}
+            </Text>
+            <Text
+              style={{
+                alignContent: 'center',
+                color: theme.textColor,
+                fontSize: 16,
+              }}>
               {currencyNameToBeReceived}
             </Text>
           </View>
           <View style={{marginTop: 0, flexDirection: 'row'}}>
-            <Text style={styles.title}>Kur oranı: </Text>
-            <Text style={{alignContent: 'center', fontSize: 16}}>
+            <Text style={[styles.title, {color: theme.textColor}]}>
+              Kur oranı:{' '}
+            </Text>
+            <Text
+              style={{
+                alignContent: 'center',
+                color: theme.textColor,
+                fontSize: 16,
+              }}>
               {exchangeRate}
             </Text>
           </View>
           <View style={{marginTop: 0, flexDirection: 'row'}}>
-            <Text style={styles.title}>Sonuç: </Text>
-            <Text style={{alignContent: 'center', fontSize: 16}}>
+            <Text style={[styles.title, {color: theme.textColor}]}>
+              Sonuç:{' '}
+            </Text>
+            <Text
+              style={{
+                alignContent: 'center',
+                color: theme.textColor,
+                fontSize: 16,
+              }}>
               {outputValue}
             </Text>
           </View>
         </View>
-        <View>
+        <View style={{marginBottom: 20}}>
           <Button
             contained
             title="Tamamla"

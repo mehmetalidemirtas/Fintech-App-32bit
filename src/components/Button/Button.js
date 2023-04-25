@@ -38,7 +38,7 @@ const CustomButton = ({
         buttonStyle,
         localStyles.button,
         style,
-        contained && {backgroundColor: theme.primary},
+        contained && {backgroundColor: theme.buttonColor},
         {borderColor: theme.primary},
       ]}
       onPress={onPress}
@@ -51,7 +51,7 @@ const CustomButton = ({
             buttonTextStyle,
             textStyle,
             {
-              color: contained ? theme.backgroundColor : theme.primary,
+              color: contained ? '#FFF' : theme.primary,
             },
           ]}>
           {title}

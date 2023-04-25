@@ -9,9 +9,17 @@ const ToggleButton = () => {
 
   return (
     <Pressable onPress={toggleAppTheme}>
-      <View style={styles.bottom_container}>
-        <Text style={styles.title}>Change theme</Text>
-        <Icon name="theme-light-dark" size={20} style={{marginRight: 5}} />
+      <View
+        style={[styles.bottom_container, {backgroundColor: theme.itemColor}]}>
+        <Text style={[styles.title, {color: theme.textColor}]}>
+          Change theme
+        </Text>
+        <Icon
+          name="theme-light-dark"
+          size={20}
+          style={{marginRight: 5}}
+          color={theme.iconColor}
+        />
       </View>
     </Pressable>
   );

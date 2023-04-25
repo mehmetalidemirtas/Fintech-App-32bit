@@ -113,41 +113,57 @@ const Watchlist = ({navigation}) => {
   };
 
   const Item = ({item}) => (
-    <View style={styles.card_container}>
-      <Text style={[styles.title, {textAlign: 'center', marginBottom: 2}]}>
+    <View style={[styles.card_container, {backgroundColor: theme.itemColor}]}>
+      <Text
+        style={[
+          styles.title,
+          {textAlign: 'center', marginBottom: 2, color: theme.textColor},
+        ]}>
         {item.currencyNameToBeSold} / {item.currencyToBeReceived}
       </Text>
       <View style={styles.title_container}>
-        <Text style={styles.title}>Satılan hesap:</Text>
-        <Text style={styles.text}>{item.bankAccountToBeSold}</Text>
+        <Text style={[styles.title, {color: theme.textColor}]}>
+          Satılan hesap:
+        </Text>
+        <Text style={[styles.text, {color: theme.textColor}]}>
+          {item.bankAccountToBeSold}
+        </Text>
       </View>
       <View style={styles.title_container}>
-        <Text style={styles.title}>Aktarılan hesap: </Text>
-        <Text style={styles.text}>{item.bankAccountToBeReceived}</Text>
+        <Text style={[styles.title, {color: theme.textColor}]}>
+          Aktarılan hesap:
+        </Text>
+        <Text style={[styles.text, {color: theme.textColor}]}>
+          {item.bankAccountToBeReceived}
+        </Text>
       </View>
       <View style={styles.title_container}>
-        <Text style={styles.title}>Kur oranı: </Text>
-        <Text style={styles.text}>{item.exchangeRate}</Text>
+        <Text style={[styles.title, {color: theme.textColor}]}>Kur oranı:</Text>
+        <Text style={[styles.text, {color: theme.textColor}]}>
+          {item.exchangeRate}
+        </Text>
       </View>
       <View style={styles.title_container}>
-        <Text style={styles.title}>Toplam yeni bakiye: </Text>
-        <Text style={styles.text}>
+        <Text style={[styles.title, {color: theme.textColor}]}>
+          Toplam yeni bakiye:
+        </Text>
+        <Text style={[styles.text, {color: theme.textColor}]}>
           {item.newTotalAmount} {item.currencyToBeReceived}
         </Text>
       </View>
       <View style={styles.bottom_container}>
         <View style={{flexDirection: 'column'}}>
-          <Text style={{textAlign: 'right'}}>
+          <Text style={{textAlign: 'right', color: theme.textColor}}>
             {formatDate(new Date(parseInt(item.time)))}
           </Text>
-          <Text>
+          <Text style={{color: theme.textColor}}>
             + {item.outputValue} {item.currencyToBeReceived}
           </Text>
         </View>
         <Icon
           name="share-variant"
           size={20}
-          color="#aaa"
+          color={theme.primary}
           onPress={() => shareItem(item)}
         />
       </View>
@@ -173,12 +189,13 @@ const Watchlist = ({navigation}) => {
             <View style={{marginTop: 10, flex: 0.99}}>
               <Searchbar
                 style={{
-                  backgroundColor: '#f7f7f7',
+                  backgroundColor: theme.itemColor,
                   color: 'black',
                   height: 45,
                 }}
-                inputStyle={{alignSelf: 'center'}}
+                inputStyle={{alignSelf: 'center', color: theme.textColor}}
                 placeholder="Ara"
+                placeholderTextColor={theme.textColor}
                 onChangeText={text => setSearchText(text)}
                 value={searchText}
               />
@@ -186,7 +203,7 @@ const Watchlist = ({navigation}) => {
             <TouchableOpacity
               style={{marginHorizontal: 5}}
               onPress={() => setIsAscending(prev => !prev)}>
-              <Text style={styles.sortButton}>
+              <Text style={[styles.sortButton, {color: theme.primary}]}>
                 {isAscending ? 'Newest' : 'Oldest'}
               </Text>
             </TouchableOpacity>
@@ -197,11 +214,14 @@ const Watchlist = ({navigation}) => {
             renderItem={({item}) => <Item item={item} />}
             keyExtractor={(item, index) => index.toString()}
             ListFooterComponent={
-              //Butonların sadece en altta kalması için
               <View style={styles.pagination}>
                 <TouchableOpacity
                   disabled={page === 0}
-                  style={[styles.button, page === 0 && styles.disabledButton]}
+                  style={[
+                    styles.button,
+                    {backgroundColor: theme.buttonColor},
+                    page === 0 && styles.disabledButton,
+                  ]}
                   onPress={handlePrevPage}>
                   <Text style={styles.buttonText}>{'<'}</Text>
                 </TouchableOpacity>
@@ -210,6 +230,7 @@ const Watchlist = ({navigation}) => {
                   disabled={(page + 1) * PAGE_SIZE >= bank.length}
                   style={[
                     styles.button,
+                    {backgroundColor: theme.buttonColor},
                     (page + 1) * PAGE_SIZE >= bank.length &&
                       styles.disabledButton,
                   ]}
