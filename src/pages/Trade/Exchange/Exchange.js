@@ -48,7 +48,7 @@ const Exchange = props => {
   const [exchangeRate, setExchangeRate] = useState(props.route.params.buyValue); //Kur oranı
   const [exchangeTime, setExchangeTime] = useState(props.route.params.time); //Kur oranı
   const [inputValue, setInputValue] = useState(''); //Girilen tutar
-  const [counter, setCounter] = useState(6000);
+  const [counter, setCounter] = useState(60);
 
   useEffect(() => {
     const timer = setInterval(() => {

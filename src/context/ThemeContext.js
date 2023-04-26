@@ -20,6 +20,8 @@ export const ThemeProvider = ({children}) => {
       primary:
         colorScheme === 'dark' ? colors.dark_primary : colors.light_primary,
       textColor: colorScheme === 'dark' ? colors.dark_text : colors.light_text,
+      mainColor:
+        colorScheme === 'dark' ? colors.light_primary : colors.light_primary,
       buttonColor:
         colorScheme === 'dark'
           ? colors.item_dark_background

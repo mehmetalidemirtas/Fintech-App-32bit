@@ -69,13 +69,13 @@
     "icon.tradeHistory": "Trade History",
     "icon.allBankAccounts": "All Bank Accounts",
     "title.bankAccountType": "Bank Account Type",
-    "title.bankAccountType2": "Account Type:",
+    "title.bankAccountType2": "Account type:",
     "text.chooseBankAccountType": "Please choose a bank account type",
     "title.currencyType": "Currency Type",
-    "title.currencyType2": "Currency Type:",
+    "title.currencyType2": "Currency type:",
     "text.chooseCurrencyType": "Please choose a currency type",
     "title.bankBranch": "Bank Branch",
-    "title.bankBranch2": "Bank Branch:",
+    "title.bankBranch2": "Bank branch:",
     "text.chooseBranch": "Please choose a branch",
     "title.confirmation": "Confirmation",
     "text.confirm": "Please confirm to create new bank account",
@@ -112,6 +112,9 @@
     "successful": "TRADE SUCCESSFULLY DONE",
     "newAmount": "Your new account balance:",
     "scanNfc": "Scan your identity card",
-    "closeNfc": "Bring your ID card closer to the NFC reader!"
+    "closeNfc": "Bring your ID card closer to the NFC reader!",
+    "watchlist": "Watchlist",
+    "exchangeMoney": "Exchange Money",
+    "tradeSummary": "Receipt"
   }
 }

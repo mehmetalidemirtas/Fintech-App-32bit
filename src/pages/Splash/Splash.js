@@ -9,7 +9,7 @@ function Splash() {
     <View style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
       <Image
         style={styles.logo}
-        source={require('../../assets/splash-logo.png')}
+        source={require('../../assets/splashlogo.png')}
       />
     </View>
   );

@@ -28,13 +28,16 @@ import AllBankAccounts from './pages/AllBankAccounts';
 import ChangePassword from './pages/Settings/SettingScreens/ChangePassword';
 import ChangePhoto from './pages/Settings/SettingScreens/ChangePhoto';
 import ChangePhone from './pages/Settings/SettingScreens/ChangePhone';
-const socket = io('http://10.0.2.2:3000');
+const socket = io('http://fx32.vercel.app/');
+import {useTranslation} from 'react-i18next';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const App = () => {
   const {theme} = useContext(ThemeContext);
+  const {t} = useTranslation();
+
   const screenOptions = {
     headerStyle: {backgroundColor: theme.backgroundColor},
     headerTitleStyle: {color: theme.textColor},
@@ -103,7 +106,7 @@ const App = () => {
           name="WatchlistStack"
           component={WatchlistStack}
           options={{
-            tabBarLabel: 'Watchlist',
+            tabBarLabel: t('watchlist'),
             tabBarIcon: () => (
               <Icon name="home" color={theme.primary} size={25} />
             ),
@@ -114,7 +117,7 @@ const App = () => {
           name="SettingsScreen"
           component={SettingsStack}
           options={{
-            tabBarLabel: 'Settings',
+            tabBarLabel: t('settings'),
             tabBarIcon: () => (
               <Icon name="cog" color={theme.primary} size={25} />
             ),
@@ -131,7 +134,7 @@ const App = () => {
           name="Setting"
           component={Settings}
           options={{
-            title: 'Settings',
+            title: t('settings'),
             headerBackVisible: false,
             headerRight: () => (
               <Icon
@@ -147,21 +150,21 @@ const App = () => {
           name="ChangePasswordScreen"
           component={ChangePassword}
           options={{
-            title: 'Change Password',
+            title: t('settings.changePassword'),
           }}
         />
         <Stack.Screen
           name="ChangePhoneScreen"
           component={ChangePhone}
           options={{
-            title: 'Change Phone Number',
+            title: t('settings.changePhoneNumber'),
           }}
         />
         <Stack.Screen
           name="ChangePhotoScreen"
           component={ChangePhoto}
           options={{
-            title: 'Change Profile Photo',
+            title: t('settings.changeProfilePhoto'),
           }}
         />
       </Stack.Navigator>
@@ -175,7 +178,7 @@ const App = () => {
           name="WatchlistScreen"
           component={Watchlist}
           options={{
-            title: 'Watchlist',
+            title: t('watchlist'),
             headerBackVisible: false,
           }}
         />
@@ -183,63 +186,64 @@ const App = () => {
           name="BankAccountTypeScreen"
           component={BankAccountType}
           options={{
-            title: 'Bank Account Type',
+            title: t('title.bankAccountType'),
           }}
         />
         <Stack.Screen
           name="BankCurrencyTypeScreen"
           component={BankCurrencyType}
           options={{
-            title: 'Currency Type',
+            title: t('title.currencyType'),
           }}
         />
         <Stack.Screen
           name="BankBranchScreen"
           component={BankBranch}
           options={{
-            title: 'Bank Branch',
+            title: t('title.bankBranch'),
           }}
         />
         <Stack.Screen
           name="ConfirmationScreen"
           component={Confirmation}
           options={{
-            title: 'Confirmation',
+            title: t('title.confirmation'),
           }}
         />
         <Stack.Screen
           name="SummaryScreen"
           component={Summary}
           options={{
-            title: 'Summary',
+            title: t('title.summary'),
+            headerBackVisible: false,
           }}
         />
         <Stack.Screen
           name="HistoryScreen"
           component={History}
           options={{
-            title: 'Trade History',
+            title: t('icon.tradeHistory'),
           }}
         />
         <Stack.Screen
           name="FavoriteCurrenciesScreen"
           component={FavoriteCurrencies}
           options={{
-            title: 'Favorite Currencies',
+            title: t('icon.favoriteCurrencies'),
           }}
         />
         <Stack.Screen
           name="ExchangeScreen"
           component={Exchange}
           options={{
-            title: 'Exchange Money',
+            title: t('exchangeMoney'),
           }}
         />
         <Stack.Screen
           name="TradeSummaryScreen"
           component={TradeSummary}
           options={{
-            title: 'Receipt',
+            title: t('tradeSummary'),
             headerBackVisible: false,
           }}
         />
@@ -247,7 +251,7 @@ const App = () => {
           name="AllBankAccountsScreen"
           component={AllBankAccounts}
           options={{
-            title: 'Bank Accounts',
+            title: t('icon.allBankAccounts'),
           }}
         />
       </Stack.Navigator>

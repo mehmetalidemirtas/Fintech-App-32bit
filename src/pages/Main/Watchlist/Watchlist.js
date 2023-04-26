@@ -17,7 +17,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import CurrencyContext from '../../../context/CurrencyContext';
 import styles from './Watchlist.style';
 
-const socket = io('http://192.168.90.38:3000');
+const socket = io('http://fx32.vercel.app/');
 const Watchlist = ({navigation}) => {
   const [data, setData] = useState([]);
   const {currencyValues, setCurrencyValues} = useContext(CurrencyContext);
@@ -189,10 +189,10 @@ const Watchlist = ({navigation}) => {
                 <Icon
                   name="bank-plus"
                   size={35}
-                  color={theme.primary}
+                  color={theme.mainColor}
                   onPress={() => navigation.navigate('BankAccountTypeScreen')}
                 />
-                <Text style={[styles.icon_text, {color: theme.primary}]}>
+                <Text style={[styles.icon_text, {color: theme.mainColor}]}>
                   {t('icon.newBankAccount')}
                 </Text>
               </View>
@@ -200,12 +200,12 @@ const Watchlist = ({navigation}) => {
                 <Icon
                   name="star-plus"
                   size={35}
-                  color={theme.primary}
+                  color={theme.mainColor}
                   onPress={() =>
                     navigation.navigate('FavoriteCurrenciesScreen')
                   }
                 />
-                <Text style={[styles.icon_text, {color: theme.primary}]}>
+                <Text style={[styles.icon_text, {color: theme.mainColor}]}>
                   {t('icon.favoriteCurrencies')}
                 </Text>
               </View>
@@ -213,10 +213,10 @@ const Watchlist = ({navigation}) => {
                 <Icon
                   name="history"
                   size={35}
-                  color={theme.primary}
+                  color={theme.mainColor}
                   onPress={() => navigation.navigate('HistoryScreen')}
                 />
-                <Text style={[styles.icon_text, {color: theme.primary}]}>
+                <Text style={[styles.icon_text, {color: theme.mainColor}]}>
                   {t('icon.tradeHistory')}
                 </Text>
               </View>
@@ -224,10 +224,10 @@ const Watchlist = ({navigation}) => {
                 <Icon
                   name="bank"
                   size={35}
-                  color={theme.primary}
+                  color={theme.mainColor}
                   onPress={() => navigation.navigate('AllBankAccountsScreen')}
                 />
-                <Text style={[styles.icon_text, {color: theme.primary}]}>
+                <Text style={[styles.icon_text, {color: theme.mainColor}]}>
                   {t('icon.allBankAccounts')}
                 </Text>
               </View>
@@ -257,8 +257,10 @@ const Watchlist = ({navigation}) => {
             alignItems: 'center',
             marginBottom: 50,
           }}>
-          <ActivityIndicator color="black" size="large" />
-          <Text style={{marginTop: 10}}>{t('loading.websocket')}</Text>
+          <ActivityIndicator color={theme.textColor} size="large" />
+          <Text style={{marginTop: 10, color: theme.textColor}}>
+            {t('loading.websocket')}
+          </Text>
         </View>
       ) : (
         <FlatList

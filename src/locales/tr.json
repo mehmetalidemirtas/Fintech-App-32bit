@@ -64,11 +64,11 @@
     "title.buyPrice": "Alış",
     "title.sellPrice": "Satış",
     "title.change": "Değişim%",
-    "icon.newBankAccount": "Yeni banka hesabı",
-    "icon.favoriteCurrencies": "Favori dövizlerim",
-    "icon.tradeHistory": "İşlem geçmişim",
-    "icon.allBankAccounts": "Banka hesaplarım",
-    "title.bankAccountType": "Hesap türü",
+    "icon.newBankAccount": "Yeni Banka Hesabı",
+    "icon.favoriteCurrencies": "Favori Dövizlerim",
+    "icon.tradeHistory": "İşlem Geçmişim",
+    "icon.allBankAccounts": "Banka Hesaplarım",
+    "title.bankAccountType": "Hesap Türü",
     "title.bankAccountType2": "Hesap türü:",
     "text.chooseBankAccountType": "Lütfen hesap türü seçiniz",
     "title.currencyType": "Döviz Tipi",
@@ -112,6 +112,9 @@
     "successful": "İŞLEMİNİZ BAŞARIYLA GERÇEKLEŞTİRİLMİŞTİR",
     "newAmount": "Yeni hesap bakiyeniz:",
     "scanNfc": "NFC ile kimlik kartı okut",
-    "closeNfc": "Kimlik kartınızı nfc okuyucusuna yaklaştırın !"
+    "closeNfc": "Kimlik kartınızı nfc okuyucusuna yaklaştırın !",
+    "watchlist": "İzleme Listesi",
+    "exchangeMoney": "Döviz Değiştir",
+    "tradeSummary": "İşlem Özeti"
   }
 }
