@@ -67,7 +67,7 @@ const Password = () => {
       errors.phoneNumber = t('error.enterPhone');
     }
     if (phoneNumber.length < 10) {
-      errors.phoneNumberLength = 'Telefon numarası yanlış';
+      errors.phoneNumberLength = t('error.phoneNumberLength');
     }
     return errors;
   };
@@ -81,7 +81,7 @@ const Password = () => {
         {({handleBlur, handleSubmit, errors}) => (
           <>
             <Text style={[styles.title, {color: theme.primary}]}>
-              Yeni telefon numaranızı belirleyin
+              {t('settings.setNewPhoneNumber')}
             </Text>
 
             <View>
@@ -104,7 +104,7 @@ const Password = () => {
               )}
               {showAlert && (
                 <Text style={styles.error_message}>
-                  Telefon numarası 5XXXXXXXXX formatında olmalıdır.
+                  {t('error.numberFormat')}
                 </Text>
               )}
             </View>
@@ -112,7 +112,7 @@ const Password = () => {
               <Button
                 contained
                 onPress={handleSubmit}
-                title="Tamamla"
+                title={t('button.complete')}
                 loading={isLoading}
               />
             </View>

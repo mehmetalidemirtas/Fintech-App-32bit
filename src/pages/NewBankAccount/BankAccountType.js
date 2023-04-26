@@ -5,6 +5,8 @@ import colors from '../../styles/colors';
 import {useNavigation} from '@react-navigation/native';
 import {SelectList} from 'react-native-dropdown-select-list';
 import BankAccountContext from '../../context/BankAccountContext';
+import {useTranslation} from 'react-i18next';
+
 import FlashMessage, {
   showMessage,
   hideMessage,
@@ -16,6 +18,7 @@ const BankAccountType = () => {
   const [selected, setSelected] = useState('');
   const {bank, setBank} = useContext(BankAccountContext);
   const {theme} = useContext(ThemeContext);
+  const {t} = useTranslation();
 
   const data = [
     {key: '1', value: 'Vadeli hesap'},
@@ -24,7 +27,7 @@ const BankAccountType = () => {
   const handleBankAccountTypeSelect = () => {
     if (selected === '') {
       showMessage({
-        message: 'Lütfen bir seçim yapın',
+        message: t('text.chooseBankAccountType'),
         type: 'danger',
         backgroundColor: colors.primary,
       });
@@ -38,19 +41,19 @@ const BankAccountType = () => {
     <SafeAreaView
       style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
       <Text style={[styles.title, {color: theme.primary}]}>
-        Bank Account Type
+        {t('title.bankAccountType')}
       </Text>
       <Text style={[styles.text, {color: theme.textColor}]}>
-        Lütfen hesap türü seçiniz
+        {t('text.chooseBankAccountType')}
       </Text>
       <View style={{margin: 20}}>
         <SelectList
           setSelected={val => setSelected(val)}
           data={data}
-          title="Hesap türünü seçiniz"
-          searchPlaceholder="Ara"
-          notFoundText="Bulunamadı..."
-          placeholder="Hesap türünü seçiniz"
+          title={t('text.chooseBankAccountType')}
+          searchPlaceholder={t('search')}
+          notFoundText={t('notFound')}
+          placeholder={t('text.chooseBankAccountType')}
           save="value"
           defaultOption={bank.bankType}
           dropdownTextStyles={{color: theme.textColor}}
@@ -63,7 +66,7 @@ const BankAccountType = () => {
         <Button
           contained
           onPress={handleBankAccountTypeSelect}
-          title="Sonraki adım"
+          title={t('button.next')}
         />
       </View>
     </SafeAreaView>

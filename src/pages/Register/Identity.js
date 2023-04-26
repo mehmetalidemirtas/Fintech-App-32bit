@@ -316,7 +316,7 @@ const Identity = () => {
                 <Button
                   text
                   onPress={readTag}
-                  title="Scan your identity card"
+                  title={t('scanNfc')}
                   border={1}
                   marginLeft={25}
                   marginRight={25}
@@ -347,7 +347,7 @@ const Identity = () => {
 
                       <Text
                         style={[styles.modalText, {color: theme.textColor}]}>
-                        Kimlik kartınızı nfc okuyucusuna yaklaştırın !
+                        {t('closeNfc')}{' '}
                       </Text>
                       <Button
                         contained

@@ -3,9 +3,11 @@ import {TouchableOpacity, StyleSheet, View} from 'react-native';
 import {Divider, Text} from 'react-native-paper';
 import styles from './Card.style';
 import {ThemeContext} from '../../context/ThemeContext';
+import {useTranslation} from 'react-i18next';
 
 const CustomCard = ({title, text, onPress}) => {
   const {theme} = useContext(ThemeContext);
+  const {t} = useTranslation();
 
   return (
     <View style={styles.container}>
@@ -19,7 +21,7 @@ const CustomCard = ({title, text, onPress}) => {
             style={[styles.button, {backgroundColor: theme.backgroundColor}]}
             onPress={onPress}>
             <Text style={[styles.button_text, {color: theme.textColor}]}>
-              Düzenle
+              {t('button.edit')}
             </Text>
           </TouchableOpacity>
         </View>

@@ -65,10 +65,7 @@ const ChooseFavoriteCurrencies = ({navigation}) => {
     const key = `${identityNo}_favoriteCurrencies`;
 
     try {
-      // Async storage'de var olan kaydı silmek için
       await AsyncStorage.removeItem(key);
-
-      // Yeni kaydı oluşturmak için
       await AsyncStorage.setItem(key, JSON.stringify(favoriteCurrencies));
       console.log('Favorites saved:', favoriteCurrencies);
       setLoading(false);
@@ -85,7 +82,7 @@ const ChooseFavoriteCurrencies = ({navigation}) => {
       <View
         style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
         <Text style={[styles.title, {color: theme.textColor}]}>
-          Choose your favorite currencies
+          {t('title.chooseFavoriteCurrencies')}
         </Text>
         {loading ? (
           <View
@@ -112,7 +109,7 @@ const ChooseFavoriteCurrencies = ({navigation}) => {
             ))}
             <Button
               contained
-              title="Save favorite currencies"
+              title={t('button.saveFavorite')}
               onPress={saveFavorites}
               loading={isLoading}
             />

@@ -10,6 +10,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ThemeContext} from '../../context/ThemeContext';
 import styles from './AllBankAccounts.syle';
+import {useTranslation} from 'react-i18next';
 
 const PAGE_SIZE = 5;
 
@@ -18,6 +19,7 @@ const AllBankAccounts = ({navigation}) => {
   const {theme} = useContext(ThemeContext);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
+  const {t} = useTranslation();
 
   const getBankData = async () => {
     setLoading(true);
@@ -73,21 +75,23 @@ const AllBankAccounts = ({navigation}) => {
       </Text>
       <View style={styles.title_container}>
         <Text style={[styles.title, {color: theme.textColor}]}>
-          Hesap türü:
+          {t('title.bankAccountType2')}
         </Text>
         <Text style={[styles.text, {color: theme.textColor}]}>
           {item.bankType}
         </Text>
       </View>
       <View style={styles.title_container}>
-        <Text style={[styles.title, {color: theme.textColor}]}>Şube adı: </Text>
+        <Text style={[styles.title, {color: theme.textColor}]}>
+          {t('title.bankBranch2')}{' '}
+        </Text>
         <Text style={[styles.text, {color: theme.textColor}]}>
           {item.branchName}
         </Text>
       </View>
       <View style={styles.title_container}>
         <Text style={[styles.title, {color: theme.textColor}]}>
-          Hesap numarası:
+          {t('title.accountNo')}
         </Text>
         <Text style={[styles.text, {color: theme.textColor}]}>
           {item.accountNo}

@@ -193,7 +193,7 @@ const Watchlist = ({navigation}) => {
                   onPress={() => navigation.navigate('BankAccountTypeScreen')}
                 />
                 <Text style={[styles.icon_text, {color: theme.primary}]}>
-                  New bank account
+                  {t('icon.newBankAccount')}
                 </Text>
               </View>
               <View style={styles.icon}>
@@ -206,7 +206,7 @@ const Watchlist = ({navigation}) => {
                   }
                 />
                 <Text style={[styles.icon_text, {color: theme.primary}]}>
-                  Favorite currencies
+                  {t('icon.favoriteCurrencies')}
                 </Text>
               </View>
               <View style={styles.icon}>
@@ -217,7 +217,7 @@ const Watchlist = ({navigation}) => {
                   onPress={() => navigation.navigate('HistoryScreen')}
                 />
                 <Text style={[styles.icon_text, {color: theme.primary}]}>
-                  Trade history
+                  {t('icon.tradeHistory')}
                 </Text>
               </View>
               <View style={styles.icon}>
@@ -228,7 +228,7 @@ const Watchlist = ({navigation}) => {
                   onPress={() => navigation.navigate('AllBankAccountsScreen')}
                 />
                 <Text style={[styles.icon_text, {color: theme.primary}]}>
-                  All bank accounts
+                  {t('icon.allBankAccounts')}
                 </Text>
               </View>
             </View>
@@ -236,10 +236,18 @@ const Watchlist = ({navigation}) => {
         </ScrollView>
       </View>
       <View style={styles.bottom_container}>
-        <Text style={[styles.bar, {color: theme.textColor}]}>Currency</Text>
-        <Text style={[styles.bar, {color: theme.textColor}]}>Buy price</Text>
-        <Text style={[styles.bar, {color: theme.textColor}]}>Sell price</Text>
-        <Text style={[styles.change, {color: theme.textColor}]}>Change%</Text>
+        <Text style={[styles.bar, {color: theme.textColor}]}>
+          {t('title.currency')}
+        </Text>
+        <Text style={[styles.bar, {color: theme.textColor}]}>
+          {t('title.buyPrice')}
+        </Text>
+        <Text style={[styles.bar, {color: theme.textColor}]}>
+          {t('title.sellPrice')}
+        </Text>
+        <Text style={[styles.change, {color: theme.textColor}]}>
+          {t('title.change')}
+        </Text>
       </View>
       {loading ? (
         <View

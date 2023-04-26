@@ -77,7 +77,7 @@ const Photo = () => {
     <SafeAreaView
       style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
       <Text style={[styles.title, {color: theme.primary}]}>
-        Yeni Fotoğrafınızı seçin
+        {t('settings.setNewPhoto')}
       </Text>
       {selectedImage && (
         <Image style={styles.image} source={{uri: selectedImage}} />
@@ -103,7 +103,7 @@ const Photo = () => {
         <Button
           contained
           onPress={handleFormSubmit}
-          title="Tamamla"
+          title={t('button.complete')}
           loading={isLoading}
         />
       </View>

@@ -7,11 +7,13 @@ import Card from '../../components/Card';
 import BankAccountContext from '../../context/BankAccountContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ThemeContext} from '../../context/ThemeContext';
+import {useTranslation} from 'react-i18next';
 
 const Summary = () => {
   const navigation = useNavigation();
   const {bank, setBank} = useContext(BankAccountContext);
   const {theme} = useContext(ThemeContext);
+  const {t} = useTranslation();
 
   useEffect(() => {}, [bank]);
 
@@ -56,14 +58,18 @@ const Summary = () => {
           borderRadius: 30,
           margin: 20,
         }}>
-        <Card title="Bank Account Type:" text={bank.bankType} />
-        <Card title="Currency Type:" text={bank.currencyType} />
-        <Card title="Bank Branch:" text={bank.branchName} />
-        <Card title="Account No:" text={bank.accountNo} />
+        <Card title={t('title.bankAccountType2')} text={bank.bankType} />
+        <Card title={t('title.currencyType2')} text={bank.currencyType} />
+        <Card title={t('title.bankBranch2')} text={bank.branchName} />
+        <Card title={t('title.accountNo')} text={bank.accountNo} />
         <Card title="Iban:" text={bank.iban} />
       </View>
       <View style={styles.button_container}>
-        <Button contained onPress={handleSubmit} title="Ana sayfaya git" />
+        <Button
+          contained
+          onPress={handleSubmit}
+          title={t('button.goToMainScreen')}
+        />
       </View>
     </SafeAreaView>
   );

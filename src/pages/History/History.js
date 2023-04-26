@@ -13,6 +13,7 @@ import {ThemeContext} from '../../context/ThemeContext';
 import styles from './History.style';
 import {Searchbar} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useTranslation} from 'react-i18next';
 
 const PAGE_SIZE = 5;
 
@@ -24,6 +25,7 @@ const Watchlist = ({navigation}) => {
   const [searchText, setSearchText] = useState('');
   const [searchData, setSearchData] = useState([]);
   const [isAscending, setIsAscending] = useState(false);
+  const {t} = useTranslation();
 
   useEffect(() => {
     const getBankData = async () => {
@@ -123,7 +125,7 @@ const Watchlist = ({navigation}) => {
       </Text>
       <View style={styles.title_container}>
         <Text style={[styles.title, {color: theme.textColor}]}>
-          Satılan hesap:
+          {t('soldAccount')}
         </Text>
         <Text style={[styles.text, {color: theme.textColor}]}>
           {item.bankAccountToBeSold}
@@ -131,21 +133,23 @@ const Watchlist = ({navigation}) => {
       </View>
       <View style={styles.title_container}>
         <Text style={[styles.title, {color: theme.textColor}]}>
-          Aktarılan hesap:
+          {t('transferredAccount')}
         </Text>
         <Text style={[styles.text, {color: theme.textColor}]}>
           {item.bankAccountToBeReceived}
         </Text>
       </View>
       <View style={styles.title_container}>
-        <Text style={[styles.title, {color: theme.textColor}]}>Kur oranı:</Text>
+        <Text style={[styles.title, {color: theme.textColor}]}>
+          {t('exchangeRate')}
+        </Text>
         <Text style={[styles.text, {color: theme.textColor}]}>
           {item.exchangeRate}
         </Text>
       </View>
       <View style={styles.title_container}>
         <Text style={[styles.title, {color: theme.textColor}]}>
-          Toplam yeni bakiye:
+          {t('newTotalAmount')}
         </Text>
         <Text style={[styles.text, {color: theme.textColor}]}>
           {item.newTotalAmount} {item.currencyToBeReceived}
@@ -194,7 +198,7 @@ const Watchlist = ({navigation}) => {
                   height: 45,
                 }}
                 inputStyle={{alignSelf: 'center', color: theme.textColor}}
-                placeholder="Ara"
+                placeholder={t('search')}
                 placeholderTextColor={theme.textColor}
                 onChangeText={text => setSearchText(text)}
                 value={searchText}
@@ -204,7 +208,7 @@ const Watchlist = ({navigation}) => {
               style={{marginHorizontal: 5}}
               onPress={() => setIsAscending(prev => !prev)}>
               <Text style={[styles.sortButton, {color: theme.primary}]}>
-                {isAscending ? 'Newest' : 'Oldest'}
+                {isAscending ? t('newest') : t('oldest')}
               </Text>
             </TouchableOpacity>
           </View>

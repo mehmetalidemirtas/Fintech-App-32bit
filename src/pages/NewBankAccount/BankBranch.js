@@ -6,6 +6,8 @@ import Button from '../../components/Button';
 import colors from '../../styles/colors';
 import {useNavigation} from '@react-navigation/native';
 import BankAccountContext from '../../context/BankAccountContext';
+import {useTranslation} from 'react-i18next';
+
 import FlashMessage, {
   showMessage,
   hideMessage,
@@ -17,11 +19,12 @@ const BankBranch = () => {
   const navigation = useNavigation();
   const {bank, setBank} = useContext(BankAccountContext);
   const {theme} = useContext(ThemeContext);
+  const {t} = useTranslation();
 
   const handleBranchNameSelect = () => {
     if (selected === '') {
       showMessage({
-        message: 'Lütfen bir seçim yapın',
+        message: t('text.chooseBranch'),
         type: 'danger',
         backgroundColor: colors.primary,
       });
@@ -34,16 +37,21 @@ const BankBranch = () => {
   return (
     <SafeAreaView
       style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
-      <Text style={[styles.title, {color: theme.primary}]}>Branch</Text>
-      <Text style={styles.text}> Lütfen şube seçiniz</Text>
+      <Text style={[styles.title, {color: theme.primary}]}>
+        {t('title.bankBranch')}
+      </Text>
+      <Text style={[styles.text, {color: theme.textColor}]}>
+        {' '}
+        {t('text.chooseBranch')}
+      </Text>
       <View style={{margin: 20}}>
         <SelectList
           setSelected={val => setSelected(val)}
           data={bank_branch_list}
           save="value"
-          searchPlaceholder="Ara"
-          notFoundText="Bulunamadı..."
-          placeholder="Şube seçiniz"
+          searchPlaceholder={t('search')}
+          notFoundText={t('notFound')}
+          placeholder={t('text.chooseBranch')}
           defaultOption={bank.branchName}
           dropdownTextStyles={{color: theme.textColor}}
           dropdownItemStyles={{color: theme.textColor}}
@@ -55,14 +63,14 @@ const BankBranch = () => {
         <Button
           textColor="#7286D3"
           onPress={() => navigation.goBack()}
-          title="Önceki adım"
+          title={t('button.previous')}
         />
         <Button
           contained
           buttonColor="#7286D3"
           textColor="white"
           onPress={handleBranchNameSelect}
-          title="Sonraki adım"
+          title={t('button.next')}
         />
       </View>
     </SafeAreaView>

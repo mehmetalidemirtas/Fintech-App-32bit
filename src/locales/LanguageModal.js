@@ -8,7 +8,6 @@ import {
   Pressable,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Button from '../components/Button';
 import {useTranslation} from 'react-i18next';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {ThemeContext} from '../context/ThemeContext';

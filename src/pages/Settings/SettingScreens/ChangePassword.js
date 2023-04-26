@@ -67,7 +67,7 @@ const Password = () => {
         }) => (
           <>
             <Text style={[styles.title, {color: theme.primary}]}>
-              Yeni şifrenizi belirleyin
+              {t('settings.setNewPassword')}
             </Text>
 
             <View>
@@ -100,7 +100,7 @@ const Password = () => {
               <Button
                 contained
                 onPress={handleSubmit}
-                title="Tamamla"
+                title={t('button.complete')}
                 loading={isLoading}
               />
             </View>

@@ -6,15 +6,16 @@ import {useNavigation} from '@react-navigation/native';
 import BankAccountContext from '../../context/BankAccountContext';
 import Card from '../../components/Card';
 import {ThemeContext} from '../../context/ThemeContext';
+import {useTranslation} from 'react-i18next';
 
 const Confirmation = () => {
   const navigation = useNavigation();
   const {bank, setBank} = useContext(BankAccountContext);
   const accountNumber = Math.floor(Math.random() * 100000000);
   const {theme} = useContext(ThemeContext);
+  const {t} = useTranslation();
 
   useEffect(() => {
-    //Bir önceki aşamada seçilen branchName bir sonraki render işleminde context'e kaydolacağı için useEffect kullandımm.
     console.log(bank.bankType);
     console.log(bank.currencyType);
     console.log(bank.branchName);
@@ -50,10 +51,11 @@ const Confirmation = () => {
   return (
     <SafeAreaView
       style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
-      <Text style={[styles.title, {color: theme.primary}]}>Confirmation</Text>
+      <Text style={[styles.title, {color: theme.primary}]}>
+        {t('title.confirmation')}
+      </Text>
       <Text style={[styles.text, {color: theme.primary}]}>
-        {' '}
-        Lütfen hesap açma işlemini onaylayınız
+        {t('text.confirm')}
       </Text>
       <View
         style={{
@@ -62,23 +64,23 @@ const Confirmation = () => {
           margin: 20,
         }}>
         <Card
-          title="Bank Account Type:"
+          title={t('title.bankAccountType2')}
           text={bank.bankType}
           onPress={editAccountType}
         />
         <Card
-          title="Currency Type:"
+          title={t('title.currencyType2')}
           text={bank.currencyType}
           onPress={editCurrencyType}
         />
         <Card
-          title="Bank Branch:"
+          title={t('title.bankBranch2')}
           text={bank.branchName}
           onPress={editBankBranch}
         />
       </View>
       <View style={styles.button_container}>
-        <Button contained onPress={handleSubmit} title="Onaylıyorum" />
+        <Button contained onPress={handleSubmit} title={t('button.approve')} />
       </View>
     </SafeAreaView>
   );

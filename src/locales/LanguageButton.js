@@ -1,12 +1,14 @@
 import React, {useState, useContext} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LanguageModal from './LanguageModal';
+import {useTranslation} from 'react-i18next';
 import {View, Text, Pressable} from 'react-native';
 import {ThemeContext} from '../context/ThemeContext';
 import styles from '../pages/Settings/Settings.style';
 const LanguageButton = () => {
   const {theme} = useContext(ThemeContext);
   const [modalVisible, setModalVisible] = useState(false);
+  const {t} = useTranslation();
 
   return (
     <>
@@ -14,7 +16,7 @@ const LanguageButton = () => {
         <View
           style={[styles.bottom_container, {backgroundColor: theme.itemColor}]}>
           <Text style={[styles.title, {color: theme.textColor}]}>
-            Change language
+            {t('settings.changeLanguage')}
           </Text>
           <Icon
             name="translate"

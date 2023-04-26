@@ -62,7 +62,7 @@ const Settings = () => {
               marginBottom: 50,
             }}>
             <ActivityIndicator color="black" size="large" />
-            <Text style={{marginTop: 10}}>Bilgiler getiriliyor...</Text>
+            <Text style={{marginTop: 10}}>{t('english')}</Text>
           </View>
         ) : (
           <>
@@ -78,7 +78,7 @@ const Settings = () => {
                 </Text>
                 <View style={styles.title_container}>
                   <Text style={[styles.title, {color: theme.textColor}]}>
-                    Date of birth:
+                    {t('text.dateOfBirth')}
                   </Text>
                   <Text style={[styles.text, {color: theme.textColor}]}>
                     {user.birthDate}
@@ -86,7 +86,7 @@ const Settings = () => {
                 </View>
                 <View style={styles.title_container}>
                   <Text style={[styles.title, {color: theme.textColor}]}>
-                    Identity No:
+                    {t('text.identityNo')}
                   </Text>
                   <Text style={[styles.text, {color: theme.textColor}]}>
                     {user.identityNumber}
@@ -94,7 +94,7 @@ const Settings = () => {
                 </View>
                 <View style={styles.title_container}>
                   <Text style={[styles.title, {color: theme.textColor}]}>
-                    Phone No:
+                    {t('text.phoneNo')}
                   </Text>
                   <Text style={[styles.text, {color: theme.textColor}]}>
                     {user.phone}
@@ -102,7 +102,7 @@ const Settings = () => {
                 </View>
                 <View style={styles.title_container}>
                   <Text style={[styles.title, {color: theme.textColor}]}>
-                    Password:
+                    {t('text.password')}
                   </Text>
                   <Text style={[styles.text, {color: theme.textColor}]}>
                     {user.password}
@@ -121,7 +121,7 @@ const Settings = () => {
               {backgroundColor: theme.itemColor},
             ]}>
             <Text style={[styles.title, {color: theme.textColor}]}>
-              Change password
+              {t('settings.changePassword')}
             </Text>
             <Icon name="chevron-right" size={30} color={theme.iconColor} />
           </View>
@@ -133,7 +133,7 @@ const Settings = () => {
               {backgroundColor: theme.itemColor},
             ]}>
             <Text style={[styles.title, {color: theme.textColor}]}>
-              Change phone number
+              {t('settings.changePhoneNumber')}
             </Text>
             <Icon name="chevron-right" size={30} color={theme.iconColor} />
           </View>
@@ -145,7 +145,7 @@ const Settings = () => {
               {backgroundColor: theme.itemColor},
             ]}>
             <Text style={[styles.title, {color: theme.textColor}]}>
-              Change profile photo
+              {t('settings.changeProfilePhoto')}
             </Text>
             <Icon name="chevron-right" size={30} color={theme.iconColor} />
           </View>

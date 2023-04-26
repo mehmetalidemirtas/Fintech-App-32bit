@@ -6,10 +6,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '../../../components/Button';
 import {useNavigation} from '@react-navigation/native';
 import TradeHistoryContext from '../../../context/TradeHistoryContext';
+import {useTranslation} from 'react-i18next';
 
 const Exchange = props => {
   const {theme} = useContext(ThemeContext);
   const navigation = useNavigation();
+  const {t} = useTranslation();
 
   const {tradeHistory, setTradeHistory} = useContext(TradeHistoryContext);
   useEffect(() => {
@@ -36,14 +38,18 @@ const Exchange = props => {
       <View>
         <View style={styles.bottom_container}>
           <Text style={[styles.title, {color: theme.textColor}]}>
-            İŞLEMİNİZ BAŞARIYLA GERÇEKLEŞTİRİLMİŞTİR
+            {t('successful')}{' '}
           </Text>
           <Text style={[styles.text, {color: theme.textColor}]}>
-            Yeni hesap bakiyeniz: {tradeHistory.newTotalAmount}
+            {t('newAmount')} {tradeHistory.newTotalAmount}
           </Text>
         </View>
         <View style={styles.button}>
-          <Button contained onPress={handleSubmit} title="Ana sayfaya git" />
+          <Button
+            contained
+            onPress={handleSubmit}
+            title={t('button.goToMainScreen')}
+          />
         </View>
       </View>
     </SafeAreaView>

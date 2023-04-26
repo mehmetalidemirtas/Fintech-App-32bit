@@ -6,6 +6,8 @@ import {useNavigation} from '@react-navigation/native';
 import {SelectList} from 'react-native-dropdown-select-list';
 import currency_type_list from '../../assets/currency_type';
 import BankAccountContext from '../../context/BankAccountContext';
+import {useTranslation} from 'react-i18next';
+
 import FlashMessage, {
   showMessage,
   hideMessage,
@@ -17,11 +19,12 @@ const BankCurrencyType = () => {
   const [selected, setSelected] = useState('');
   const {bank, setBank} = useContext(BankAccountContext);
   const {theme} = useContext(ThemeContext);
+  const {t} = useTranslation();
 
   const handleCurrencyTypeSelect = () => {
     if (selected === '') {
       showMessage({
-        message: 'Lütfen bir seçim yapın',
+        message: t('text.chooseCurrencyType'),
         type: 'danger',
         backgroundColor: colors.primary,
       });
@@ -33,17 +36,21 @@ const BankCurrencyType = () => {
   return (
     <SafeAreaView
       style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
-      <Text style={[styles.title, {color: theme.primary}]}>Currency Type</Text>
-      <Text style={styles.text}> Lütfen döviz tipi seçiniz</Text>
+      <Text style={[styles.title, {color: theme.primary}]}>
+        {t('title.currencyType')}
+      </Text>
+      <Text style={[styles.text, {color: theme.textColor}]}>
+        {t('text.chooseCurrencyType')}
+      </Text>
       <View style={{margin: 20}}>
         <SelectList
           setSelected={val => setSelected(val)}
           data={currency_type_list}
-          title="Döviz tipi seçiniz"
+          title={t('text.chooseCurrencyType')}
           save="value"
-          searchPlaceholder="Ara"
-          notFoundText="Bulunamadı..."
-          placeholder="Döviz tipi seçiniz"
+          searchPlaceholder={t('search')}
+          notFoundText={t('notFound')}
+          placeholder={t('text.chooseCurrencyType')}
           dropdownTextStyles={{color: theme.textColor}}
           dropdownItemStyles={{color: theme.textColor}}
           boxStyles={theme.textColor}
@@ -53,16 +60,13 @@ const BankCurrencyType = () => {
       </View>
       <View style={styles.button_container}>
         <Button
-          textColor="#7286D3"
           onPress={() => navigation.goBack()}
-          title="Önceki adım"
+          title={t('button.previous')}
         />
         <Button
           contained
-          buttonColor="#7286D3"
-          textColor="white"
           onPress={handleCurrencyTypeSelect}
-          title="Sonraki adım"
+          title={t('button.next')}
         />
       </View>
     </SafeAreaView>

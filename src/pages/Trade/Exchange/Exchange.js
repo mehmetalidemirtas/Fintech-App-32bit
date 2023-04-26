@@ -17,9 +17,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {SelectList} from 'react-native-dropdown-select-list';
 import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
 
 const Exchange = props => {
   const {theme} = useContext(ThemeContext);
+  const {t} = useTranslation();
   const nameOfCurrency = props.route.params.currency;
   const {tradeHistory, setTradeHistory} = useContext(TradeHistoryContext);
   const [isBuySelected, setIsBuySelected] = useState(false);
@@ -46,7 +48,7 @@ const Exchange = props => {
   const [exchangeRate, setExchangeRate] = useState(props.route.params.buyValue); //Kur oranı
   const [exchangeTime, setExchangeTime] = useState(props.route.params.time); //Kur oranı
   const [inputValue, setInputValue] = useState(''); //Girilen tutar
-  const [counter, setCounter] = useState(60);
+  const [counter, setCounter] = useState(6000);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -168,19 +170,24 @@ const Exchange = props => {
     setIsLoading(true);
     if (selectedAccountToBeSold == null) {
       showMessage({
-        message: `${currencyNameToBeSold} Hesabı seçiniz, yoksa hesap oluşturun`,
+        message:
+          t('select') + ' ' + `${currencyNameToBeSold} ` + t('selectAccount'),
         type: 'danger',
         duration: 3000,
       });
     } else if (inputValue == '') {
       showMessage({
-        message: 'Miktar giriniz',
+        message: t('enterAmount'),
         type: 'danger',
         duration: 3000,
       });
     } else if (selectedAccountToBeReceived == null) {
       showMessage({
-        message: `${currencyNameToBeReceived} Hesabı seçiniz, yoksa hesap oluşturun`,
+        message:
+          t('select') +
+          ' ' +
+          `${currencyNameToBeReceived}` +
+          t('selectAccount'),
         type: 'danger',
         duration: 3000,
       });
@@ -213,7 +220,7 @@ const Exchange = props => {
           navigation.navigate('TradeSummaryScreen');
         } else {
           showMessage({
-            message: 'Hesabınızda yeterli bakiye bulunmamaktadır.',
+            message: t('notEnoughBalance'),
             type: 'danger',
             duration: 3000,
           });
@@ -244,7 +251,7 @@ const Exchange = props => {
           navigation.navigate('TradeSummaryScreen');
         } else {
           showMessage({
-            message: 'Hesabınızda yeterli bakiye bulunmamaktadır.',
+            message: t('notEnoughBalance'),
             type: 'danger',
             duration: 3000,
           });
@@ -287,35 +294,35 @@ const Exchange = props => {
         </Text>
         <View style={styles.counter_container}>
           <Text style={[styles.counter_title, {color: theme.textColor}]}>
-            İşlemi tamamlamanız için son{' '}
+            {t('lastSeconds')}{' '}
           </Text>
           <Text style={[styles.counter, {color: theme.textColor}]}>
             {counter}
           </Text>
           <Text style={[styles.counter_title, {color: theme.textColor}]}>
             {' '}
-            saniye
+            {t('second')}
           </Text>
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
           <View style={!isBuySelected ? {margin: 7} : {}}>
             <Button
               contained={isBuySelected}
-              title="Buy"
+              title={t('buy')}
               onPress={handleBuyPress}
             />
           </View>
           <View style={isBuySelected ? {margin: 7} : {}}>
             <Button
               contained={!isBuySelected}
-              title="Sell"
+              title={t('sell')}
               onPress={handleSellPress}
             />
           </View>
         </View>
         <View style={styles.bottom_container}>
           <Text style={[styles.title, {color: theme.textColor}]}>
-            Satılacak Hesap:{' '}
+            {t('accountToSell')}{' '}
           </Text>
           <SelectList
             setSelected={handleBankAccountSelect}
@@ -323,9 +330,9 @@ const Exchange = props => {
               key: `${identityNo}_bankAccount_${currencyNameToBeSold}_${item.accountNo}`,
               value: `${item.branchName} - ${item.accountNo}`,
             }))}
-            searchPlaceholder="Ara"
-            notFoundText="Bulunamadı..."
-            placeholder="Şube seçiniz"
+            searchPlaceholder={t('search')}
+            notFoundText={t('notFound')}
+            placeholder={t('text.chooseBranch')}
             dropdownTextStyles={{color: theme.textColor}}
             dropdownItemStyles={{color: theme.textColor}}
             boxStyles={theme.textColor}
@@ -333,7 +340,7 @@ const Exchange = props => {
           />
           <View style={{marginTop: 10, flexDirection: 'row'}}>
             <Text style={[styles.title, {color: theme.textColor}]}>
-              Satılacak para birimi:{' '}
+              {t('currencyToSell')}{' '}
             </Text>
             <Text
               style={{
@@ -357,12 +364,12 @@ const Exchange = props => {
                   marginBottom: 0,
                 },
               ]}>
-              Satılacak Para Tutarı:
+              {t('amountToSell')}
             </Text>
           </View>
           <Input
             keyboardType="numeric"
-            placeholder="Miktar giriniz"
+            placeholder={t('enterAmount')}
             value={inputValue}
             onType={setInputValue}
           />
@@ -370,7 +377,7 @@ const Exchange = props => {
         <View style={[styles.bottom_container, {marginTop: 0}]}>
           <View>
             <Text style={[styles.title, {color: theme.textColor}]}>
-              Aktarılacak hesap:
+              {t('accountToTransfer')}
             </Text>
             <SelectList
               setSelected={handleBankAccountSelectGet}
@@ -378,9 +385,9 @@ const Exchange = props => {
                 key: `${identityNo}_bankAccount_${currencyNameToBeReceived}_${item.accountNo}`,
                 value: `${item.branchName} - ${item.accountNo}`,
               }))}
-              searchPlaceholder="Ara"
-              notFoundText="Bulunamadı..."
-              placeholder="Şube seçiniz"
+              searchPlaceholder={t('search')}
+              notFoundText={t('notFound')}
+              placeholder={t('text.chooseBranch')}
               dropdownTextStyles={{color: theme.textColor}}
               dropdownItemStyles={{color: theme.textColor}}
               boxStyles={theme.textColor}
@@ -389,7 +396,7 @@ const Exchange = props => {
           </View>
           <View style={{marginTop: 10, flexDirection: 'row'}}>
             <Text style={[styles.title, {color: theme.textColor}]}>
-              Alınacak para birimi:{' '}
+              {t('currencyToReceive')}{' '}
             </Text>
             <Text
               style={{
@@ -402,7 +409,7 @@ const Exchange = props => {
           </View>
           <View style={{marginTop: 0, flexDirection: 'row'}}>
             <Text style={[styles.title, {color: theme.textColor}]}>
-              Kur oranı:{' '}
+              {t('exchangeRate')}{' '}
             </Text>
             <Text
               style={{
@@ -415,7 +422,7 @@ const Exchange = props => {
           </View>
           <View style={{marginTop: 0, flexDirection: 'row'}}>
             <Text style={[styles.title, {color: theme.textColor}]}>
-              Sonuç:{' '}
+              {t('result')}{' '}
             </Text>
             <Text
               style={{
@@ -430,7 +437,7 @@ const Exchange = props => {
         <View style={{marginBottom: 20}}>
           <Button
             contained
-            title="Tamamla"
+            title={t('button.complete')}
             marginRight={25}
             marginLeft={25}
             onPress={handleButtonClick}
