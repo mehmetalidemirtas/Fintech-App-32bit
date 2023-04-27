@@ -46,10 +46,7 @@ const App = () => {
     statusBarStyle: theme.statusBarStyle,
     headerTintColor: colors.primary,
     navigationBarColor: theme.backgroundColor,
-    transitionSpec: {
-      open: {animation: 'timing', config: {duration: 0}},
-      close: {animation: 'timing', config: {duration: 0}},
-    },
+    backgroundColor: theme.backgroundColor,
   };
 
   const handleLogin = async () => {
@@ -68,14 +65,47 @@ const App = () => {
           statusBarColor: theme.backgroundColor,
           statusBarStyle: theme.statusBarStyle,
           navigationBarColor: theme.backgroundColor,
+          backgroundColor: theme.backgroundColor,
         }}>
         <Stack.Screen name="LoginScreen">
-          {props => <Login {...props} handleLogin={handleLogin} />}
+          {props => (
+            <Login
+              {...props}
+              handleLogin={handleLogin}
+              options={{
+                presentation: 'transparentModal',
+              }}
+            />
+          )}
         </Stack.Screen>
-        <Stack.Screen name="IdentityScreen" component={Identity} />
-        <Stack.Screen name="PhotoScreen" component={Photo} />
-        <Stack.Screen name="PasswordScreen" component={Password} />
-        <Stack.Screen name="ForgotPasswordScreen" component={ForgotPassword} />
+        <Stack.Screen
+          name="IdentityScreen"
+          options={{
+            presentation: 'transparentModal',
+          }}
+          component={Identity}
+        />
+        <Stack.Screen
+          name="PhotoScreen"
+          options={{
+            presentation: 'transparentModal',
+          }}
+          component={Photo}
+        />
+        <Stack.Screen
+          name="PasswordScreen"
+          options={{
+            presentation: 'transparentModal',
+          }}
+          component={Password}
+        />
+        <Stack.Screen
+          name="ForgotPasswordScreen"
+          options={{
+            presentation: 'transparentModal',
+          }}
+          component={ForgotPassword}
+        />
       </Stack.Navigator>
     );
   };
@@ -107,6 +137,7 @@ const App = () => {
           component={WatchlistStack}
           options={{
             tabBarLabel: t('watchlist'),
+            presentation: 'transparentModal',
             tabBarIcon: () => (
               <Icon name="home" color={theme.primary} size={25} />
             ),
@@ -118,6 +149,7 @@ const App = () => {
           component={SettingsStack}
           options={{
             tabBarLabel: t('settings'),
+            presentation: 'transparentModal',
             tabBarIcon: () => (
               <Icon name="cog" color={theme.primary} size={25} />
             ),
@@ -135,6 +167,7 @@ const App = () => {
           component={Settings}
           options={{
             title: t('settings'),
+            presentation: 'transparentModal',
             headerBackVisible: false,
             headerRight: () => (
               <Icon
@@ -150,6 +183,7 @@ const App = () => {
           name="ChangePasswordScreen"
           component={ChangePassword}
           options={{
+            presentation: 'transparentModal',
             title: t('settings.changePassword'),
           }}
         />
@@ -157,6 +191,7 @@ const App = () => {
           name="ChangePhoneScreen"
           component={ChangePhone}
           options={{
+            presentation: 'transparentModal',
             title: t('settings.changePhoneNumber'),
           }}
         />
@@ -164,6 +199,7 @@ const App = () => {
           name="ChangePhotoScreen"
           component={ChangePhoto}
           options={{
+            presentation: 'transparentModal',
             title: t('settings.changeProfilePhoto'),
           }}
         />
@@ -178,6 +214,7 @@ const App = () => {
           name="WatchlistScreen"
           component={Watchlist}
           options={{
+            presentation: 'transparentModal',
             title: t('watchlist'),
             headerBackVisible: false,
           }}
@@ -186,6 +223,7 @@ const App = () => {
           name="BankAccountTypeScreen"
           component={BankAccountType}
           options={{
+            presentation: 'transparentModal',
             title: t('title.bankAccountType'),
           }}
         />
@@ -193,6 +231,7 @@ const App = () => {
           name="BankCurrencyTypeScreen"
           component={BankCurrencyType}
           options={{
+            presentation: 'transparentModal',
             title: t('title.currencyType'),
           }}
         />
@@ -200,6 +239,7 @@ const App = () => {
           name="BankBranchScreen"
           component={BankBranch}
           options={{
+            presentation: 'transparentModal',
             title: t('title.bankBranch'),
           }}
         />
@@ -208,6 +248,7 @@ const App = () => {
           component={Confirmation}
           options={{
             title: t('title.confirmation'),
+            presentation: 'transparentModal',
           }}
         />
         <Stack.Screen
@@ -216,6 +257,7 @@ const App = () => {
           options={{
             title: t('title.summary'),
             headerBackVisible: false,
+            presentation: 'transparentModal',
           }}
         />
         <Stack.Screen
@@ -223,6 +265,7 @@ const App = () => {
           component={History}
           options={{
             title: t('icon.tradeHistory'),
+            presentation: 'transparentModal',
           }}
         />
         <Stack.Screen
@@ -230,6 +273,7 @@ const App = () => {
           component={FavoriteCurrencies}
           options={{
             title: t('icon.favoriteCurrencies'),
+            presentation: 'transparentModal',
           }}
         />
         <Stack.Screen
@@ -237,6 +281,7 @@ const App = () => {
           component={Exchange}
           options={{
             title: t('exchangeMoney'),
+            presentation: 'transparentModal',
           }}
         />
         <Stack.Screen
@@ -244,6 +289,7 @@ const App = () => {
           component={TradeSummary}
           options={{
             title: t('tradeSummary'),
+            presentation: 'transparentModal',
             headerBackVisible: false,
           }}
         />
@@ -252,6 +298,7 @@ const App = () => {
           component={AllBankAccounts}
           options={{
             title: t('icon.allBankAccounts'),
+            presentation: 'transparentModal',
           }}
         />
       </Stack.Navigator>
@@ -296,15 +343,24 @@ const App = () => {
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
-          transitionSpec: {
-            open: {animation: 'timing', config: {duration: 0}},
-            close: {animation: 'timing', config: {duration: 0}},
-          },
+          backgroundColor: theme.backgroundColor,
         }}>
         {isLoggedIn ? (
-          <Stack.Screen name="MainTabs" component={MainTabs} />
+          <Stack.Screen
+            name="MainTabs"
+            options={{
+              presentation: 'transparentModal',
+            }}
+            component={MainTabs}
+          />
         ) : (
-          <Stack.Screen name="LoginStack" component={LoginStack} />
+          <Stack.Screen
+            name="LoginStack"
+            options={{
+              presentation: 'transparentModal',
+            }}
+            component={LoginStack}
+          />
         )}
       </Stack.Navigator>
     </NavigationContainer>

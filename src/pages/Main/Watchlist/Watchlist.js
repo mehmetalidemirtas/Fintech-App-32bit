@@ -16,11 +16,13 @@ import io from 'socket.io-client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CurrencyContext from '../../../context/CurrencyContext';
 import styles from './Watchlist.style';
-
 const socket = io('http://fx32.vercel.app/');
+
 const Watchlist = ({navigation}) => {
   const [data, setData] = useState([]);
   const {currencyValues, setCurrencyValues} = useContext(CurrencyContext);
+  const [isMounted, setIsMounted] = useState(false);
+  const [isconnected, setIsconnected] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const {theme} = useContext(ThemeContext);
@@ -48,8 +50,9 @@ const Watchlist = ({navigation}) => {
       console.error(error);
     }
   };
-
   useEffect(() => {
+    setIsMounted(true);
+
     const getFavoriteCurrencies = async () => {
       const identityNo = await AsyncStorage.getItem('currentUser');
       const favoriteCurrencies = await AsyncStorage.getItem(
@@ -70,21 +73,17 @@ const Watchlist = ({navigation}) => {
       }
     };
 
-    let timeout;
-
-    const handleSocketConnection = () => {
-      if (!socket.connected) {
-        console.log('Socket bağlantısı yok, tekrar deneniyor...');
-        socket.connect();
+    const checkSocketConnection = () => {
+      if (socket.connected) {
+        return;
       }
-      timeout = setTimeout(() => {
-        handleSocketConnection();
-      }, 15000);
+
+      console.log('Socket bağlantısı yok, tekrar deneniyor...');
+      socket.connect();
     };
 
     socket.on('connect', () => {
       console.log('Socket connected!');
-      clearTimeout(timeout);
     });
 
     socket.on('currency-update', message => {
@@ -109,26 +108,28 @@ const Watchlist = ({navigation}) => {
 
       // Get favorite currencies
       getFavoriteCurrencies().then(favorites => {
-        if (favorites) {
-          const favoriteData = newData.filter(currency =>
-            favorites.includes(currency.currency),
-          );
-          setData(favoriteData);
-        } else {
-          setData(newData);
+        if (isMounted) {
+          if (favorites) {
+            const favoriteData = newData.filter(currency =>
+              favorites.includes(currency.currency),
+            );
+            setData(favoriteData);
+          } else {
+            setData(newData);
+          }
+          setLoading(false);
         }
-        setLoading(false);
       });
       saveCurrencies(newData.map(currency => currency.currency));
     });
 
-    handleSocketConnection();
+    checkSocketConnection();
 
     return () => {
+      setIsMounted(false);
       socket.disconnect();
-      clearTimeout(timeout);
     };
-  }, []);
+  }, [isMounted]);
   const renderItem = ({item}) => {
     const goToCryptoDetail = () => {
       setCurrencyValues(prev => ({

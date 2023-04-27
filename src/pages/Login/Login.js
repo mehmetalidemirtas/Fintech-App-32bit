@@ -44,6 +44,10 @@ const Login = ({navigation, handleLogin}) => {
 
   useEffect(() => {
     checkIsLoggedIn();
+
+    return () => {
+      setIsLoading(false); // isLoading durumunu temizle
+    };
   }, []);
 
   const handleFormSubmit = async values => {
