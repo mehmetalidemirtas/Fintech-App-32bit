@@ -1,4 +1,4 @@
-package com.fintech.newarchitecture;
+package com.madsoft.fintech.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.EmptyReactNativeConfig;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.fintech.BuildConfig;
-import com.fintech.newarchitecture.components.MainComponentsRegistry;
-import com.fintech.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.madsoft.fintech.BuildConfig;
+import com.madsoft.fintech.newarchitecture.components.MainComponentsRegistry;
+import com.madsoft.fintech.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 

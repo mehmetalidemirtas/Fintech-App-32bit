@@ -1,4 +1,4 @@
-package com.fintech;
+package com.madsoft.fintech;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

@@ -1,4 +1,4 @@
-package com.fintech.newarchitecture.modules;
+package com.madsoft.fintech.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;
