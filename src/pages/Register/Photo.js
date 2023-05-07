@@ -8,6 +8,14 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {showMessage} from 'react-native-flash-message';
 import colors from '../../styles/colors';
 import {useTranslation} from 'react-i18next';
+import {
+  request,
+  PERMISSIONS,
+  RESULTS,
+  openSettings,
+} from 'react-native-permissions';
+import {Alert} from 'react-native';
+import ModalAlert from '../../components/Modal';
 
 const Photo = () => {
   const {user, setUser} = useContext(UserContext);
@@ -16,32 +24,50 @@ const Photo = () => {
   const {theme} = useContext(ThemeContext);
   const [selectedImage, setSelectedImage] = useState(null);
   const {t} = useTranslation();
+  const [modalVisible, setModalVisible] = useState(false);
 
-  const handleCameraPress = () => {
-    const options = {
-      mediaType: 'photo',
-      includeBase64: false,
-      saveToPhotos: true,
-    };
-    launchCamera(options, response => {
-      if (response.assets) {
-        setSelectedImage(response.assets[0].uri);
+  const handleCameraPress = async () => {
+    try {
+      const result = await request(PERMISSIONS.ANDROID.CAMERA);
+      if (result === 'granted') {
+        const options = {
+          mediaType: 'photo',
+          includeBase64: false,
+          saveToPhotos: true,
+        };
+        launchCamera(options, response => {
+          if (response.assets) {
+            setSelectedImage(response.assets[0].uri);
+          }
+        });
+      } else {
+        setModalVisible(true);
       }
-    });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleGalleryPress = () => {
-    const options = {
-      mediaType: 'photo',
-      includeBase64: false,
-    };
-    launchImageLibrary(options, response => {
-      if (response.assets) {
-        setSelectedImage(response.assets[0].uri);
+  const handleGalleryPress = async () => {
+    try {
+      const result = await request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
+      if (result === 'granted') {
+        const options = {
+          mediaType: 'photo',
+          includeBase64: false,
+        };
+        launchImageLibrary(options, response => {
+          if (response.assets) {
+            setSelectedImage(response.assets[0].uri);
+          }
+        });
+      } else {
+        setModalVisible(true);
       }
-    });
+    } catch (error) {
+      console.log(error);
+    }
   };
-
   const handleSubmit = async photo => {
     if (selectedImage === null) {
       showMessage({
@@ -88,6 +114,16 @@ const Photo = () => {
           loading={isLoading}
         />
       </View>
+      <ModalAlert
+        visible={modalVisible}
+        title={t('permissionError')}
+        message={t('permissionErrorText')}
+        confirmText={t('settings')}
+        cancelText={t('ok')}
+        onConfirm={() => openSettings()}
+        onCancel={() => setModalVisible(false)}
+        style={{backgroundColor: 'yellow'}}
+      />
       <View style={styles.button_container}>
         <Button
           onPress={() => navigation.goBack()}

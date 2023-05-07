@@ -24,7 +24,7 @@ const LanguageModal = ({isVisible, onClose}) => {
   };
 
   return (
-    <Modal visible={isVisible} animationType="slide" transparent={true}>
+    <Modal visible={isVisible} animationType="fade" transparent={true}>
       <View style={styles.centeredView}>
         <View
           style={[styles.modalView, {backgroundColor: theme.backgroundColor}]}>

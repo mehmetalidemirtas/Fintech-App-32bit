@@ -115,6 +115,9 @@
     "closeNfc": "Kimlik kartınızı nfc okuyucusuna yaklaştırın !",
     "watchlist": "İzleme Listesi",
     "exchangeMoney": "Döviz Değiştir",
-    "tradeSummary": "İşlem Özeti"
+    "tradeSummary": "İşlem Özeti",
+    "permissionError": "İzin Hatası",
+    "permissionErrorText": "Uygulama gerekli izinlere sahip değil. Ayarlardan izin vererek devam edebilirsiniz.",
+    "ok": "Tamam"
   }
 }

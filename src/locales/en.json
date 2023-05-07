@@ -115,6 +115,9 @@
     "closeNfc": "Bring your ID card closer to the NFC reader!",
     "watchlist": "Watchlist",
     "exchangeMoney": "Exchange Money",
-    "tradeSummary": "Receipt"
+    "tradeSummary": "Receipt",
+    "permissionError": "Permission Error",
+    "permissionErrorText": "The app does not have the required permissions. You can continue by giving permission from the settings.",
+    "ok": "Ok"
   }
 }

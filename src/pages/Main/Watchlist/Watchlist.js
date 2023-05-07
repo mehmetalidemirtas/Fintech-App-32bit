@@ -16,7 +16,7 @@ import io from 'socket.io-client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CurrencyContext from '../../../context/CurrencyContext';
 import styles from './Watchlist.style';
-const url = 'https://fx32.vercel.app:80/';
+const url = 'https://fx32.vercel.app/';
 const socket = io(url);
 
 const Watchlist = ({navigation}) => {
