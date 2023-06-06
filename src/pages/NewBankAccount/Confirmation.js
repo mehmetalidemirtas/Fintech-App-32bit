@@ -7,6 +7,7 @@ import BankAccountContext from '../../context/BankAccountContext';
 import Card from '../../components/Card';
 import {ThemeContext} from '../../context/ThemeContext';
 import {useTranslation} from 'react-i18next';
+import generateTRIBAN from '../../utils/ibanGenerator';
 
 const Confirmation = () => {
   const navigation = useNavigation();
@@ -25,7 +26,7 @@ const Confirmation = () => {
     setBank(prev => ({
       ...prev,
       accountNo: accountNumber,
-      iban: generateTRIBAN(),
+      iban: generateTRIBAN(accountNumber),
     }));
     navigation.navigate('SummaryScreen');
   };
@@ -38,15 +39,6 @@ const Confirmation = () => {
   };
   const editBankBranch = () => {
     navigation.navigate('BankBranchScreen');
-  };
-  const generateTRIBAN = () => {
-    const TR_COUNTRY_CODE = 'TR';
-    const TR_IBAN_CHECK_DIGIT_VALUE = '68';
-    const bankCode = '0001';
-    const branchCode = '0019';
-    const accountNo = accountNumber;
-    const trIban = `${TR_COUNTRY_CODE}${TR_IBAN_CHECK_DIGIT_VALUE}${bankCode}${branchCode}${accountNo}`;
-    return trIban;
   };
   return (
     <SafeAreaView

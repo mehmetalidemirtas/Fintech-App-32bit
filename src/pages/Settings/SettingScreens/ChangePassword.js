@@ -8,27 +8,18 @@ import * as Yup from 'yup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ThemeContext} from '../../../context/ThemeContext';
 import {useTranslation} from 'react-i18next';
+import {passwordValidationSchema} from '../../../utils/validationSchema';
 
 const Password = () => {
   const {t} = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const {theme} = useContext(ThemeContext);
-
-  const validationSchema = Yup.object().shape({
-    password: Yup.string()
-      .min(8, t('error.minPassword'))
-      .required(t('error.enterPassword')),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], t('error.passwordsNotSame'))
-      .required(t('error.enterConfirmPassword')),
-  });
+  const navigation = useNavigation();
 
   const initialValues = {
     password: '',
     confirmPassword: '',
   };
-
-  const navigation = useNavigation();
 
   const uptadePassword = async newPassword => {
     setIsLoading(true);
@@ -55,7 +46,7 @@ const Password = () => {
       style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema}
+        validationSchema={passwordValidationSchema(t)}
         onSubmit={handleFormSubmit}>
         {({
           handleChange,

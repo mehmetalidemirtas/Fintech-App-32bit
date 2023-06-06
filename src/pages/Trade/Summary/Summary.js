@@ -7,6 +7,7 @@ import Button from '../../../components/Button';
 import {useNavigation} from '@react-navigation/native';
 import TradeHistoryContext from '../../../context/TradeHistoryContext';
 import {useTranslation} from 'react-i18next';
+import {saveTradeHistoryToStorage} from '../../../utils/saveTradeHistoryToStorage';
 
 const Exchange = props => {
   const {theme} = useContext(ThemeContext);
@@ -14,18 +15,9 @@ const Exchange = props => {
   const {t} = useTranslation();
 
   const {tradeHistory, setTradeHistory} = useContext(TradeHistoryContext);
+
   useEffect(() => {
-    const saveTradeHistoryToStorage = async () => {
-      try {
-        const identityNo = await AsyncStorage.getItem('currentUser');
-        const time = Date.now();
-        const key = `${identityNo}_tradeHistory_${time}`;
-        await AsyncStorage.setItem(key, JSON.stringify(tradeHistory));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    saveTradeHistoryToStorage();
+    saveTradeHistoryToStorage(tradeHistory);
   }, [tradeHistory]);
 
   const handleSubmit = () => {

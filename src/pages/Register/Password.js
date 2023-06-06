@@ -9,7 +9,8 @@ import * as Yup from 'yup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ThemeContext} from '../../context/ThemeContext';
 import {useTranslation} from 'react-i18next';
-
+import {passwordValidationSchema} from '../../utils/validationSchema';
+import {formatPhoneNumber} from '../../utils/formatPhoneNumber';
 const Password = () => {
   const {t} = useTranslation();
   const {user, setUser} = useContext(UserContext);
@@ -18,15 +19,6 @@ const Password = () => {
     t('button.completeRegistration'),
   );
   const {theme} = useContext(ThemeContext);
-
-  const validationSchema = Yup.object().shape({
-    password: Yup.string()
-      .min(8, t('error.minPassword'))
-      .required(t('error.enterPassword')),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], t('error.passwordsNotSame'))
-      .required(t('error.enterConfirmPassword')),
-  });
 
   const initialValues = {
     phone: '',
@@ -86,44 +78,35 @@ const Password = () => {
       await saveUserToAsyncStorage();
     }
   };
+
   const [phoneNumber, setPhoneNumber] = useState('');
   const [phone, setPhone] = useState('');
   const [showAlert, setShowAlert] = useState(false);
 
   const handleTextChange = phoneInput => {
-    const cleanedNumber = phoneInput.replace(/\D/g, '');
-    const match = cleanedNumber.match(/^(\d{3})(\d{3})(\d{4})$/);
-    if (cleanedNumber.length > 0 && cleanedNumber.charAt(0) !== '5') {
-      setShowAlert(true);
-      return;
-    }
-    if (match) {
-      const formattedText = `(${match[1]}) ${match[2]} ${match[3]}`;
-      setShowAlert(false);
-      setPhoneNumber(formattedText);
-      const phone = `+90${phoneInput}`;
-      setPhone(phone);
-    } else {
-      setPhoneNumber(cleanedNumber);
-      setShowAlert(false);
-    }
+    const {showAlert, phoneNumber, phone} = formatPhoneNumber(phoneInput);
+    setShowAlert(showAlert);
+    setPhoneNumber(phoneNumber);
+    setPhone(phone);
   };
+
   const validate = () => {
     const errors = {};
     if (phoneNumber == '') {
       errors.phoneNumber = t('error.enterPhone');
     }
     if (phoneNumber.length < 10) {
-      errors.phoneNumberLength = 'Telefon numarası yanlış';
+      errors.phoneNumberLength = t('error.phoneNumberLength');
     }
     return errors;
   };
+
   return (
     <SafeAreaView
       style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema}
+        validationSchema={passwordValidationSchema(t)}
         validate={validate}
         onSubmit={handleFormSubmit}>
         {({
@@ -158,7 +141,7 @@ const Password = () => {
               )}
               {showAlert && (
                 <Text style={styles.error_message}>
-                  Telefon numarası 5XXXXXXXXX formatında olmalıdır.
+                  {t('error.numberFormat')}
                 </Text>
               )}
             </View>

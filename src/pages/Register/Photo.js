@@ -5,8 +5,7 @@ import Button from '../../components/Button';
 import {useNavigation} from '@react-navigation/native';
 import {ThemeContext} from '../../context/ThemeContext';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {showMessage} from 'react-native-flash-message';
-import colors from '../../styles/colors';
+import {showFlashMessage} from '../../utils/flashMessage';
 import {useTranslation} from 'react-i18next';
 import {
   request,
@@ -70,11 +69,7 @@ const Photo = () => {
   };
   const handleSubmit = async photo => {
     if (selectedImage === null) {
-      showMessage({
-        message: t('error.choosePhoto'),
-        type: 'danger',
-        backgroundColor: colors.primary,
-      });
+      showFlashMessage(t('error.choosePhoto'));
       return;
     }
     setIsLoading(true);

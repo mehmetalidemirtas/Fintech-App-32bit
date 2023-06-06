@@ -51,7 +51,9 @@ const Summary = () => {
   return (
     <SafeAreaView
       style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
-      <Text style={[styles.title, {color: theme.textColor}]}>Hesap Özeti</Text>
+      <Text style={[styles.title, {color: theme.primary}]}>
+        {t('title.summary')}
+      </Text>
       <View
         style={{
           backgroundColor: theme.itemColor,

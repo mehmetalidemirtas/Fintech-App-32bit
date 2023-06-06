@@ -3,8 +3,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LanguageModal from './LanguageModal';
 import {useTranslation} from 'react-i18next';
 import {View, Text, Pressable} from 'react-native';
-import {ThemeContext} from '../context/ThemeContext';
-import styles from '../pages/Settings/Settings.style';
+import {ThemeContext} from '../../../context/ThemeContext';
+import styles from '../Settings.style';
 const LanguageButton = () => {
   const {theme} = useContext(ThemeContext);
   const [modalVisible, setModalVisible] = useState(false);

@@ -4,7 +4,6 @@ import {
   Text,
   FlatList,
   ScrollView,
-  Pressable,
   ActivityIndicator,
   SafeAreaView,
 } from 'react-native';
@@ -16,8 +15,14 @@ import io from 'socket.io-client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CurrencyContext from '../../../context/CurrencyContext';
 import styles from './Watchlist.style';
-const url = 'https://fx32.vercel.app/';
-const socket = io(url);
+import {
+  getFavoriteCurrencies,
+  saveCurrencies,
+} from '../../../utils/FavoriteCurrenciesUtils';
+import {listCurrencies} from '../../../components/ListItem/ListItem';
+import {connectionString} from '../../../server/connectionString';
+
+const socket = io(connectionString);
 
 const Watchlist = ({navigation}) => {
   const [data, setData] = useState([]);
@@ -29,50 +34,8 @@ const Watchlist = ({navigation}) => {
   const {theme} = useContext(ThemeContext);
   const {t} = useTranslation();
 
-  const getFavoriteCurrencies = async () => {
-    const identityNo = await AsyncStorage.getItem('currentUser');
-    const favoriteCurrencies = await AsyncStorage.getItem(
-      `${identityNo}_favoriteCurrencies`,
-    );
-    if (favoriteCurrencies) {
-      const favorites = favoriteCurrencies.split(',');
-      const filteredData = data.filter(currency =>
-        favorites.includes(currency.currency),
-      );
-      setData(filteredData);
-    }
-  };
-
-  const saveCurrencies = async currencies => {
-    try {
-      await AsyncStorage.setItem('currencies', JSON.stringify(currencies));
-      //console.log('Currencies saved:', currencies);
-    } catch (error) {
-      console.error(error);
-    }
-  };
   useEffect(() => {
     setIsMounted(true);
-
-    const getFavoriteCurrencies = async () => {
-      const identityNo = await AsyncStorage.getItem('currentUser');
-      const favoriteCurrencies = await AsyncStorage.getItem(
-        `${identityNo}_favoriteCurrencies`,
-      );
-      if (favoriteCurrencies) {
-        return favoriteCurrencies;
-      } else {
-        return null;
-      }
-    };
-
-    const saveCurrencies = async currencies => {
-      try {
-        await AsyncStorage.setItem('currencies', JSON.stringify(currencies));
-      } catch (error) {
-        console.error(error);
-      }
-    };
 
     const checkSocketConnection = () => {
       if (socket.connected) {
@@ -131,49 +94,6 @@ const Watchlist = ({navigation}) => {
       socket.disconnect();
     };
   }, [isMounted]);
-  const renderItem = ({item}) => {
-    const goToCryptoDetail = () => {
-      setCurrencyValues(prev => ({
-        ...prev,
-        currency: item.currency,
-        buyValue: item.buyValue,
-        sellValue: item.sellValue,
-        time: item.time,
-      }));
-      //console.log('values:' + currencyValues);
-      navigation.navigate('ExchangeScreen', {
-        currency: item.currency,
-        buyValue: item.buyValue,
-        time: item.time,
-        sellValue: item.sellValue,
-      });
-    };
-    return (
-      <Pressable
-        style={[styles.item, {backgroundColor: theme.itemColor}]}
-        onPress={() => goToCryptoDetail()}>
-        <View style={styles.card_container}>
-          <View style={styles.currency}>
-            <Text style={[styles.title, {color: theme.textColor}]}>
-              {item.currency}
-            </Text>
-            <Text style={[styles.try, {color: theme.textColor}]}>/TRY</Text>
-          </View>
-          <Text style={[styles.subtitle, {color: theme.textColor}]}>
-            {item.buyValue}
-          </Text>
-          <Text style={[styles.subtitle, {color: theme.textColor}]}>
-            {item.sellValue}
-          </Text>
-          <View style={[styles.rate, {backgroundColor: item.backgroundColor}]}>
-            <Text style={[styles.subtitle, {color: 'white'}]}>
-              {item.changeRate}%
-            </Text>
-          </View>
-        </View>
-      </Pressable>
-    );
-  };
 
   return (
     <SafeAreaView
@@ -267,7 +187,9 @@ const Watchlist = ({navigation}) => {
       ) : (
         <FlatList
           data={data}
-          renderItem={renderItem}
+          renderItem={({item}) =>
+            listCurrencies(item, theme, setCurrencyValues, navigation)
+          }
           showsVerticalScrollIndicator={false}
           keyExtractor={item => item.currency}
         />

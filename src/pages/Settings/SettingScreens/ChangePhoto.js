@@ -16,6 +16,8 @@ import {
 } from 'react-native-permissions';
 import {Alert} from 'react-native';
 import ModalAlert from '../../../components/Modal';
+import {showFlashMessage} from '../../../utils/flashMessage';
+
 const Photo = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
@@ -83,11 +85,7 @@ const Photo = () => {
 
   const handleFormSubmit = async values => {
     if (selectedImage === null) {
-      showMessage({
-        message: t('error.choosePhoto'),
-        type: 'danger',
-        backgroundColor: colors.primary,
-      });
+      showFlashMessage(t('error.choosePhoto'));
       return;
     }
     setIsLoading(true);

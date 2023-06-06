@@ -1,13 +1,5 @@
 import React, {useState, useContext, useEffect} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  Switch,
-  FlatList,
-  ScrollView,
-} from 'react-native';
+import {View, Text, SafeAreaView, ScrollView} from 'react-native';
 import styles from './Exchange.style';
 import {ThemeContext} from '../../../context/ThemeContext';
 import TradeHistoryContext from '../../../context/TradeHistoryContext';
@@ -15,9 +7,10 @@ import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {SelectList} from 'react-native-dropdown-select-list';
-import {showMessage} from 'react-native-flash-message';
 import {useNavigation} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
+import {showFlashMessage} from '../../../utils/flashMessage';
+import {updateAmountSell} from '../../../utils/updateAmount';
 
 const Exchange = props => {
   const {theme} = useContext(ThemeContext);
@@ -143,54 +136,22 @@ const Exchange = props => {
       );
     }
   };
-  const updateAmountSell = async (newAmount, newAmountGet) => {
-    const bankAccountData = await AsyncStorage.getItem(selectedAccountToBeSold);
-    if (bankAccountData !== null) {
-      const parsedData = JSON.parse(bankAccountData);
-      parsedData.amount = newAmount;
-      await AsyncStorage.setItem(
-        selectedAccountToBeSold,
-        JSON.stringify(parsedData),
-      );
-    }
-    const bankAccountTLData = await AsyncStorage.getItem(
-      selectedAccountToBeReceived,
-    );
-    if (bankAccountTLData !== null) {
-      const parsedData = JSON.parse(bankAccountTLData);
-      parsedData.amount = newAmountGet;
-      await AsyncStorage.setItem(
-        selectedAccountToBeReceived,
-        JSON.stringify(parsedData),
-      );
-    }
-  };
 
   const handleButtonClick = () => {
     setIsLoading(true);
     if (selectedAccountToBeSold == null) {
-      showMessage({
-        message:
-          t('select') + ' ' + `${currencyNameToBeSold} ` + t('selectAccount'),
-        type: 'danger',
-        duration: 3000,
-      });
+      setIsLoading(false);
+      showFlashMessage(
+        t('select') + ' ' + `${currencyNameToBeSold} ` + t('selectAccount'),
+      );
     } else if (inputValue == '') {
-      showMessage({
-        message: t('enterAmount'),
-        type: 'danger',
-        duration: 3000,
-      });
+      setIsLoading(false);
+      showFlashMessage(t('enterAmount'));
     } else if (selectedAccountToBeReceived == null) {
-      showMessage({
-        message:
-          t('select') +
-          ' ' +
-          `${currencyNameToBeReceived}` +
-          t('selectAccount'),
-        type: 'danger',
-        duration: 3000,
-      });
+      setIsLoading(false);
+      showFlashMessage(
+        t('select') + ' ' + `${currencyNameToBeReceived}` + t('selectAccount'),
+      );
     } else {
       const num = parseInt(inputValue, 10);
       if (isBuySelected == true) {
@@ -203,6 +164,8 @@ const Exchange = props => {
           updateAmountSell(
             amount - inputValue, //Girilen değer bankadaki toplam paradan çıkarılıyor.
             newTotalAmount, //output value : sonuç
+            selectedAccountToBeSold,
+            selectedAccountToBeReceived,
           );
           setTradeHistory({
             ...tradeHistory,
@@ -217,13 +180,13 @@ const Exchange = props => {
             time: exchangeTime,
           });
 
-          navigation.navigate('TradeSummaryScreen');
+          setTimeout(() => {
+            setIsLoading(false);
+            navigation.navigate('TradeSummaryScreen');
+          }, 2000);
         } else {
-          showMessage({
-            message: t('notEnoughBalance'),
-            type: 'danger',
-            duration: 3000,
-          });
+          showFlashMessage(t('notEnoughBalance'));
+          setIsLoading(false);
         }
       } else {
         if (num <= amount) {
@@ -233,7 +196,12 @@ const Exchange = props => {
             Number(amountOfReceivedBank) + Number(outputValue)
           ).toFixed(2);
 
-          updateAmountSell(amount - inputValue, newTotalAmount);
+          updateAmountSell(
+            amount - inputValue,
+            newTotalAmount,
+            selectedAccountToBeSold,
+            selectedAccountToBeReceived,
+          );
 
           setTradeHistory({
             ...tradeHistory,
@@ -248,17 +216,16 @@ const Exchange = props => {
             time: exchangeTime,
           });
 
-          navigation.navigate('TradeSummaryScreen');
+          setTimeout(() => {
+            setIsLoading(false);
+            navigation.navigate('TradeSummaryScreen');
+          }, 2000);
         } else {
-          showMessage({
-            message: t('notEnoughBalance'),
-            type: 'danger',
-            duration: 3000,
-          });
+          showFlashMessage(t('notEnoughBalance'));
+          setIsLoading(false);
         }
       }
     }
-    setIsLoading(false);
   };
 
   const handleBankAccountSelect = value => {

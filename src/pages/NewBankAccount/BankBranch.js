@@ -1,17 +1,13 @@
 import React, {useState, useContext} from 'react';
 import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
-import {SelectList} from 'react-native-dropdown-select-list';
 import bank_branch_list from '../../assets/bank_branch';
 import Button from '../../components/Button';
 import colors from '../../styles/colors';
 import {useNavigation} from '@react-navigation/native';
 import BankAccountContext from '../../context/BankAccountContext';
 import {useTranslation} from 'react-i18next';
-
-import FlashMessage, {
-  showMessage,
-  hideMessage,
-} from 'react-native-flash-message';
+import Dropdown from '../../components/Dwopdown/Dropdown';
+import {showFlashMessage} from '../../utils/flashMessage';
 import {ThemeContext} from '../../context/ThemeContext';
 
 const BankBranch = () => {
@@ -23,11 +19,7 @@ const BankBranch = () => {
 
   const handleBranchNameSelect = () => {
     if (selected === '') {
-      showMessage({
-        message: t('text.chooseBranch'),
-        type: 'danger',
-        backgroundColor: colors.primary,
-      });
+      showFlashMessage(t('text.chooseBranch'));
       return;
     }
     setBank(prev => ({...prev, branchName: selected}));
@@ -45,18 +37,10 @@ const BankBranch = () => {
         {t('text.chooseBranch')}
       </Text>
       <View style={{margin: 20}}>
-        <SelectList
-          setSelected={val => setSelected(val)}
+        <Dropdown
+          selected={val => setSelected(val)}
           data={bank_branch_list}
-          save="value"
-          searchPlaceholder={t('search')}
-          notFoundText={t('notFound')}
           placeholder={t('text.chooseBranch')}
-          defaultOption={bank.branchName}
-          dropdownTextStyles={{color: theme.textColor}}
-          dropdownItemStyles={{color: theme.textColor}}
-          boxStyles={theme.textColor}
-          inputStyles={{color: theme.textColor}}
         />
       </View>
       <View style={styles.button_container}>

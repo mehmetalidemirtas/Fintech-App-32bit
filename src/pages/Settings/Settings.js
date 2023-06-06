@@ -5,12 +5,14 @@ import {
   ScrollView,
   Text,
   Image,
+  Modal,
   Pressable,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import {ThemeContext} from '../../context/ThemeContext';
 import styles from './Settings.style';
-import LanguageButton from '../../locales/LanguageButton';
+import LanguageButton from './SettingScreens/LanguageButton';
 import {useTranslation} from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
@@ -48,6 +50,11 @@ const Settings = () => {
     });
     return unsubscribe;
   }, [navigation, user]);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleImagePress = () => {
+    setModalVisible(!modalVisible);
+  };
 
   return (
     <SafeAreaView
@@ -71,7 +78,31 @@ const Settings = () => {
                 styles.image_container,
                 {backgroundColor: theme.itemColor},
               ]}>
-              <Image style={styles.image} source={{uri: user.photo}} />
+              <Pressable onPress={handleImagePress}>
+                <Image style={styles.image} source={{uri: user.photo}} />
+              </Pressable>
+              <Modal
+                transparent={true}
+                visible={modalVisible}
+                animationType="fade">
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: theme.backgroundColor,
+                  }}>
+                  <Pressable onPress={handleImagePress}>
+                    <Image
+                      style={{
+                        width: Dimensions.get('window').width * 0.9,
+                        height: Dimensions.get('window').height / 1.2,
+                      }}
+                      source={{uri: user.photo}}
+                    />
+                  </Pressable>
+                </View>
+              </Modal>
               <View style={styles.text_container}>
                 <Text style={[styles.name_text, {color: theme.textColor}]}>
                   {user.name} {user.surname}

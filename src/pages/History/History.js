@@ -12,12 +12,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ThemeContext} from '../../context/ThemeContext';
 import styles from './History.style';
 import {Searchbar} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useTranslation} from 'react-i18next';
+import {HistoryRender} from '../../components/ListItem/ListItem';
 
 const PAGE_SIZE = 5;
 
-const Watchlist = ({navigation}) => {
+const History = ({navigation}) => {
   const [bank, setBank] = useState([]);
   const {theme} = useContext(ThemeContext);
   const [page, setPage] = useState(0);
@@ -71,7 +71,7 @@ const Watchlist = ({navigation}) => {
 
     return slicedData;
   };
-  const aramaYap = searchText => {
+  const search = searchText => {
     const start = page * PAGE_SIZE;
     const end = start + PAGE_SIZE;
     const filteredBank = bank.filter(
@@ -90,89 +90,8 @@ const Watchlist = ({navigation}) => {
           .includes(searchText.toLowerCase()),
     );
 
-    //setSearchData(filteredBank);
     return filteredBank.slice(start, end).sort((a, b) => b.time - a.time);
   };
-  const formatDate = date => {
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear();
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    return `${day}/${month}/${year} ${hours}:${minutes}`;
-  };
-  const shareItem = item => {
-    Share.share({
-      message:
-        `${item.currencyNameToBeSold} / ${item.currencyToBeReceived}\n` +
-        `Satılan hesap: ${item.bankAccountToBeSold}\n` +
-        `Aktarılan hesap: ${item.bankAccountToBeReceived}\n` +
-        `Kur oranı: ${item.exchangeRate}\n` +
-        `Toplam yeni bakiye: ${item.newTotalAmount} ${item.currencyToBeReceived}\n` +
-        `${formatDate(new Date(parseInt(item.time)))}\n` +
-        `+ ${item.outputValue} ${item.currencyToBeReceived}\n`,
-    });
-  };
-
-  const Item = ({item}) => (
-    <View style={[styles.card_container, {backgroundColor: theme.itemColor}]}>
-      <Text
-        style={[
-          styles.title,
-          {textAlign: 'center', marginBottom: 2, color: theme.textColor},
-        ]}>
-        {item.currencyNameToBeSold} / {item.currencyToBeReceived}
-      </Text>
-      <View style={styles.title_container}>
-        <Text style={[styles.title, {color: theme.textColor}]}>
-          {t('soldAccount')}
-        </Text>
-        <Text style={[styles.text, {color: theme.textColor}]}>
-          {item.bankAccountToBeSold}
-        </Text>
-      </View>
-      <View style={styles.title_container}>
-        <Text style={[styles.title, {color: theme.textColor}]}>
-          {t('transferredAccount')}
-        </Text>
-        <Text style={[styles.text, {color: theme.textColor}]}>
-          {item.bankAccountToBeReceived}
-        </Text>
-      </View>
-      <View style={styles.title_container}>
-        <Text style={[styles.title, {color: theme.textColor}]}>
-          {t('exchangeRate')}
-        </Text>
-        <Text style={[styles.text, {color: theme.textColor}]}>
-          {item.exchangeRate}
-        </Text>
-      </View>
-      <View style={styles.title_container}>
-        <Text style={[styles.title, {color: theme.textColor}]}>
-          {t('newTotalAmount')}
-        </Text>
-        <Text style={[styles.text, {color: theme.textColor}]}>
-          {item.newTotalAmount} {item.currencyToBeReceived}
-        </Text>
-      </View>
-      <View style={styles.bottom_container}>
-        <View style={{flexDirection: 'column'}}>
-          <Text style={{textAlign: 'right', color: theme.textColor}}>
-            {formatDate(new Date(parseInt(item.time)))}
-          </Text>
-          <Text style={{color: theme.textColor}}>
-            + {item.outputValue} {item.currencyToBeReceived}
-          </Text>
-        </View>
-        <Icon
-          name="share-variant"
-          size={20}
-          color={theme.primary}
-          onPress={() => shareItem(item)}
-        />
-      </View>
-    </View>
-  );
 
   return (
     <SafeAreaView
@@ -214,8 +133,8 @@ const Watchlist = ({navigation}) => {
           </View>
           <FlatList
             showsVerticalScrollIndicator={false}
-            data={searchText !== '' ? aramaYap(searchText) : getPageData()}
-            renderItem={({item}) => <Item item={item} />}
+            data={searchText !== '' ? search(searchText) : getPageData()}
+            renderItem={({item}) => <HistoryRender item={item} />}
             keyExtractor={(item, index) => index.toString()}
             ListFooterComponent={
               <View style={styles.pagination}>
@@ -250,4 +169,4 @@ const Watchlist = ({navigation}) => {
   );
 };
 
-export default Watchlist;
+export default History;

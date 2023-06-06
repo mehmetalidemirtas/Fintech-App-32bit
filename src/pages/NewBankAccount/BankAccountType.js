@@ -3,15 +3,11 @@ import {SafeAreaView, View, Text, StyleSheet} from 'react-native';
 import Button from '../../components/Button';
 import colors from '../../styles/colors';
 import {useNavigation} from '@react-navigation/native';
-import {SelectList} from 'react-native-dropdown-select-list';
 import BankAccountContext from '../../context/BankAccountContext';
 import {useTranslation} from 'react-i18next';
-
-import FlashMessage, {
-  showMessage,
-  hideMessage,
-} from 'react-native-flash-message';
 import {ThemeContext} from '../../context/ThemeContext';
+import Dropdown from '../../components/Dwopdown/Dropdown';
+import {showFlashMessage} from '../../utils/flashMessage';
 
 const BankAccountType = () => {
   const navigation = useNavigation();
@@ -26,11 +22,7 @@ const BankAccountType = () => {
   ];
   const handleBankAccountTypeSelect = () => {
     if (selected === '') {
-      showMessage({
-        message: t('text.chooseBankAccountType'),
-        type: 'danger',
-        backgroundColor: colors.primary,
-      });
+      showFlashMessage(t('text.chooseBankAccountType'));
       return;
     }
     setBank(prev => ({...prev, bankType: selected}));
@@ -47,19 +39,11 @@ const BankAccountType = () => {
         {t('text.chooseBankAccountType')}
       </Text>
       <View style={{margin: 20}}>
-        <SelectList
-          setSelected={val => setSelected(val)}
+        <Dropdown
+          selected={val => setSelected(val)}
           data={data}
           title={t('text.chooseBankAccountType')}
-          searchPlaceholder={t('search')}
-          notFoundText={t('notFound')}
           placeholder={t('text.chooseBankAccountType')}
-          save="value"
-          defaultOption={bank.bankType}
-          dropdownTextStyles={{color: theme.textColor}}
-          dropdownItemStyles={{color: theme.textColor}}
-          boxStyles={theme.textColor}
-          inputStyles={{color: theme.textColor}}
         />
       </View>
       <View style={styles.button_container}>

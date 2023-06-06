@@ -1,16 +1,9 @@
 import React, {useState, useContext} from 'react';
-import {
-  Modal,
-  Text,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-  Pressable,
-} from 'react-native';
+import {Modal, Text, View, StyleSheet, Pressable} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useTranslation} from 'react-i18next';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {ThemeContext} from '../context/ThemeContext';
+import {ThemeContext} from '../../../context/ThemeContext';
 
 const LanguageModal = ({isVisible, onClose}) => {
   const {t, i18n} = useTranslation();

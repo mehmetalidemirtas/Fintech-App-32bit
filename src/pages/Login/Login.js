@@ -6,25 +6,15 @@ import styles from './Login.style';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {showMessage} from 'react-native-flash-message';
 import colors from '../../styles/colors';
 import {ThemeContext} from '../../context/ThemeContext';
 import {useTranslation} from 'react-i18next';
 import {Vibration} from 'react-native';
+import {showFlashMessage} from '../../utils/flashMessage';
+import {loginValidationSchema} from '../../utils/validationSchema';
 
 const Login = ({navigation, handleLogin}) => {
   const {t} = useTranslation();
-
-  const validationSchema = Yup.object().shape({
-    identityNumber: Yup.string()
-      .required(t('error.enterIdentityNo'))
-      .matches(/^[1-9]{1}[0-9]{9}[02468]{1}$/, t('error.invalidId'))
-      .min(11, t('error.minIdentity'))
-      .max(11, t('error.minIdentity')),
-    password: Yup.string()
-      .min(8, t('error.minPassword'))
-      .required(t('error.enterPassword')),
-  });
 
   const initialValues = {
     identityNumber: '',
@@ -70,20 +60,12 @@ const Login = ({navigation, handleLogin}) => {
           //navigation.navigate('MainTabs');
         } else {
           console.log('şifre yanlış');
-          showMessage({
-            message: t('error.wrongPassword'),
-            type: 'danger',
-            backgroundColor: colors.primary,
-          });
+          showFlashMessage(t('error.wrongPassword'));
           Vibration.vibrate(500);
         }
       } else {
         console.log('kullanıcı kayıtlı değil');
-        showMessage({
-          message: t('error.wrongIdentity'),
-          type: 'danger',
-          backgroundColor: colors.primary,
-        });
+        showFlashMessage(t('error.wrongIdentity'));
         Vibration.vibrate(500);
       }
     } catch (error) {
@@ -103,7 +85,7 @@ const Login = ({navigation, handleLogin}) => {
       </View>
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema}
+        validationSchema={loginValidationSchema(t)}
         onSubmit={handleFormSubmit}>
         {({
           handleChange,
@@ -143,11 +125,7 @@ const Login = ({navigation, handleLogin}) => {
                 <Text style={styles.error_message}>{errors.password}</Text>
               )}
               <View style={styles.forgot_pw_container}>
-                <Button
-                  title={t('login.forgotPassword')}
-                  border={0}
-                  onPress={() => navigation.navigate('ForgotPasswordScreen')}
-                />
+                <Button title={''} border={0} onPress={() => null} />
               </View>
             </View>
 

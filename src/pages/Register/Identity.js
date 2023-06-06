@@ -21,6 +21,7 @@ import {showMessage} from 'react-native-flash-message';
 import NfcManager, {NfcTech, Ndef, NfcEvents} from 'react-native-nfc-manager';
 import Lottie from 'lottie-react-native';
 import DatePicker from 'react-native-date-picker';
+import {identityValidationSchema} from '../../utils/validationSchema';
 
 const Identity = () => {
   const {user, setUser} = useContext(UserContext);
@@ -134,16 +135,6 @@ const Identity = () => {
     );
   }
 
-  const validationSchema = Yup.object().shape({
-    name: Yup.string().required(t('error.enterName')),
-    surname: Yup.string().required(t('error.enterSurname')),
-    identityNumber: Yup.string()
-      .required(t('error.enterIdentityNo'))
-      .matches(/^[1-9]{1}[0-9]{9}[02468]{1}$/, t('error.invalidId'))
-      .min(11, t('error.minIdentity'))
-      .max(11, t('error.minIdentity')),
-  });
-
   const initialValues = {
     name: name || '',
     surname: surname || '',
@@ -208,7 +199,7 @@ const Identity = () => {
         <>
           <Formik
             initialValues={initialValues}
-            validationSchema={validationSchema}
+            validationSchema={identityValidationSchema(t)}
             validate={validate}
             onSubmit={handleFormSubmit}>
             {({

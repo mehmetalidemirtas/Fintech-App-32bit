@@ -3,15 +3,11 @@ import {SafeAreaView, View, Text, StyleSheet} from 'react-native';
 import Button from '../../components/Button';
 import colors from '../../styles/colors';
 import {useNavigation} from '@react-navigation/native';
-import {SelectList} from 'react-native-dropdown-select-list';
 import currency_type_list from '../../assets/currency_type';
 import BankAccountContext from '../../context/BankAccountContext';
 import {useTranslation} from 'react-i18next';
-
-import FlashMessage, {
-  showMessage,
-  hideMessage,
-} from 'react-native-flash-message';
+import Dropdown from '../../components/Dwopdown/Dropdown';
+import {showFlashMessage} from '../../utils/flashMessage';
 import {ThemeContext} from '../../context/ThemeContext';
 
 const BankCurrencyType = () => {
@@ -23,11 +19,7 @@ const BankCurrencyType = () => {
 
   const handleCurrencyTypeSelect = () => {
     if (selected === '') {
-      showMessage({
-        message: t('text.chooseCurrencyType'),
-        type: 'danger',
-        backgroundColor: colors.primary,
-      });
+      showFlashMessage(t('text.chooseCurrencyType'));
       return;
     }
     setBank(prev => ({...prev, currencyType: selected}));
@@ -43,19 +35,10 @@ const BankCurrencyType = () => {
         {t('text.chooseCurrencyType')}
       </Text>
       <View style={{margin: 20}}>
-        <SelectList
-          setSelected={val => setSelected(val)}
+        <Dropdown
+          selected={val => setSelected(val)}
           data={currency_type_list}
-          title={t('text.chooseCurrencyType')}
-          save="value"
-          searchPlaceholder={t('search')}
-          notFoundText={t('notFound')}
           placeholder={t('text.chooseCurrencyType')}
-          dropdownTextStyles={{color: theme.textColor}}
-          dropdownItemStyles={{color: theme.textColor}}
-          boxStyles={theme.textColor}
-          inputStyles={{color: theme.textColor}}
-          defaultOption={bank.currencyType}
         />
       </View>
       <View style={styles.button_container}>

@@ -6,6 +6,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '../../components/Button';
 import {ThemeContext} from '../../context/ThemeContext';
 import {useTranslation} from 'react-i18next';
+import styles from './FavoriteCurrencies.style';
+import {
+  saveFavorites,
+  loadFavorites,
+  getIdentity,
+} from '../../utils/FavoriteCurrenciesUtils';
 
 const ChooseFavoriteCurrencies = ({navigation}) => {
   const [data, setData] = useState([]);
@@ -15,30 +21,23 @@ const ChooseFavoriteCurrencies = ({navigation}) => {
   const [favorites, setFavorites] = useState({});
   const {t} = useTranslation();
   const {theme} = useContext(ThemeContext);
+
   useEffect(() => {
-    const loadFavorites = async () => {
-      const key = `${identityNo}_favoriteCurrencies`;
-      const favoriteCurrencies = await AsyncStorage.getItem(key);
-      if (favoriteCurrencies) {
-        const favoritesObj = {};
-        JSON.parse(favoriteCurrencies).forEach(currency => {
-          favoritesObj[currency] = true;
-        });
-        setFavorites(favoritesObj);
-      }
+    //Daha önce favorilere eklenenleri göster.
+    const loadFavoritesData = async () => {
+      const favoritesData = await loadFavorites(identityNo);
+      setFavorites(favoritesData);
       setLoading(false);
     };
 
     if (identityNo) {
-      loadFavorites();
+      loadFavoritesData();
     }
   }, [identityNo]);
+
   useEffect(() => {
-    const getIdentity = async () => {
-      const identityNo = await AsyncStorage.getItem('currentUser');
-      setIdentityNo(identityNo);
-    };
-    const loadCurrencies = async () => {
+    //websocket bağlantısından gelen bütün para birimlerini listele.
+    const fetchData = async () => {
       try {
         const savedCurrencies = await AsyncStorage.getItem('currencies');
         if (savedCurrencies) {
@@ -49,29 +48,22 @@ const ChooseFavoriteCurrencies = ({navigation}) => {
       }
     };
 
-    loadCurrencies();
-    getIdentity();
+    fetchData();
+    getIdentity().then(identityNo => setIdentityNo(identityNo));
   }, []);
 
   const toggleCheckbox = currency => {
     setFavorites(prev => ({...prev, [currency]: !prev[currency]}));
   };
 
-  const saveFavorites = async () => {
+  const saveFavoritesData = async () => {
     setIsLoading(true);
-    const favoriteCurrencies = Object.keys(favorites).filter(
-      currency => favorites[currency],
-    );
-    const key = `${identityNo}_favoriteCurrencies`;
+    const success = await saveFavorites(identityNo, favorites);
 
-    try {
-      await AsyncStorage.removeItem(key);
-      await AsyncStorage.setItem(key, JSON.stringify(favoriteCurrencies));
-      console.log('Favorites saved:', favoriteCurrencies);
-      setLoading(false);
+    if (success) {
+      setIsLoading(false);
       navigation.navigate('WatchlistScreen');
-    } catch (error) {
-      console.error(error);
+    } else {
       setIsLoading(false);
     }
   };
@@ -110,7 +102,7 @@ const ChooseFavoriteCurrencies = ({navigation}) => {
             <Button
               contained
               title={t('button.saveFavorite')}
-              onPress={saveFavorites}
+              onPress={saveFavoritesData}
               loading={isLoading}
             />
           </>
@@ -119,20 +111,5 @@ const ChooseFavoriteCurrencies = ({navigation}) => {
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 16,
-  },
-  item_container: {
-    flex: 0.99,
-  },
-});
 
 export default ChooseFavoriteCurrencies;

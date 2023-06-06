@@ -7,6 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ThemeContext} from '../../../context/ThemeContext';
 import {useTranslation} from 'react-i18next';
+import {formatPhoneNumber} from '../../../utils/formatPhoneNumber';
 
 const Password = () => {
   const {t} = useTranslation();
@@ -44,23 +45,12 @@ const Password = () => {
   };
 
   const handleTextChange = phoneInput => {
-    const cleanedNumber = phoneInput.replace(/\D/g, '');
-    const match = cleanedNumber.match(/^(\d{3})(\d{3})(\d{4})$/);
-    if (cleanedNumber.length > 0 && cleanedNumber.charAt(0) !== '5') {
-      setShowAlert(true);
-      return;
-    }
-    if (match) {
-      const formattedText = `(${match[1]}) ${match[2]} ${match[3]}`;
-      setShowAlert(false);
-      setPhoneNumber(formattedText);
-      const phone = `+90${phoneInput}`;
-      setPhone(phone);
-    } else {
-      setPhoneNumber(cleanedNumber);
-      setShowAlert(false);
-    }
+    const {showAlert, phoneNumber, phone} = formatPhoneNumber(phoneInput);
+    setShowAlert(showAlert);
+    setPhoneNumber(phoneNumber);
+    setPhone(phone);
   };
+
   const validate = () => {
     const errors = {};
     if (phoneNumber == '') {

@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ThemeContext} from '../../context/ThemeContext';
 import styles from './AllBankAccounts.syle';
 import {useTranslation} from 'react-i18next';
+import {AllBankAccountRender} from '../../components/ListItem/ListItem';
 
 const PAGE_SIZE = 5;
 
@@ -60,58 +61,6 @@ const AllBankAccounts = ({navigation}) => {
     return bank.slice(start, end);
   };
 
-  function formatAmount(amount) {
-    const newAmount = Number(amount).toFixed(2);
-    return newAmount;
-  }
-  const Item = ({item}) => (
-    <View style={[styles.card_container, {backgroundColor: theme.itemColor}]}>
-      <Text
-        style={[
-          styles.title,
-          {textAlign: 'center', marginBottom: 2, color: theme.textColor},
-        ]}>
-        {item.currencyType}
-      </Text>
-      <View style={styles.title_container}>
-        <Text style={[styles.title, {color: theme.textColor}]}>
-          {t('title.bankAccountType2')}
-        </Text>
-        <Text style={[styles.text, {color: theme.textColor}]}>
-          {item.bankType}
-        </Text>
-      </View>
-      <View style={styles.title_container}>
-        <Text style={[styles.title, {color: theme.textColor}]}>
-          {t('title.bankBranch2')}{' '}
-        </Text>
-        <Text style={[styles.text, {color: theme.textColor}]}>
-          {item.branchName}
-        </Text>
-      </View>
-      <View style={styles.title_container}>
-        <Text style={[styles.title, {color: theme.textColor}]}>
-          {t('title.accountNo')}
-        </Text>
-        <Text style={[styles.text, {color: theme.textColor}]}>
-          {item.accountNo}
-        </Text>
-      </View>
-      <View style={styles.title_container}>
-        <Text style={[styles.title, {color: theme.textColor}]}>IBAN: </Text>
-        <Text style={[styles.text, {color: theme.textColor}]}>{item.iban}</Text>
-      </View>
-      <View style={styles.title_container}>
-        <Text style={[styles.title, {color: theme.textColor}]}>
-          Toplam bakiye:
-        </Text>
-        <Text style={[styles.text, {color: theme.textColor}]}>
-          {formatAmount(item.amount)}
-        </Text>
-      </View>
-    </View>
-  );
-
   return (
     <SafeAreaView
       style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
@@ -129,7 +78,7 @@ const AllBankAccounts = ({navigation}) => {
         <>
           <FlatList
             data={getPageData()}
-            renderItem={({item}) => <Item item={item} />}
+            renderItem={({item}) => <AllBankAccountRender item={item} />}
             keyExtractor={(item, index) => index.toString()}
             ListFooterComponent={
               <View style={styles.pagination}>
