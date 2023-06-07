@@ -6,6 +6,7 @@
 
 - [Usage](#usage)
 - [Screenshots](#screenshots)
+- [Websocket](#websocket)
 
 ## Usage
 
@@ -26,9 +27,16 @@ Install packages with `npm install`
 
 ```bash
 Run `npx react-native start` to start Metro bundler
+Connect your device or start an emulator.
 Run `npx react-native run-android` to start the application
 ```
+## Websocket
 
+This application utilizes a WebSocket connection to fetch real-time data. The real-time data is sourced from the https://fx32.vercel.app/ website. If you encounter any issues with the connection, you can use the server provided within the project.
+
+To use the server included in the project, replace the connection address in `src/server/connectionString/` with your own localhost or IPv4 address. Then, run the command  `node src/server/index.js`.
+
+To learn more about WebSocket connection, you can refer to the following repository: https://github.com/mehmetalidemirtas/socket.io-currency-mock-service
 ## Screenshots
 |  |  |  |
 | ---------------- | ---------------- | ---------------- |
