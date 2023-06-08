@@ -8,12 +8,14 @@ import BankAccountContext from '../../context/BankAccountContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ThemeContext} from '../../context/ThemeContext';
 import {useTranslation} from 'react-i18next';
+import {disableBackButton} from '../../utils/disableBackButton';
 
 const Summary = () => {
   const navigation = useNavigation();
   const {bank, setBank} = useContext(BankAccountContext);
   const {theme} = useContext(ThemeContext);
   const {t} = useTranslation();
+  disableBackButton();
 
   useEffect(() => {}, [bank]);
 

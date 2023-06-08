@@ -33,6 +33,9 @@ target 'Fintech' do
 
   pod 'react-native-nfc-manager', :path => '../node_modules/react-native-nfc-manager'
 
+
+  pod 'react-native-fingerprint-scanner', :path => '../node_modules/react-native-fingerprint-scanner'
+
   target 'FintechTests' do
     inherit! :complete
     # Pods for testing

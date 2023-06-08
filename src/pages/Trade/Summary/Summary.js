@@ -1,5 +1,5 @@
 import React, {useContext, useEffect} from 'react';
-import {View, Text, SafeAreaView} from 'react-native';
+import {View, BackHandler, Platform, Text, SafeAreaView} from 'react-native';
 import styles from './Summary.style';
 import {ThemeContext} from '../../../context/ThemeContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -8,11 +8,13 @@ import {useNavigation} from '@react-navigation/native';
 import TradeHistoryContext from '../../../context/TradeHistoryContext';
 import {useTranslation} from 'react-i18next';
 import {saveTradeHistoryToStorage} from '../../../utils/saveTradeHistoryToStorage';
+import {disableBackButton} from '../../../utils/disableBackButton';
 
 const Exchange = props => {
   const {theme} = useContext(ThemeContext);
   const navigation = useNavigation();
   const {t} = useTranslation();
+  disableBackButton();
 
   const {tradeHistory, setTradeHistory} = useContext(TradeHistoryContext);
 

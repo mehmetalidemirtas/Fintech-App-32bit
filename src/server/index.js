@@ -1,3 +1,4 @@
+import {port} from './connectionString';
 const http = require('http');
 const server = http.createServer();
 
@@ -108,6 +109,6 @@ function calculateChangeRate(previousValue, currentValue) {
   const change = ((currentValue - previousValue) / previousValue) * 100;
   return parseFloat(change.toFixed(2));
 }
-server.listen(3000, () => {
-  console.log('listening on :3000');
+server.listen(port, () => {
+  console.log('listening on :' + {port});
 });
