@@ -31,16 +31,16 @@ const Exchange = props => {
   const navigation = useNavigation();
 
   //forHistory
-  const [nameOfBankSold, setNameOfBankSold] = useState(null); //Satılacak hesap adı
-  const [nameOfBankBuy, setNameOfBankBuy] = useState(null); //Aktarılacak hesap adı
+  const [nameOfBankSold, setNameOfBankSold] = useState(null); //Account name to sell
+  const [nameOfBankBuy, setNameOfBankBuy] = useState(null); //Account name to transfer
   const [currencyNameToBeReceived, setCurrencyNameToBeReceived] =
-    useState('TL'); //Alınacak para birimi adı
+    useState('TL'); //Currency name to receive
   const [currencyNameToBeSold, setCurrencyNameToBeSold] = useState(
     props.route.params.currency,
-  ); //Satılacak para birimi adı
-  const [exchangeRate, setExchangeRate] = useState(props.route.params.buyValue); //Kur oranı
-  const [exchangeTime, setExchangeTime] = useState(props.route.params.time); //Kur oranı
-  const [inputValue, setInputValue] = useState(''); //Girilen tutar
+  ); //currency name to be sold
+  const [exchangeRate, setExchangeRate] = useState(props.route.params.buyValue); //exchange rate
+  const [exchangeTime, setExchangeTime] = useState(props.route.params.time); //exchange time
+  const [inputValue, setInputValue] = useState(''); //Amount entered
   const [counter, setCounter] = useState(60);
 
   useEffect(() => {
@@ -162,8 +162,8 @@ const Exchange = props => {
             parseInt(amountOfReceivedBank) + parseInt(outputValue)
           ).toFixed(2);
           updateAmountSell(
-            amount - inputValue, //Girilen değer bankadaki toplam paradan çıkarılıyor.
-            newTotalAmount, //output value : sonuç
+            amount - inputValue, //The entered value is subtracted from the total money in the bank.
+            newTotalAmount, //output value : result
             selectedAccountToBeSold,
             selectedAccountToBeReceived,
           );

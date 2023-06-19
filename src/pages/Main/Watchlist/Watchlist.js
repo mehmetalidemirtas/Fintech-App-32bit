@@ -42,7 +42,7 @@ const Watchlist = ({navigation}) => {
         return;
       }
 
-      console.log('Socket bağlantısı yok, tekrar deneniyor...');
+      console.log('No socket connection, retrying...');
       socket.connect();
     };
 
