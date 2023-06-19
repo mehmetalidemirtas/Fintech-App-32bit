@@ -23,7 +23,7 @@ const ChooseFavoriteCurrencies = ({navigation}) => {
   const {theme} = useContext(ThemeContext);
 
   useEffect(() => {
-    //Daha önce favorilere eklenenleri göster.
+    //Show previously favorited currencies.
     const loadFavoritesData = async () => {
       const favoritesData = await loadFavorites(identityNo);
       setFavorites(favoritesData);
@@ -36,7 +36,7 @@ const ChooseFavoriteCurrencies = ({navigation}) => {
   }, [identityNo]);
 
   useEffect(() => {
-    //websocket bağlantısından gelen bütün para birimlerini listele.
+    //List all currencies coming from websocket connection.
     const fetchData = async () => {
       try {
         const savedCurrencies = await AsyncStorage.getItem('currencies');

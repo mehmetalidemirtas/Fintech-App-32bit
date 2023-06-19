@@ -17,9 +17,7 @@ const Confirmation = () => {
   const {t} = useTranslation();
 
   useEffect(() => {
-    console.log(bank.bankType);
-    console.log(bank.currencyType);
-    console.log(bank.branchName);
+    console.log(bank.bankType + bank.currencyType + bank.branchName);
   }, [bank]);
 
   const handleSubmit = async () => {

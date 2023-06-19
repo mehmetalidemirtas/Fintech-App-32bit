@@ -27,7 +27,7 @@ const Login = ({navigation, handleLogin}) => {
   const checkIsLoggedIn = async () => {
     const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
     if (isLoggedIn === 'true') {
-      console.log('Kullanıcı daha önce giriş yapmış, ana sayfaya yönlendir');
+      console.log('User already logged in, redirect to home page');
       //navigation.navigate('MainTabs');
     }
   };
@@ -36,7 +36,7 @@ const Login = ({navigation, handleLogin}) => {
     checkIsLoggedIn();
 
     return () => {
-      setIsLoading(false); // isLoading durumunu temizle
+      setIsLoading(false);
     };
   }, []);
 
@@ -50,21 +50,21 @@ const Login = ({navigation, handleLogin}) => {
       const isUserAccountExists = await AsyncStorage.getItem(userAccountKey);
 
       if (isUserAccountExists) {
-        console.log('kullanıcı bulundu');
+        console.log('user found');
         const userAccount = JSON.parse(isUserAccountExists);
         if (userAccount.password === values.password) {
-          console.log('şifre doğru, giriş başarılı');
+          console.log('password correct, login successful');
           await handleLogin();
           AsyncStorage.setItem('isLoggedIn', 'true');
           await AsyncStorage.setItem('currentUser', values.identityNumber);
           //navigation.navigate('MainTabs');
         } else {
-          console.log('şifre yanlış');
+          console.log('wrong password');
           showFlashMessage(t('error.wrongPassword'));
           Vibration.vibrate(500);
         }
       } else {
-        console.log('kullanıcı kayıtlı değil');
+        console.log('user is not registered');
         showFlashMessage(t('error.wrongIdentity'));
         Vibration.vibrate(500);
       }

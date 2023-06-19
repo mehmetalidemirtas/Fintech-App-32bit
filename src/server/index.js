@@ -8,7 +8,6 @@ const io = require('socket.io')(server, {
   },
 });
 
-// USD, EUR, GBP, IDR, JPY değerlerini içeren bir dizi oluşturuyoruz
 const currencies = [
   'USD',
   'EUR',
@@ -29,7 +28,7 @@ const currencies = [
   'TEST',
 ];
 
-// Değerleri rastgele olarak üretecek bir fonksiyon yazıyoruz
+// We write a function that will randomly generate the values
 function generateRandomValue() {
   return (Math.random() * (20 - 10) + 10).toFixed(2);
 }
@@ -55,7 +54,7 @@ let previousSellValues = {
 
 io.on('connection', socket => {
   console.log('a user connected');
-  const data = currencies //İlk açılışta yüklenecek veriler
+  const data = currencies //Data to load on first boot
     .map(currency => {
       const buyValue = generateRandomValue();
       const previousSellValue = 0;
@@ -71,7 +70,7 @@ io.on('connection', socket => {
   console.log('Sending data:', data);
   socket.emit('currency-update', data);
 
-  // Belirli aralıklarla rastgele değerler üreterek frontend'e gönderiyoruz
+  // We generate random values ​​at regular intervals and send them to the frontend.
   const interval = setInterval(() => {
     const data = currencies
       .map(currency => {

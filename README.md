@@ -1,6 +1,8 @@
 <h1 align="center">
-  Fintech App 32bit
+  FX32
 </h1>
+
+FX32 is an innovative foreign exchange trading application developed using React Native. With this application, users can easily track currency exchange rates, perform real-time foreign exchange transactions, and manage their bank accounts. FX32 aims to provide a secure and efficient experience in the foreign exchange market, standing out with its user-friendly interface and fast performance. Create a user account, log in, create your bank accounts and choose your favorite currencies to list. Conduct your buy and sell transactions effortlessly among the available currency pairs. Choose FX32 for a fast, reliable, and user-centric foreign exchange trading experience!
 
 ## Introduce
 

@@ -8,7 +8,6 @@ import {TradeHistoryProvider} from './context/TradeHistoryContext';
 
 import FlashMessage from 'react-native-flash-message';
 export default () => {
-  // içteki Context yapıları, dıştaki Context yapılarının sağladığı değerlere erişebilirler.
   return (
     <UserProvider>
       <BankProvider>
